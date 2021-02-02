@@ -4,7 +4,7 @@ import { ItemTypes } from './ItemTypes';
 import { BoxDragPreview } from './BoxDragPreview';
 import { snapToGrid } from './snapToGrid';
 const layerStyles = {
-    position: 'absolute',
+    position: 'fixed',
     pointerEvents: 'none',
     zIndex: 100,
     left: 0,
@@ -28,7 +28,7 @@ function getItemStyles(initialOffset, currentOffset, isSnapToGrid) {
     }
     const transform = `translate(${x}px, ${y}px)`;
     return {
-        transform,
+        transform: transform,
         WebkitTransform: transform,
     };
 }

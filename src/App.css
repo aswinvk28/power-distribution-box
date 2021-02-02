@@ -41,6 +41,10 @@ body, html, #root {
   height: 100%;
 }
 
+.AppInnerContainer {
+  position: relative;
+}
+
 .templated-distributions-container {
   display: flex;
   position: relative;

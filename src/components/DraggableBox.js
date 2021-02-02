@@ -10,6 +10,7 @@ function getStyles(left, top, isDragging) {
         // because IE will ignore our custom "empty image" drag preview.
         opacity: isDragging ? 0 : 1,
         height: isDragging ? 0 : '',
+        transform: transform
     };
 }
 export const DraggableBox = (props) => {

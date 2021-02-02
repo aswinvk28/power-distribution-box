@@ -105,12 +105,12 @@ export const Container = ({ snapToGrid }) => {
             totalDroppedItems: templatedAddon2DroppedItems, e_name: "templated_addons_row2" }
     ]);
     const [boxes, setBoxes] = useState([
-        { name: 'Plugs', type: ItemTypes.PLUGS, uniqid: null, distribution: null, left: 20, top: 80, index: 0 },
-        { name: 'Sockets', type: ItemTypes.SOCKETS, uniqid: null, distribution: null, left: 20, top: 80, index: 1 },
-        { name: 'Pilot Lights', type: ItemTypes.PILOT_LIGHTS, uniqid: null, distribution: null, left: 20, top: 80, index: 2 },
-        { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, distribution: null, left: 20, top: 80, index: 3 },
-        { name: 'Live Pins Input', type: ItemTypes.LIVE_PINS_INPUT, uniqid: null, distribution: null, left: 20, top: 80, index: 4 },
-        { name: 'Loop Through', type: ItemTypes.LIVE_PINS_OUTPUT, uniqid: null, distribution: null, left: 20, top: 80, index: 5 },
+        { name: 'Plugs', type: ItemTypes.PLUGS, uniqid: null, distribution: null, left: 0, top: 0, index: 0 },
+        { name: 'Sockets', type: ItemTypes.SOCKETS, uniqid: null, distribution: null, left: 0, top: 0, index: 1 },
+        { name: 'Pilot Lights', type: ItemTypes.PILOT_LIGHTS, uniqid: null, distribution: null, left: 0, top: 0, index: 2 },
+        { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, distribution: null, left: 0, top: 0, index: 3 },
+        { name: 'Live Pins Input', type: ItemTypes.LIVE_PINS_INPUT, uniqid: null, distribution: null, left: 0, top: 0, index: 4 },
+        { name: 'Loop Through', type: ItemTypes.LIVE_PINS_OUTPUT, uniqid: null, distribution: null, left: 0, top: 0, index: 5 },
     ]);
     const [droppedBoxNames, setDroppedBoxNames] = useState([]);
     function isDropped(boxName) {
