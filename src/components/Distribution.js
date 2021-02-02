@@ -4,7 +4,7 @@ import { GridBox } from './GridBox';
 import Constants from './Constants';
 const useLocalStorage = Constants.useLocalStorage;
 
-const style = {
+let style = {
     marginBottom: '0.5rem',
     color: 'white',
     padding: '1rem',
@@ -15,13 +15,21 @@ const style = {
 
 export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_name, onDrop, }) => {
     // useDrop denotes droppable
-    const [{ isOver, canDrop }, drop] = useDrop({
+    const [{ isOver, canDrop, initialOffset, currentOffset }, drop] = useDrop({
         accept,
         drop: onDrop,
         collect: (monitor) => ({
             isOver: monitor.isOver(),
             canDrop: monitor.canDrop(),
+            initialOffset: monitor.getInitialClientOffset(),
+            currentOffset: monitor.getSourceClientOffset()
         }),
+        canDrop: (item, monitor) => {
+            return {
+                initialOffset: monitor.getInitialClientOffset(),
+                currentOffset: monitor.getSourceClientOffset()
+            }
+        }
     });
     const isActive = isOver && canDrop;
     let backgroundColor = '#222';
@@ -46,7 +54,8 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
                 totalDroppedItems.map(({name, type, uniqid, distribution}, index) =>  {
                     return (
                         <GridBox name={name} type={type} uniqid={uniqid} key={index}
-                        distribution={distribution} isDropped={true} />
+                        distribution={distribution} e_name={e_name}
+                        isDropped={true} />
                     )
                 })
             }

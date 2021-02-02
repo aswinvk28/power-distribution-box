@@ -31,6 +31,6 @@ export const DustBin = ({ accept, onDrop, }) => {
     else if (canDrop) {
         backgroundColor = 'darkkhaki';
     }
-    return (<div ref={drop} style={{ ...style, backgroundColor }}>
+    return (<div ref={drop} style={{ ...style, backgroundColor }} className="dustbin-container">
 		DUSTBIN</div>);
 };

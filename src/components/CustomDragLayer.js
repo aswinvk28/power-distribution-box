@@ -61,8 +61,8 @@ export const CustomDragLayer = (props) => {
     if (!isDragging) {
         return null;
     }
-    return (<div style={layerStyles}>
-			<div style={getItemStyles(initialOffset, currentOffset, props.snapToGrid)}>
+    return (<div style={layerStyles} className="custom-drag-layer">
+			<div style={getItemStyles(initialOffset, currentOffset, props.snapToGrid)} className="custom-drag-layer-inner">
 				{renderItem()}
 			</div>
 		</div>);

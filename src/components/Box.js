@@ -18,7 +18,8 @@ export const Box = ({ name, type, uniqid, distribution, isDropped }) => {
             opacity: monitor.isDragging() ? 0.4 : 1,
         })
     });
-    return (<div style={{ ...style, opacity }}>
+    let className = "box-item-" + name;
+    return (<div style={{ ...style, opacity }} className={className}>
 			{isDropped ? <s>{name}</s> : name}
 		</div>);
 };

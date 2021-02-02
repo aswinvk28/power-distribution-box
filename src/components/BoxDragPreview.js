@@ -11,7 +11,7 @@ export const BoxDragPreview = memo(({ name, type }) => {
         const interval = setInterval(() => setTickTock(!tickTock), 500);
         return () => clearInterval(interval);
     }, [tickTock]);
-    return (<div style={styles}>
+    return (<div style={styles} className="box-drag-preview">
 				<Box name={name} type={type} yellow={tickTock}/>
 			</div>);
 });
