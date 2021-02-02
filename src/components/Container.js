@@ -5,14 +5,34 @@ import { Box } from './Box';
 import { ItemTypes } from './ItemTypes';
 import update from 'immutability-helper';
 import Uniqid from './Uniqid';
+import Constants from './Constants';
+const useLocalStorage = Constants.useLocalStorage;
 
 export const Container = () => {
+    // load from localStorage the distributions
+
+    let cartesianDroppedItems = null, templatedDroppedItems = null;
+    if(useLocalStorage) {
+        cartesianDroppedItems = localStorage.getItem("cartesian" + ": items");
+        templatedDroppedItems = localStorage.getItem("templated" + ": items");
+        if(!cartesianDroppedItems) {
+            cartesianDroppedItems = [];
+        } else {
+            cartesianDroppedItems = JSON.parse(cartesianDroppedItems);
+        }
+        if(!templatedDroppedItems) {
+            templatedDroppedItems = [];
+        } else {
+            templatedDroppedItems = JSON.parse(templatedDroppedItems);
+        }
+    }
+    
     // total dropped items overall including ones dropped in and dropped out of the grid
     const [distributions, setDistributions] = useState([
         { accepts: [ItemTypes.PILOT_LIGHTS, ItemTypes.MULTIMETER], lastDroppedItem: null, 
-            totalDroppedItems: [], e_name: "cartesian" },
+            totalDroppedItems: cartesianDroppedItems, e_name: "cartesian" },
         { accepts: [ItemTypes.PLUGS, ItemTypes.SOCKETS], lastDroppedItem: null, 
-            totalDroppedItems: [], e_name: "templated" }
+            totalDroppedItems: templatedDroppedItems, e_name: "templated" }
     ]);
     const [boxes] = useState([
         { name: 'Plugs', type: ItemTypes.PLUGS, uniqid: null, distribution: null },
@@ -47,7 +67,6 @@ export const Container = () => {
     ]);
     
     const handleDustBinDrop = useCallback((num, item) => {
-        alert(JSON.stringify(item));
         const distribution = item.distribution;
         let droppedItems = distributions[distribution].totalDroppedItems;
         
@@ -71,9 +90,10 @@ export const Container = () => {
     }, [distributions]);
     return (<div className="AppInnerContainer">
             <div style={{ overflow: 'hidden', clear: 'both' }}>
-                {distributions.map(({ accepts, lastDroppedItem, totalDroppedItems }, index) => (<Distribution accept={accepts} 
+                {distributions.map(({ accepts, lastDroppedItem, totalDroppedItems, e_name }, index) => (<Distribution accept={accepts} 
                 lastDroppedItem={lastDroppedItem} 
                 totalDroppedItems={totalDroppedItems} 
+                e_name={e_name}
                 onDrop={(item) => handleDrop(index, item)} key={index}/>))}
             </div>
 

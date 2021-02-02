@@ -1,6 +1,8 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
 import { GridBox } from './GridBox';
+import Constants from './Constants';
+const useLocalStorage = Constants.useLocalStorage;
 const style = {
     height: '24rem',
     width: '24rem',
@@ -13,7 +15,7 @@ const style = {
     lineHeight: 'normal',
     float: 'left',
 };
-export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, onDrop, }) => {
+export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_name, onDrop, }) => {
     // useDrop denotes droppable
     const [{ isOver, canDrop }, drop] = useDrop({
         accept,
@@ -31,10 +33,16 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, onDro
     else if (canDrop) {
         backgroundColor = 'darkkhaki';
     }
+    if(!totalDroppedItems) {
+        totalDroppedItems = [];
+    }
+    if(totalDroppedItems) {
+        localStorage.setItem(e_name + ": items", JSON.stringify(totalDroppedItems));
+    }
     return (<div ref={drop} style={{ ...style, backgroundColor }}>
 			{isActive
         ? 'Release to drop'
-        : `This dustbin accepts: ${accept.join(', ')}`}
+        : `accepts: ${accept.join(', ')}`}
 
             {
                 totalDroppedItems.map(({name, type, uniqid, distribution}, index) =>  {
