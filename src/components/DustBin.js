@@ -1,19 +1,18 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
-import { GridBox } from './GridBox';
 const style = {
-    height: '24rem',
-    width: '24rem',
+    height: '350px',
+    width: '100%',
     marginRight: '0.5rem',
     marginBottom: '0.5rem',
     color: 'white',
     padding: '1rem',
     textAlign: 'center',
-    fontSize: '1rem',
+    fontSize: '5rem',
     lineHeight: 'normal',
     float: 'left',
 };
-export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, onDrop, }) => {
+export const DustBin = ({ accept, onDrop, }) => {
     // useDrop denotes droppable
     const [{ isOver, canDrop }, drop] = useDrop({
         accept,
@@ -32,17 +31,5 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, onDro
         backgroundColor = 'darkkhaki';
     }
     return (<div ref={drop} style={{ ...style, backgroundColor }}>
-			{isActive
-        ? 'Release to drop'
-        : `This dustbin accepts: ${accept.join(', ')}`}
-
-            {
-                totalDroppedItems.map(({name, type, uniqid, distribution}, index) =>  {
-                    return (
-                        <GridBox name={name} type={type} uniqid={uniqid} 
-                        distribution={distribution} isDropped={true} />
-                    )
-                })
-            }
-		</div>);
+		DUSTBIN</div>);
 };

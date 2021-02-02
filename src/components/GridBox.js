@@ -9,10 +9,10 @@ const style = {
     cursor: 'move',
     float: 'left',
 };
-export const GridBox = ({ name, type, isDropped }) => {
+export const GridBox = ({ name, type, uniqid, distribution, isDropped }) => {
     // useDrag denotes draggable
     const [{ opacity }, drag] = useDrag({
-        item: { name, type },
+        item: { name, type, uniqid, distribution },
         collect: (monitor) => ({
             opacity: monitor.isDragging() ? 0.4 : 1,
         }),
