@@ -6,6 +6,9 @@ import { ItemTypes } from './ItemTypes';
 import update from 'immutability-helper';
 import Uniqid from './Uniqid';
 import Constants from './Constants';
+import { snapToGrid as doSnapToGrid } from './snapToGrid';
+import { DraggableBox } from './DraggableBox';
+import { useDrop } from 'react-dnd';
 const useLocalStorage = Constants.useLocalStorage;
 
 const buckets = {
@@ -16,7 +19,10 @@ const buckets = {
     "templated_outputs_row2": null,
     "templated_addons_row1": null,
     "templated_addons_row2": null
-}
+};
+
+const allItems = [ItemTypes.PLUGS, ItemTypes.SOCKETS, ItemTypes.PILOT_LIGHTS, 
+    ItemTypes.MULTIMETER, ItemTypes.LIVE_PINS_INPUT, ItemTypes.LIVE_PINS_OUTPUT];
 
 const style = {
     width: '100%',
@@ -30,7 +36,7 @@ const style = {
     float: 'left',
 };
 
-export const Container = () => {
+export const Container = ({ snapToGrid }) => {
     // load from localStorage the distributions
 
     let cartesianDroppedItems = null, 
@@ -98,13 +104,13 @@ export const Container = () => {
         { accepts: [ItemTypes.PLUGS, ItemTypes.SOCKETS], lastDroppedItem: null, 
             totalDroppedItems: templatedAddon2DroppedItems, e_name: "templated_addons_row2" }
     ]);
-    const [boxes] = useState([
-        { name: 'Plugs', type: ItemTypes.PLUGS, uniqid: null, distribution: null },
-        { name: 'Sockets', type: ItemTypes.SOCKETS, uniqid: null, distribution: null },
-        { name: 'Pilot Lights', type: ItemTypes.PILOT_LIGHTS, uniqid: null, distribution: null },
-        { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, distribution: null },
-        { name: 'Live Pins Input', type: ItemTypes.LIVE_PINS_INPUT, uniqid: null, distribution: null },
-        { name: 'Loop Through', type: ItemTypes.LIVE_PINS_OUTPUT, uniqid: null, distribution: null },
+    const [boxes, setBoxes] = useState([
+        { name: 'Plugs', type: ItemTypes.PLUGS, uniqid: null, distribution: null, left: 20, top: 80, index: 0 },
+        { name: 'Sockets', type: ItemTypes.SOCKETS, uniqid: null, distribution: null, left: 20, top: 80, index: 1 },
+        { name: 'Pilot Lights', type: ItemTypes.PILOT_LIGHTS, uniqid: null, distribution: null, left: 20, top: 80, index: 2 },
+        { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, distribution: null, left: 20, top: 80, index: 3 },
+        { name: 'Live Pins Input', type: ItemTypes.LIVE_PINS_INPUT, uniqid: null, distribution: null, left: 20, top: 80, index: 4 },
+        { name: 'Loop Through', type: ItemTypes.LIVE_PINS_OUTPUT, uniqid: null, distribution: null, left: 20, top: 80, index: 5 },
     ]);
     const [droppedBoxNames, setDroppedBoxNames] = useState([]);
     function isDropped(boxName) {
@@ -154,6 +160,16 @@ export const Container = () => {
             },
         }))
     }, [distributions]);
+
+    function renderBox(item, index) {
+        return (<DraggableBox key={index} id={index}
+        name={item.name} type={item.type} 
+        uniqid={item.uniqid}
+        distribution={item.distribution}
+        isDropped={isDropped(item.name)}
+        {...item} />)
+    }
+
     return (<div className="AppInnerContainer">
     <div style={{ overflow: 'hidden', clear: 'both' }}>
         <div style={style} className="templated-distributions-container">
@@ -165,8 +181,11 @@ export const Container = () => {
         </div>
     </div>
 
-    <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px" }}>
-        {boxes.map(({ name, type }, index) => (<Box name={name} type={type} isDropped={isDropped(name)} key={index}/>))}
+    <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: 300,
+    height: 300, border: '1px solid black', position: 'relative' }}>
+        {boxes.map((item, index) => (
+            renderBox(item, index)
+        ))}
     </div>
 
     {dustbins.map(({accepts}, num) => (

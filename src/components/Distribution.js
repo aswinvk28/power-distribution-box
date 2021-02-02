@@ -38,14 +38,14 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         localStorage.setItem(e_name + ": items", JSON.stringify(totalDroppedItems));
     }
     return (<div ref={drop} style={{ ...style, backgroundColor }} className={e_name}>
-			{isActive
-        ? 'Release to drop'
-        : `accepts: ${accept.join(', ')}`}
+			{e_name.indexOf("addons") > -1 ? 'addons' : ''}
+            {e_name.indexOf("inputs") > -1 ? 'inputs' : ''}
+            {e_name.indexOf("outputs") > -1 ? 'outputs' : ''}
 
             {
                 totalDroppedItems.map(({name, type, uniqid, distribution}, index) =>  {
                     return (
-                        <GridBox name={name} type={type} uniqid={uniqid} 
+                        <GridBox name={name} type={type} uniqid={uniqid} key={index}
                         distribution={distribution} isDropped={true} />
                     )
                 })

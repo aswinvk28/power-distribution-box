@@ -16,9 +16,9 @@ export const Box = ({ name, type, uniqid, distribution, isDropped }) => {
         item: { name, type, uniqid, distribution },
         collect: (monitor) => ({
             opacity: monitor.isDragging() ? 0.4 : 1,
-        }),
+        })
     });
-    return (<div ref={drag} style={{ ...style, opacity }}>
+    return (<div style={{ ...style, opacity }}>
 			{isDropped ? <s>{name}</s> : name}
 		</div>);
 };
