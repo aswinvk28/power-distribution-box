@@ -2,8 +2,9 @@ import React from 'react';
 import { useDrop } from 'react-dnd';
 const style = {
     height: '350px',
-    width: '100%',
-    marginRight: '0.5rem',
+    marginRight: '10%',
+    marginLeft: '5%',
+    width: '90%',
     marginBottom: '0.5rem',
     color: 'white',
     padding: '1rem',

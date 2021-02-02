@@ -8,22 +8,76 @@ import Uniqid from './Uniqid';
 import Constants from './Constants';
 const useLocalStorage = Constants.useLocalStorage;
 
+const buckets = {
+    "cartesian": null, 
+    "templated_inputs_row1": null,
+    "templated_inputs_row2": null,
+    "templated_outputs_row1": null,
+    "templated_outputs_row2": null,
+    "templated_addons_row1": null,
+    "templated_addons_row2": null
+}
+
+const style = {
+    width: '100%',
+    // marginRight: '0.5rem',
+    marginBottom: '0.5rem',
+    color: 'white',
+    padding: '1rem',
+    textAlign: 'center',
+    fontSize: '1rem',
+    lineHeight: 'normal',
+    float: 'left',
+};
+
 export const Container = () => {
     // load from localStorage the distributions
 
-    let cartesianDroppedItems = null, templatedDroppedItems = null;
+    let cartesianDroppedItems = null, 
+    templatedInput1DroppedItems = null, templatedInput2DroppedItems = null, templatedOutput1DroppedItems = null,
+    templatedOutput2DroppedItems = null, templatedAddon1DroppedItems = null, templatedAddon2DroppedItems = null;
     if(useLocalStorage) {
         cartesianDroppedItems = localStorage.getItem("cartesian" + ": items");
-        templatedDroppedItems = localStorage.getItem("templated" + ": items");
+        templatedInput1DroppedItems = localStorage.getItem("templated_inputs_row1" + ": items");
+        templatedInput2DroppedItems = localStorage.getItem("templated_inputs_row2" + ": items");
+        templatedOutput1DroppedItems = localStorage.getItem("templated_outputs_row1" + ": items");
+        templatedOutput2DroppedItems = localStorage.getItem("templated_outputs_row2" + ": items");
+        templatedAddon1DroppedItems = localStorage.getItem("templated_addons_row1" + ": items");
+        templatedAddon2DroppedItems = localStorage.getItem("templated_addons_row2" + ": items");
         if(!cartesianDroppedItems) {
             cartesianDroppedItems = [];
         } else {
             cartesianDroppedItems = JSON.parse(cartesianDroppedItems);
         }
-        if(!templatedDroppedItems) {
-            templatedDroppedItems = [];
+        if(!templatedInput1DroppedItems) {
+            templatedInput1DroppedItems = [];
         } else {
-            templatedDroppedItems = JSON.parse(templatedDroppedItems);
+            templatedInput1DroppedItems = JSON.parse(templatedInput1DroppedItems);
+        }
+        if(!templatedInput2DroppedItems) {
+            templatedInput2DroppedItems = [];
+        } else {
+            templatedInput2DroppedItems = JSON.parse(templatedInput2DroppedItems);
+        }
+        if(!templatedOutput1DroppedItems) {
+            templatedOutput1DroppedItems = [];
+        } else {
+            templatedOutput1DroppedItems = JSON.parse(templatedOutput1DroppedItems);
+        }
+        if(!templatedOutput2DroppedItems) {
+            templatedOutput2DroppedItems = [];
+        } else {
+            templatedOutput2DroppedItems = JSON.parse(templatedOutput2DroppedItems);
+        }
+        if(!templatedAddon1DroppedItems) {
+            templatedAddon1DroppedItems = [];
+        } else {
+            templatedAddon1DroppedItems = JSON.parse(templatedAddon1DroppedItems);
+        }
+        if(!templatedAddon2DroppedItems) {
+            templatedAddon2DroppedItems = [];
+        } else {
+            templatedAddon2DroppedItems = JSON.parse(templatedAddon2DroppedItems);
         }
     }
     
@@ -32,13 +86,25 @@ export const Container = () => {
         { accepts: [ItemTypes.PILOT_LIGHTS, ItemTypes.MULTIMETER], lastDroppedItem: null, 
             totalDroppedItems: cartesianDroppedItems, e_name: "cartesian" },
         { accepts: [ItemTypes.PLUGS, ItemTypes.SOCKETS], lastDroppedItem: null, 
-            totalDroppedItems: templatedDroppedItems, e_name: "templated" }
+            totalDroppedItems: templatedInput1DroppedItems, e_name: "templated_inputs_row1" },
+        { accepts: [ItemTypes.PLUGS, ItemTypes.SOCKETS], lastDroppedItem: null, 
+            totalDroppedItems: templatedInput2DroppedItems, e_name: "templated_inputs_row2" },
+        { accepts: [ItemTypes.PLUGS, ItemTypes.SOCKETS], lastDroppedItem: null, 
+            totalDroppedItems: templatedOutput1DroppedItems, e_name: "templated_outputs_row1" },
+        { accepts: [ItemTypes.PLUGS, ItemTypes.SOCKETS], lastDroppedItem: null, 
+            totalDroppedItems: templatedOutput2DroppedItems, e_name: "templated_outputs_row2" },
+        { accepts: [ItemTypes.PLUGS, ItemTypes.SOCKETS], lastDroppedItem: null, 
+            totalDroppedItems: templatedAddon1DroppedItems, e_name: "templated_addons_row1" },
+        { accepts: [ItemTypes.PLUGS, ItemTypes.SOCKETS], lastDroppedItem: null, 
+            totalDroppedItems: templatedAddon2DroppedItems, e_name: "templated_addons_row2" }
     ]);
     const [boxes] = useState([
         { name: 'Plugs', type: ItemTypes.PLUGS, uniqid: null, distribution: null },
         { name: 'Sockets', type: ItemTypes.SOCKETS, uniqid: null, distribution: null },
         { name: 'Pilot Lights', type: ItemTypes.PILOT_LIGHTS, uniqid: null, distribution: null },
-        { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, distribution: null }
+        { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, distribution: null },
+        { name: 'Live Pins Input', type: ItemTypes.LIVE_PINS_INPUT, uniqid: null, distribution: null },
+        { name: 'Loop Through', type: ItemTypes.LIVE_PINS_OUTPUT, uniqid: null, distribution: null },
     ]);
     const [droppedBoxNames, setDroppedBoxNames] = useState([]);
     function isDropped(boxName) {
@@ -89,21 +155,23 @@ export const Container = () => {
         }))
     }, [distributions]);
     return (<div className="AppInnerContainer">
-            <div style={{ overflow: 'hidden', clear: 'both' }}>
-                {distributions.map(({ accepts, lastDroppedItem, totalDroppedItems, e_name }, index) => (<Distribution accept={accepts} 
-                lastDroppedItem={lastDroppedItem} 
-                totalDroppedItems={totalDroppedItems} 
-                e_name={e_name}
-                onDrop={(item) => handleDrop(index, item)} key={index}/>))}
-            </div>
+    <div style={{ overflow: 'hidden', clear: 'both' }}>
+        <div style={style} className="templated-distributions-container">
+            {distributions.map(({ accepts, lastDroppedItem, totalDroppedItems, e_name }, index) => (<Distribution accept={accepts} 
+            lastDroppedItem={lastDroppedItem} 
+            totalDroppedItems={totalDroppedItems} 
+            e_name={e_name}
+            onDrop={(item) => handleDrop(index, item)} key={index}/>))}
+        </div>
+    </div>
 
-            <div style={{ overflow: 'hidden', clear: 'both' }}>
-                {boxes.map(({ name, type }, index) => (<Box name={name} type={type} isDropped={isDropped(name)} key={index}/>))}
-            </div>
+    <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px" }}>
+        {boxes.map(({ name, type }, index) => (<Box name={name} type={type} isDropped={isDropped(name)} key={index}/>))}
+    </div>
 
-        {dustbins.map(({accepts}, num) => (
-            <DustBin key={num} accept={accepts} onDrop={(item) => handleDustBinDrop(num, item)}></DustBin>
-        ))}
-            
-		</div>);
+    {dustbins.map(({accepts}, num) => (
+        <DustBin key={num} accept={accepts} onDrop={(item) => handleDustBinDrop(num, item)}></DustBin>
+    ))}
+        
+    </div>);
 };

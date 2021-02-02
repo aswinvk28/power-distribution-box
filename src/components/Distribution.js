@@ -3,18 +3,16 @@ import { useDrop } from 'react-dnd';
 import { GridBox } from './GridBox';
 import Constants from './Constants';
 const useLocalStorage = Constants.useLocalStorage;
+
 const style = {
-    height: '24rem',
-    width: '24rem',
-    marginRight: '0.5rem',
     marginBottom: '0.5rem',
     color: 'white',
     padding: '1rem',
     textAlign: 'center',
     fontSize: '1rem',
     lineHeight: 'normal',
-    float: 'left',
 };
+
 export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_name, onDrop, }) => {
     // useDrop denotes droppable
     const [{ isOver, canDrop }, drop] = useDrop({
@@ -39,7 +37,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
     if(totalDroppedItems) {
         localStorage.setItem(e_name + ": items", JSON.stringify(totalDroppedItems));
     }
-    return (<div ref={drop} style={{ ...style, backgroundColor }}>
+    return (<div ref={drop} style={{ ...style, backgroundColor }} className={e_name}>
 			{isActive
         ? 'Release to drop'
         : `accepts: ${accept.join(', ')}`}

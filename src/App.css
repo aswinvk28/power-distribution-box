@@ -40,3 +40,68 @@
 body, html, #root {
   height: 100%;
 }
+
+.templated-distributions-container {
+  display: flex;
+  position: relative;
+}
+
+.templated-distributions-container .cartesian {
+  flex: wrap;
+  width: 45%;
+  height: 325px;
+}
+
+.templated-distributions-container .templated_inputs_row1 {
+  flex: wrap;
+  position: absolute;
+  width: 45%;
+  height: 50px;
+  margin-top: 0px;
+  margin-left: 50%;
+}
+
+.templated-distributions-container .templated_inputs_row2 {
+  flex: wrap;
+  position: absolute;
+  width: 45%;
+  height: 50px;
+  margin-top: 55px;
+  margin-left: 50%;
+}
+
+.templated-distributions-container .templated_outputs_row1 {
+  flex: wrap;
+  position: absolute;
+  width: 45%;
+  height: 50px;
+  margin-top: 110px;
+  margin-left: 50%;
+}
+
+.templated-distributions-container .templated_outputs_row2 {
+  flex: wrap;
+  position: absolute;
+  width: 45%;
+  height: 50px;
+  margin-top: 165px;
+  margin-left: 50%;
+}
+
+.templated-distributions-container .templated_addons_row1 {
+  flex: wrap;
+  position: absolute;
+  width: 45%;
+  height: 50px;
+  margin-top: 220px;
+  margin-left: 50%;
+}
+
+.templated-distributions-container .templated_addons_row2 {
+  flex: wrap;
+  position: absolute;
+  width: 45%;
+  height: 50px;
+  margin-top: 275px;
+  margin-left: 50%;
+}

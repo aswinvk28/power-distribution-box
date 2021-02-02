@@ -12,6 +12,7 @@ const style = {
 export const Box = ({ name, type, uniqid, distribution, isDropped }) => {
     // useDrag denotes draggable
     const [{ opacity }, drag] = useDrag({
+        // add attributes here
         item: { name, type, uniqid, distribution },
         collect: (monitor) => ({
             opacity: monitor.isDragging() ? 0.4 : 1,
