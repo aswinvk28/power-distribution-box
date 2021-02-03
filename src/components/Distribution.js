@@ -25,10 +25,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             currentOffset: monitor.getSourceClientOffset()
         }),
         canDrop: (item, monitor) => {
-            return {
-                initialOffset: monitor.getInitialClientOffset(),
-                currentOffset: monitor.getSourceClientOffset()
-            }
+            return (item.distribution != null) || (item.distribution != undefined) ? false : true;
         }
     });
     const isActive = isOver && canDrop;

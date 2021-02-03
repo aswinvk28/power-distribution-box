@@ -65,7 +65,7 @@ export const GridBox = ({ name, type, uniqid, distribution, e_name, isDropped })
     // left and top are saved on refresh
     if(currentOffset && e_name == "cartesian") {
         styleCopy = Object.assign({}, style);
-        styleCopy['left'] = currentOffset.x;
+        styleCopy['left'] = "100px";
         styleCopy['top'] = currentOffset.y;
     }
     let className = "grid-box grid-box-item-" + name;
