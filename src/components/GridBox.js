@@ -16,25 +16,37 @@ const style = {
 };
 let styleCopy = {};
 export const GridBox = ({ name, type, uniqid, distribution, image, e_name, isDropped }) => {
+    let shortClassName = "grid-box-item-" + name;
+    let className = "grid-box " + shortClassName;
+    let width = "20px";
+    if(name == ItemTypes.LIVE_PINS_INPUT || name == ItemTypes.LIVE_PINS_OUTPUT) {
+        width = "50px";
+    }
+    
+    // specify an id for styling purposes
+    let id = shortClassName + "-" + uniqid;
+
+    let position = useMousePosition();
+
     // useDrag denotes draggable
-    const [{ opacity, initialOffset, currentOffset }, drag] = useDrag({
+    const [{ opacity, initialOffset, currentOffset, clientOffset }, drag] = useDrag({
         // add attributes here
         item: { name, type, uniqid, distribution, image },
         collect: (monitor) => ({
             opacity: monitor.isDragging() ? 0.4 : 1,
             initialOffset: monitor.getInitialClientOffset(),
-            currentOffset: monitor.getSourceClientOffset()
-        }),
-        isDragging: (monitor) => {
-            let monitor_initialOffset = monitor.getInitialClientOffset();
-            let monitor_currentOfset = monitor.getSourceClientOffset();
-
-            return {
-                initialOffset: monitor_initialOffset,
-                currentOffset: monitor_currentOfset,
-            }
-        }
+            currentOffset: monitor.getSourceClientOffset(),
+            clientOffset: monitor.getClientOffset()
+        })
     });
+    useEffect(() => {
+        // left and top are saved on refresh
+        if(currentOffset && e_name == "cartesian") {
+            document.getElementById(id).style.position = "absolute";
+            document.getElementById(id).style.left = clientOffset.x.toString() + "px";
+            document.getElementById(id).style.top = currentOffset.y.toString() + "px";
+        }
+    }, [])
     // mouse tracking
     function useMousePosition() {
         const [x, setX] = useState(null)
@@ -62,19 +74,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, e_name, isDro
         
         return { mouseX: x, mouseY: y }
     }
-    let position = useMousePosition();
-    // left and top are saved on refresh
-    if(currentOffset && e_name == "cartesian") {
-        styleCopy = Object.assign({}, style);
-        styleCopy['left'] = "100px";
-        styleCopy['top'] = currentOffset.y;
-    }
-    let className = "grid-box grid-box-item-" + name;
-    let width = "20px";
-    if(name == ItemTypes.LIVE_PINS_INPUT || name == ItemTypes.LIVE_PINS_OUTPUT) {
-        width = "50px";
-    }
-    return (<div ref={drag} style={{...styleCopy, opacity}} className={className}>
+    return (<div ref={drag} style={{...style, opacity}} className={className} id={id}>
             <img src={image} alt={name} title={name} width={width} height="auto" />
 		</div>);
 };
