@@ -21,7 +21,7 @@ const buckets = {
     "templated_addons_row2": null
 };
 
-const allItems = [ItemTypes.PLUGS, ItemTypes.SOCKETS, ItemTypes.PILOT_LIGHTS, 
+const allTypes = [ItemTypes.PLUGS, ItemTypes.SOCKETS, ItemTypes.PILOT_LIGHTS, 
     ItemTypes.MULTIMETER, ItemTypes.LIVE_PINS_INPUT, ItemTypes.LIVE_PINS_OUTPUT];
 
 const style = {
@@ -140,8 +140,7 @@ export const Container = ({ snapToGrid }) => {
     }, [droppedBoxNames, distributions]);
 
     const [dustbins, setDustBin] = useState([
-        { accepts: [ItemTypes.PLUGS, ItemTypes.SOCKETS, 
-            ItemTypes.PILOT_LIGHTS, ItemTypes.MULTIMETER] },
+        { accepts: allTypes },
     ]);
     
     const handleDustBinDrop = useCallback((num, item) => {
@@ -175,7 +174,7 @@ export const Container = ({ snapToGrid }) => {
         }));
     }, [boxes]);
     const [, drop] = useDrop({
-        accept: allItems,
+        accept: allTypes,
         drop(item, monitor) {
             const delta = monitor.getDifferenceFromInitialOffset();
             let left = Math.round(item.left + delta.x);

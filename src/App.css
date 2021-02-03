@@ -109,3 +109,7 @@ body, html, #root {
   margin-top: 275px;
   margin-left: 50%;
 }
+
+.cartesian .grid-box {
+  position: absolute;
+}
