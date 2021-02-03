@@ -118,4 +118,11 @@ body, html, #root {
   color: black;
   font-style: normal;
   text-decoration: none;
+  font-size: 8px;
+}
+
+.box-item {
+  color: black;
+  font-style: normal;
+  font-size: 8px;
 }

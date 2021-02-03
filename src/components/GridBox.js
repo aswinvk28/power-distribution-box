@@ -4,6 +4,7 @@ import update from 'immutability-helper';
 import { useEffect } from 'react'
 import { fromEvent } from 'rxjs'
 import { map, throttleTime } from 'rxjs/operators'
+import { ItemTypes } from './ItemTypes';
 const style = {
     border: '1px dashed gray',
     backgroundColor: 'white',
@@ -14,11 +15,11 @@ const style = {
     float: 'left',
 };
 let styleCopy = {};
-export const GridBox = ({ name, type, uniqid, distribution, e_name, isDropped }) => {
+export const GridBox = ({ name, type, uniqid, distribution, image, e_name, isDropped }) => {
     // useDrag denotes draggable
     const [{ opacity, initialOffset, currentOffset }, drag] = useDrag({
         // add attributes here
-        item: { name, type, uniqid, distribution },
+        item: { name, type, uniqid, distribution, image },
         collect: (monitor) => ({
             opacity: monitor.isDragging() ? 0.4 : 1,
             initialOffset: monitor.getInitialClientOffset(),
@@ -69,7 +70,11 @@ export const GridBox = ({ name, type, uniqid, distribution, e_name, isDropped })
         styleCopy['top'] = currentOffset.y;
     }
     let className = "grid-box grid-box-item-" + name;
+    let width = "20px";
+    if(name == ItemTypes.LIVE_PINS_INPUT || name == ItemTypes.LIVE_PINS_OUTPUT) {
+        width = "50px";
+    }
     return (<div ref={drag} style={{...styleCopy, opacity}} className={className}>
-			{isDropped ? <s>{name}</s> : name}
+            <img src={image} alt={name} title={name} width={width} height="auto" />
 		</div>);
 };
