@@ -21,8 +21,13 @@ const buckets = {
     "templated_addons_row2": null
 };
 
-const allTypes = [ItemTypes.PLUGS, ItemTypes.SOCKETS, ItemTypes.PILOT_LIGHTS, 
-    ItemTypes.MULTIMETER, ItemTypes.LIVE_PINS_INPUT, ItemTypes.LIVE_PINS_OUTPUT];
+const plugsAndSockets = [ItemTypes.PLUGS_1, ItemTypes.PLUGS_2, ItemTypes.PLUGS_3, ItemTypes.PLUGS_4, ItemTypes.PLUGS_5, 
+    ItemTypes.SOCKETS_1, ItemTypes.SOCKETS_2, ItemTypes.SOCKETS_3];
+    
+    const allTypes = [ItemTypes.PLUGS_1, ItemTypes.PLUGS_2, ItemTypes.PLUGS_3, ItemTypes.PLUGS_4, ItemTypes.PLUGS_5, 
+        ItemTypes.SOCKETS_1, ItemTypes.SOCKETS_2, ItemTypes.SOCKETS_3, ItemTypes.PILOT_LIGHTS, 
+        ItemTypes.MULTIMETER, ItemTypes.LIVE_PINS_INPUT, ItemTypes.LIVE_PINS_OUTPUT, 
+    ItemTypes.PINS_INPUT_1, ItemTypes.PINS_INPUT_2];
 
 const style = {
     width: '100%',
@@ -91,32 +96,48 @@ export const Container = ({ snapToGrid }) => {
     const [distributions, setDistributions] = useState([
         { accepts: [ItemTypes.PILOT_LIGHTS, ItemTypes.MULTIMETER], lastDroppedItem: null, 
             totalDroppedItems: cartesianDroppedItems, e_name: "cartesian" },
-        { accepts: [ItemTypes.PLUGS, ItemTypes.SOCKETS], lastDroppedItem: null, 
+        { accepts: plugsAndSockets, lastDroppedItem: null, 
             totalDroppedItems: templatedInput1DroppedItems, e_name: "templated_inputs_row1" },
-        { accepts: [ItemTypes.PLUGS, ItemTypes.SOCKETS], lastDroppedItem: null, 
+        { accepts: plugsAndSockets, lastDroppedItem: null, 
             totalDroppedItems: templatedInput2DroppedItems, e_name: "templated_inputs_row2" },
-        { accepts: [ItemTypes.PLUGS, ItemTypes.SOCKETS], lastDroppedItem: null, 
+        { accepts: plugsAndSockets, lastDroppedItem: null, 
             totalDroppedItems: templatedOutput1DroppedItems, e_name: "templated_outputs_row1" },
-        { accepts: [ItemTypes.PLUGS, ItemTypes.SOCKETS], lastDroppedItem: null, 
+        { accepts: plugsAndSockets, lastDroppedItem: null, 
             totalDroppedItems: templatedOutput2DroppedItems, e_name: "templated_outputs_row2" },
-        { accepts: [ItemTypes.PLUGS, ItemTypes.SOCKETS], lastDroppedItem: null, 
+        { accepts: plugsAndSockets, lastDroppedItem: null, 
             totalDroppedItems: templatedAddon1DroppedItems, e_name: "templated_addons_row1" },
-        { accepts: [ItemTypes.PLUGS, ItemTypes.SOCKETS], lastDroppedItem: null, 
+        { accepts: plugsAndSockets, lastDroppedItem: null, 
             totalDroppedItems: templatedAddon2DroppedItems, e_name: "templated_addons_row2" }
     ]);
     const [boxes, setBoxes] = useState([
-        { name: 'Plugs', type: ItemTypes.PLUGS, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0 },
-        { name: 'Sockets', type: ItemTypes.SOCKETS, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 1 },
+        { name: 'Plugs@1', type: ItemTypes.PLUGS_1, uniqid: null, 
+        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-1.png' },
+        { name: 'Plugs@2', type: ItemTypes.PLUGS_2, uniqid: null, 
+        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-2.png' },
+        { name: 'Plugs@3', type: ItemTypes.PLUGS_3, uniqid: null, 
+        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-3.png' },
+        { name: 'Plugs@4', type: ItemTypes.PLUGS_4, uniqid: null, 
+        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-4.png' },
+        { name: 'Plugs@5', type: ItemTypes.PLUGS_5, uniqid: null, 
+        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-5.png' },
+        { name: 'Sockets@1', type: ItemTypes.SOCKETS_1, uniqid: null, 
+        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-1.png' },
+        { name: 'Sockets@2', type: ItemTypes.SOCKETS_2, uniqid: null, 
+        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-2.png' },
+        { name: 'Sockets@3', type: ItemTypes.SOCKETS_3, uniqid: null, 
+        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-3.png' },
         { name: 'Pilot Lights', type: ItemTypes.PILOT_LIGHTS, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 2 },
+        distribution: null, left: 0, top: 0, index: 2, image: '' },
         { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 3 },
+        distribution: null, left: 0, top: 0, index: 3, image: '' },
         { name: 'Live Pins Input', type: ItemTypes.LIVE_PINS_INPUT, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 4 },
+        distribution: null, left: 0, top: 0, index: 4, image: 'images/dist_box/Live-Pins-Inputs.png' },
         { name: 'Loop Through', type: ItemTypes.LIVE_PINS_OUTPUT, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 5 },
+        distribution: null, left: 0, top: 0, index: 5, image: 'images/dist_box/Live-Pins-Outputs.png' },
+        { name: 'Pins Input@1', type: ItemTypes.PINS_INPUT_1, uniqid: null, 
+        distribution: null, left: 0, top: 0, index: 4, image: 'images/dist_box/Inputs-Pin-1.png' },
+        { name: 'Pins Input@2', type: ItemTypes.PINS_INPUT_2, uniqid: null, 
+        distribution: null, left: 0, top: 0, index: 5, image: 'images/dist_box/Inputs-Pin-2.png' },
     ]);
     const [droppedBoxNames, setDroppedBoxNames] = useState([]);
     function isDropped(boxName) {
@@ -188,11 +209,13 @@ export const Container = ({ snapToGrid }) => {
         },
     });
 
+    // render the draggable box
     function renderBox(item, index) {
         return (<DraggableBox key={index} id={index}
         name={item.name} type={item.type} 
         uniqid={item.uniqid}
         distribution={item.distribution}
+        image={item.image}
         isDropped={isDropped(item.name)}
         {...item} />)
     }

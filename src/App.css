@@ -113,3 +113,16 @@ body, html, #root {
 .cartesian .grid-box {
   position: absolute;
 }
+
+.cartesian .grid-box s {
+  color: black;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 8px;
+}
+
+.box-item {
+  color: black;
+  font-style: normal;
+  font-size: 8px;
+}

@@ -25,10 +25,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             currentOffset: monitor.getSourceClientOffset()
         }),
         canDrop: (item, monitor) => {
-            return {
-                initialOffset: monitor.getInitialClientOffset(),
-                currentOffset: monitor.getSourceClientOffset()
-            }
+            return (item.distribution != null) || (item.distribution != undefined) ? false : true;
         }
     });
     const isActive = isOver && canDrop;
@@ -51,10 +48,10 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             {e_name.indexOf("outputs") > -1 ? 'outputs' : ''}
 
             {
-                totalDroppedItems.map(({name, type, uniqid, distribution}, index) =>  {
+                totalDroppedItems.map(({name, type, uniqid, distribution, image}, index) =>  {
                     return (
                         <GridBox name={name} type={type} uniqid={uniqid} key={index}
-                        distribution={distribution} e_name={e_name}
+                        distribution={distribution} image={image} e_name={e_name}
                         isDropped={true} />
                     )
                 })
