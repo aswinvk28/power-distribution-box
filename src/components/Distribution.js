@@ -7,10 +7,10 @@ const useLocalStorage = Constants.useLocalStorage;
 let style = {
     marginBottom: '0.5rem',
     color: 'white',
-    padding: '1rem',
+    padding: '32px',
     textAlign: 'center',
     fontSize: '1rem',
-    lineHeight: 'normal',
+    lineHeight: 'normal'
 };
 
 export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_name, onDrop, }) => {

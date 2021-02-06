@@ -7,7 +7,7 @@ const style = {
     width: '90%',
     marginBottom: '0.5rem',
     color: 'white',
-    padding: '1rem',
+    padding: '32px',
     textAlign: 'center',
     fontSize: '5rem',
     lineHeight: 'normal',
