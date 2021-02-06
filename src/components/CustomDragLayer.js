@@ -97,18 +97,21 @@ export const CustomDragLayer = (props) => {
     }
     function renderItem() {
         switch (itemType) {
-            case ItemTypes.PLUGS:
-                return <BoxDragPreview type={item.type} name={item.name} />;
-            case ItemTypes.SOCKETS:
-                return <BoxDragPreview type={item.type} name={item.name} />;
+            case ItemTypes.PLUGS_1:
+            case ItemTypes.PLUGS_2:
+            case ItemTypes.PLUGS_3: 
+            case ItemTypes.PLUGS_4:
+            case ItemTypes.PLUGS_5:
+            case ItemTypes.SOCKETS_1:
+            case ItemTypes.SOCKETS_2: 
+            case ItemTypes.SOCKETS_3:
             case ItemTypes.PILOT_LIGHTS:
-                return <BoxDragPreview type={item.type} name={item.name} />;
             case ItemTypes.MULTIMETER:
-                return <BoxDragPreview type={item.type} name={item.name} />;
             case ItemTypes.LIVE_PINS_INPUT:
-                return <BoxDragPreview type={item.type} name={item.name} />;
             case ItemTypes.LIVE_PINS_OUTPUT:
-                return <BoxDragPreview type={item.type} name={item.name} />;
+            case ItemTypes.PINS_INPUT_1: 
+            case ItemTypes.PINS_INPUT_2:
+                return <BoxDragPreview type={item.type} name={item.name} image={item.image} />;
             default:
                 return null;
         }
