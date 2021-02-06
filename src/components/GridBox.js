@@ -5,16 +5,36 @@ import { useEffect } from 'react'
 import { fromEvent } from 'rxjs'
 import { map, throttleTime } from 'rxjs/operators'
 import { ItemTypes } from './ItemTypes';
+import { snapToGrid as doSnapToGrid } from './snapToGrid';
+import $ from 'jquery';
 const style = {
     border: '1px dashed gray',
-    backgroundColor: 'white',
-    padding: '0.5rem 1rem',
+    backgroundColor: 'transparent',
+    padding: '0.1px',
     marginRight: '1.5rem',
     marginBottom: '1.5rem',
     cursor: 'move',
     float: 'left',
 };
 let styleCopy = {};
+// define the widths here
+let widths = {};
+widths[ItemTypes.PLUGS] = "40px";
+widths[ItemTypes.SOCKETS] = "40px";
+widths[ItemTypes.PILOT_LIGHTS] = "20px";
+widths[ItemTypes.MULTIMETER] = "50px";
+widths[ItemTypes.LIVE_PINS_INPUT] = "50px";
+widths[ItemTypes.LIVE_PINS_OUTPUT] = "50px";
+widths[ItemTypes.PINS_INPUT_1] = "40px";
+widths[ItemTypes.PINS_INPUT_2] = "40px";
+widths[ItemTypes.PLUGS_1] = "40px";
+widths[ItemTypes.PLUGS_2] = "40px";
+widths[ItemTypes.PLUGS_3] = "40px";
+widths[ItemTypes.PLUGS_4] = "40px";
+widths[ItemTypes.PLUGS_5] = "40px";
+widths[ItemTypes.SOCKETS_1] = "40px";
+widths[ItemTypes.SOCKETS_2] = "40px";
+widths[ItemTypes.SOCKETS_3] = "40px";
 export const GridBox = ({ name, type, uniqid, distribution, image, e_name, isDropped }) => {
     let shortClassName = "grid-box-item-" + name;
     let className = "grid-box " + shortClassName;
@@ -43,8 +63,21 @@ export const GridBox = ({ name, type, uniqid, distribution, image, e_name, isDro
         // left and top are saved on refresh
         if(currentOffset && e_name == "cartesian") {
             document.getElementById(id).style.position = "absolute";
-            document.getElementById(id).style.left = clientOffset.x.toString() + "px";
-            document.getElementById(id).style.top = currentOffset.y.toString() + "px";
+            let [left, top] = doSnapToGrid(clientOffset.x, currentOffset.y);
+            document.getElementById(id).style.left = left.toString() + "px";
+            document.getElementById(id).style.top = top.toString() + "px";
+        } else if(currentOffset && e_name.indexOf("templated") !== -1) {
+            document.getElementById(id).style.position = "absolute";
+            let [left, top] = doSnapToGrid(currentOffset.x, currentOffset.y);
+            let elem = document.getElementsByClassName(e_name).item(0);
+            let marginLeft = parseInt($(elem).css('marginLeft').replace('px', '')), 
+            marginTop = parseInt($(elem).css('marginTop').replace('px', '')), 
+            paddingLeft = parseInt($(elem).css('paddingLeft').replace('px', '')),
+            paddingTop = parseInt($(elem).css('paddingTop').replace('px', '')),
+            containerPaddingLeft = parseInt($('.templated-distributions-container').css('paddingLeft').replace('px', '')),
+            containerPaddingTop = parseInt($('.templated-distributions-container').css('paddingTop').replace('px', ''));
+            document.getElementById(id).style.left = (left-marginLeft-paddingLeft-containerPaddingLeft+312).toString() + "px";
+            document.getElementById(id).style.top = (top-marginTop-paddingTop-containerPaddingTop).toString() + "px";
         }
     }, [])
     // mouse tracking
@@ -75,6 +108,6 @@ export const GridBox = ({ name, type, uniqid, distribution, image, e_name, isDro
         return { mouseX: x, mouseY: y }
     }
     return (<div ref={drag} style={{...style, opacity}} className={className} id={id}>
-            <img src={image} alt={name} title={name} width={width} height="auto" />
+            <img src={image} alt={name} title={name} width={widths[type]} height="auto" />
 		</div>);
 };

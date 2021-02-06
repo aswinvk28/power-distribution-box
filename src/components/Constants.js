@@ -1,5 +1,6 @@
 const Constants = {
-    useLocalStorage: true
+    useLocalStorage: true,
+    gridSize: 16
 };
 
 export default Constants;

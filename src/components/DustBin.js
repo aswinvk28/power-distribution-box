@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
+import Constants from './Constants';
 const style = {
     height: '350px',
     marginRight: '10%',
@@ -7,7 +8,7 @@ const style = {
     width: '90%',
     marginBottom: '0.5rem',
     color: 'white',
-    padding: '1rem',
+    padding: Constants.gridSize.toString() + 'px',
     textAlign: 'center',
     fontSize: '5rem',
     lineHeight: 'normal',
