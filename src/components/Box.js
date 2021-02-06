@@ -22,9 +22,9 @@ export const Box = ({ name, type, uniqid, distribution, image, isDropped }) => {
         }
     });
     let className = "box-item box-item-" + name;
-    let width = "60px";
+    let width = "20px";
     if(type == ItemTypes.LIVE_PINS_INPUT || type == ItemTypes.LIVE_PINS_OUTPUT) {
-        width = "160px";
+        width = "80px";
     }
     return (<div style={{ ...style, opacity }} className={className}>
             <img src={image} alt={name} title={name} width={width} height="auto" />
