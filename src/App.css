@@ -54,7 +54,7 @@ body, html, #root {
   flex: wrap;
   width: 45%;
   height: 505px;
-  background: url('images/grid/grid_image.jpg') 0px 0px transparent repeat;
+  background: url('images/grid/grid_image-10.jpg') 0px 0px transparent repeat;
 }
 
 .templated-distributions-container .templated_inputs_row1 {
@@ -111,7 +111,8 @@ body, html, #root {
   margin-left: 50%;
 }
 
-.cartesian .grid-box {
+.cartesian .grid-box, .templated_inputs_row1 .grid-box, .templated_inputs_row2 .grid-box, .templated_outputs_row1 .grid-box, 
+.templated_outputs_row2 .grid-box, .templated_addons_row1 .grid-box, .templated_addons_row2 .grid-box {
   position: absolute;
 }
 

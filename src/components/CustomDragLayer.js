@@ -8,6 +8,7 @@ import update from 'immutability-helper';
 import { useEffect } from 'react'
 import { fromEvent } from 'rxjs'
 import { map, throttleTime } from 'rxjs/operators'
+import Constants from './Constants';
 const layerStyles = {
     position: 'absolute',
     pointerEvents: 'none',
@@ -24,8 +25,8 @@ function getItemStyles(initialOffset, currentOffset, clientOffset, isSnapToGrid)
     }
     let { x, y } = clientOffset;
     if (isSnapToGrid) {
-        x -= initialOffset.x + 32;
-        y -= initialOffset.y + 32;
+        x -= initialOffset.x + Constants.gridSize;
+        y -= initialOffset.y + Constants.gridSize;
         [x, y] = snapToGrid(x, y);
         x += initialOffset.x;
         y += initialOffset.y;
@@ -37,7 +38,6 @@ function getItemStyles(initialOffset, currentOffset, clientOffset, isSnapToGrid)
     };
 }
 export const CustomDragLayer = (props) => {
-    let id = null, shortClassName = null;
     const { itemType, isDragging, item, initialOffset, currentOffset, clientOffset } = useDragLayer((monitor) => ({
         item: monitor.getItem(),
         itemType: monitor.getItemType(),
@@ -46,9 +46,6 @@ export const CustomDragLayer = (props) => {
         clientOffset: monitor.getClientOffset(),
         isDragging: monitor.isDragging(),
         collect: (monitor) => {
-            shortClassName = "custom-drag-layer-item-" + itemType;
-            // specify an id for styling purposes
-            id = shortClassName + "-" + item.name;
             return {
                 isOver: monitor.isOver(),
                 canDrop: monitor.canDrop(),
@@ -64,8 +61,8 @@ export const CustomDragLayer = (props) => {
         // left and top are saved on refresh
         if(currentOffset) {
             document.getElementById(id).style.position = "absolute";
-            document.getElementById(id).style.left = clientOffset.x.toString() + "px";
-            document.getElementById(id).style.top = currentOffset.y.toString() + "px";
+            document.getElementById(id).style.left = (currentOffset.x).toString() + "px";
+            document.getElementById(id).style.top = (currentOffset.y).toString() + "px";
         }
     }, []);
     // mouse tracking
@@ -119,6 +116,9 @@ export const CustomDragLayer = (props) => {
     if (!isDragging) {
         return null;
     }
+    let shortClassName = "custom-drag-layer-item-" + itemType;
+    // specify an id for styling purposes
+    let id = shortClassName + "-" + item.name;
     return (<div style={layerStyles} className="custom-drag-layer" id={id}>
 			<div style={getItemStyles(initialOffset, currentOffset, clientOffset, props.snapToGrid)} className="custom-drag-layer-inner">
 				{renderItem()}

@@ -6,6 +6,7 @@ import { fromEvent } from 'rxjs'
 import { map, throttleTime } from 'rxjs/operators'
 import { ItemTypes } from './ItemTypes';
 import { snapToGrid as doSnapToGrid } from './snapToGrid';
+import $ from 'jquery';
 const style = {
     border: '1px dashed gray',
     backgroundColor: 'transparent',
@@ -65,6 +66,18 @@ export const GridBox = ({ name, type, uniqid, distribution, image, e_name, isDro
             let [left, top] = doSnapToGrid(clientOffset.x, currentOffset.y);
             document.getElementById(id).style.left = left.toString() + "px";
             document.getElementById(id).style.top = top.toString() + "px";
+        } else if(currentOffset && e_name.indexOf("templated") !== -1) {
+            document.getElementById(id).style.position = "absolute";
+            let [left, top] = doSnapToGrid(currentOffset.x, currentOffset.y);
+            let elem = document.getElementsByClassName(e_name).item(0);
+            let marginLeft = parseInt($(elem).css('marginLeft').replace('px', '')), 
+            marginTop = parseInt($(elem).css('marginTop').replace('px', '')), 
+            paddingLeft = parseInt($(elem).css('paddingLeft').replace('px', '')),
+            paddingTop = parseInt($(elem).css('paddingTop').replace('px', '')),
+            containerPaddingLeft = parseInt($('.templated-distributions-container').css('paddingLeft').replace('px', '')),
+            containerPaddingTop = parseInt($('.templated-distributions-container').css('paddingTop').replace('px', ''));
+            document.getElementById(id).style.left = (left-marginLeft-paddingLeft-containerPaddingLeft+312).toString() + "px";
+            document.getElementById(id).style.top = (top-marginTop-paddingTop-containerPaddingTop).toString() + "px";
         }
     }, [])
     // mouse tracking

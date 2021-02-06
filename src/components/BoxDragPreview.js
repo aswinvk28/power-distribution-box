@@ -1,9 +1,10 @@
 import React, { useEffect, useState, memo } from 'react';
 import { Box } from './Box';
+import { ItemTypes } from './ItemTypes';
 const styles = {
     display: 'inline-block',
-    transform: 'rotate(0deg)',
-    WebkitTransform: 'rotate(0deg)',
+    transform: 'rotate(0deg) translate(-84px, -10px)',
+    WebkitTransform: 'rotate(0deg) translate(-84px, -10px)',
 };
 export const BoxDragPreview = memo(({ name, type, image }) => {
     const [tickTock, setTickTock] = useState(false);
@@ -11,7 +12,8 @@ export const BoxDragPreview = memo(({ name, type, image }) => {
         const interval = setInterval(() => setTickTock(!tickTock), 500);
         return () => clearInterval(interval);
     }, [tickTock]);
-    return (<div style={styles} className="box-drag-preview">
+    let id = "box-drag-preview-" + name;
+    return (<div style={styles} className="box-drag-preview" id={id}>
 				<Box name={name} type={type} image={image} yellow={tickTock}/>
 			</div>);
 });
