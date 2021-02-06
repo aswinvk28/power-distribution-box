@@ -53,8 +53,16 @@ body, html, #root {
 .templated-distributions-container .cartesian {
   flex: wrap;
   width: 45%;
-  height: 505px;
+  height: 646px;
   background: url('images/grid/grid_image-10.jpg') 0px 0px transparent repeat;
+}
+
+.distribution_container {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #beb3b3;
+  border-radius: 3px;
+  color: #ababab;
 }
 
 .templated-distributions-container .templated_inputs_row1 {
@@ -71,7 +79,7 @@ body, html, #root {
   position: absolute;
   width: 45%;
   height: 80px;
-  margin-top: 85px;
+  margin-top: 113px;
   margin-left: 50%;
 }
 
@@ -80,7 +88,7 @@ body, html, #root {
   position: absolute;
   width: 45%;
   height: 80px;
-  margin-top: 165px;
+  margin-top: 226px;
   margin-left: 50%;
 }
 
@@ -89,7 +97,7 @@ body, html, #root {
   position: absolute;
   width: 45%;
   height: 80px;
-  margin-top: 250px;
+  margin-top: 339px;
   margin-left: 50%;
 }
 
@@ -98,7 +106,7 @@ body, html, #root {
   position: absolute;
   width: 45%;
   height: 80px;
-  margin-top: 335px;
+  margin-top: 452px;
   margin-left: 50%;
 }
 
@@ -107,7 +115,7 @@ body, html, #root {
   position: absolute;
   width: 45%;
   height: 80px;
-  margin-top: 420px;
+  margin-top: 565px;
   margin-left: 50%;
 }
 

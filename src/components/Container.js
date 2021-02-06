@@ -33,7 +33,7 @@ const style = {
     width: '100%',
     // marginRight: '0.5rem',
     marginBottom: '0.5rem',
-    color: 'white',
+    color: '#ababab',
     padding: '1rem',
     textAlign: 'center',
     fontSize: '1rem',

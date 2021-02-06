@@ -10,7 +10,6 @@ const useLocalStorage = Constants.useLocalStorage;
 
 let style = {
     marginBottom: '0.5rem',
-    color: 'white',
     padding: Constants.gridSize.toString() + 'px',
     textAlign: 'center',
     fontSize: '1rem',
@@ -45,7 +44,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         }
     });
     const isActive = isOver && canDrop;
-    let backgroundColor = '#222';
+    let backgroundColor = 'rgb(30, 80, 155)';
     if (isActive) {
         backgroundColor = 'darkgreen';
     }
@@ -103,20 +102,24 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
     }
 
     return (<div ref={drop} style={{ ...style, backgroundColor }} className={e_name}>
-			{e_name.indexOf("addons") > -1 ? 'addons' : ''}
+			<em style={{position: 'absolute', fontSize: '24px', color: 'rgb(50, 55, 165)'}}>
+            {e_name.indexOf("addons") > -1 ? 'addons' : ''}
             {e_name.indexOf("inputs") > -1 ? 'inputs' : ''}
             {e_name.indexOf("outputs") > -1 ? 'outputs' : ''}
+            </em>
 
             {$elem}
 
-            {
-                totalDroppedItems.map(({name, type, uniqid, distribution, image}, index) =>  {
-                    return (
-                        <GridBox name={name} type={type} uniqid={uniqid} key={index}
-                        distribution={distribution} image={image} e_name={e_name}
-                        isDropped={true} />
-                    )
-                })
-            }
+            <div className="distribution_container">
+                {
+                    totalDroppedItems.map(({name, type, uniqid, distribution, image}, index) =>  {
+                        return (
+                            <GridBox name={name} type={type} uniqid={uniqid} key={index}
+                            distribution={distribution} image={image} e_name={e_name}
+                            isDropped={true} />
+                        )
+                    })
+                }
+            </div>
 		</div>);
 };
