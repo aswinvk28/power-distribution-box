@@ -6,6 +6,7 @@ import { fromEvent } from 'rxjs'
 import { map, throttleTime } from 'rxjs/operators'
 import { ItemTypes } from './ItemTypes';
 import { snapToGrid as doSnapToGrid } from './snapToGrid';
+import DistributionMenu from './DistributionMenu';
 import $ from 'jquery';
 const style = {
     border: '1px dashed gray',
@@ -108,6 +109,6 @@ export const GridBox = ({ name, type, uniqid, distribution, image, e_name, isDro
         return { mouseX: x, mouseY: y }
     }
     return (<div ref={drag} style={{...style, opacity}} className={className} id={id}>
-            <img src={image} alt={name} title={name} width={widths[type]} height="auto" />
+            <DistributionMenu image={image} name={name} width={widths[type]} height="auto" />
 		</div>);
 };
