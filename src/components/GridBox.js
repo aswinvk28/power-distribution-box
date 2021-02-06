@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { fromEvent } from 'rxjs'
 import { map, throttleTime } from 'rxjs/operators'
 import { ItemTypes } from './ItemTypes';
+import { snapToGrid as doSnapToGrid } from './snapToGrid';
 const style = {
     border: '1px dashed gray',
     backgroundColor: 'white',
@@ -43,8 +44,9 @@ export const GridBox = ({ name, type, uniqid, distribution, image, e_name, isDro
         // left and top are saved on refresh
         if(currentOffset && e_name == "cartesian") {
             document.getElementById(id).style.position = "absolute";
-            document.getElementById(id).style.left = clientOffset.x.toString() + "px";
-            document.getElementById(id).style.top = currentOffset.y.toString() + "px";
+            let [left, top] = doSnapToGrid(clientOffset.x, currentOffset.y);
+            document.getElementById(id).style.left = left.toString() + "px";
+            document.getElementById(id).style.top = top.toString() + "px";
         }
     }, [])
     // mouse tracking

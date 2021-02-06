@@ -187,13 +187,6 @@ export const Container = ({ snapToGrid }) => {
         }))
     }, [distributions]);
 
-    const moveBox = useCallback((index, uniqid, left, top) => {
-        setBoxes(update(boxes, {
-            [index]: {
-                $merge: { left, top },
-            },
-        }));
-    }, [boxes]);
     const [, drop] = useDrop({
         accept: allTypes,
         drop(item, monitor) {
@@ -204,7 +197,6 @@ export const Container = ({ snapToGrid }) => {
                 ;
                 [left, top] = doSnapToGrid(left, top);
             }
-            moveBox(item.index, item.uniqid, left, top);
             return undefined;
         },
     });
