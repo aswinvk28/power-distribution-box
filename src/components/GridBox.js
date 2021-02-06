@@ -8,14 +8,32 @@ import { ItemTypes } from './ItemTypes';
 import { snapToGrid as doSnapToGrid } from './snapToGrid';
 const style = {
     border: '1px dashed gray',
-    backgroundColor: 'white',
-    padding: '0.5rem 1rem',
+    backgroundColor: 'transparent',
+    padding: '0.1px',
     marginRight: '1.5rem',
     marginBottom: '1.5rem',
     cursor: 'move',
     float: 'left',
 };
 let styleCopy = {};
+// define the widths here
+let widths = {};
+widths[ItemTypes.PLUGS] = "40px";
+widths[ItemTypes.SOCKETS] = "40px";
+widths[ItemTypes.PILOT_LIGHTS] = "20px";
+widths[ItemTypes.MULTIMETER] = "50px";
+widths[ItemTypes.LIVE_PINS_INPUT] = "50px";
+widths[ItemTypes.LIVE_PINS_OUTPUT] = "50px";
+widths[ItemTypes.PINS_INPUT_1] = "40px";
+widths[ItemTypes.PINS_INPUT_2] = "40px";
+widths[ItemTypes.PLUGS_1] = "40px";
+widths[ItemTypes.PLUGS_2] = "40px";
+widths[ItemTypes.PLUGS_3] = "40px";
+widths[ItemTypes.PLUGS_4] = "40px";
+widths[ItemTypes.PLUGS_5] = "40px";
+widths[ItemTypes.SOCKETS_1] = "40px";
+widths[ItemTypes.SOCKETS_2] = "40px";
+widths[ItemTypes.SOCKETS_3] = "40px";
 export const GridBox = ({ name, type, uniqid, distribution, image, e_name, isDropped }) => {
     let shortClassName = "grid-box-item-" + name;
     let className = "grid-box " + shortClassName;
@@ -77,6 +95,6 @@ export const GridBox = ({ name, type, uniqid, distribution, image, e_name, isDro
         return { mouseX: x, mouseY: y }
     }
     return (<div ref={drag} style={{...style, opacity}} className={className} id={id}>
-            <img src={image} alt={name} title={name} width={width} height="auto" />
+            <img src={image} alt={name} title={name} width={widths[type]} height="auto" />
 		</div>);
 };
