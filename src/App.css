@@ -41,7 +41,7 @@ body, html, #root {
   height: 100%;
 }
 
-.AppInnerContainer {
+.AppInnerContainerHolder {
   position: relative;
 }
 
