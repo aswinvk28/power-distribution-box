@@ -96,12 +96,14 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             let [left, top] = doSnapToGrid(x, y);
             document.getElementById(item.highlightComponent).style.left = left.toString() + "px";
             document.getElementById(item.highlightComponent).style.top = top.toString() + "px";
+            item.left = left.toString() + "px";
+            item.top = top.toString() + "px";
         }
 
         return { mouseX: x, mouseY: y }
     }
 
-    return (<div ref={drop} style={{ ...style, backgroundColor }} className={e_name}>
+    return (<div style={{ ...style, backgroundColor }} className={e_name}>
 			<em style={{position: 'absolute', fontSize: '24px', color: 'rgb(50, 55, 165)'}}>
             {e_name.indexOf("addons") > -1 ? 'addons' : ''}
             {e_name.indexOf("inputs") > -1 ? 'inputs' : ''}
@@ -110,7 +112,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
 
             {$elem}
 
-            <div className="distribution_container">
+            <div ref={drop} className="distribution_container">
                 {
                     totalDroppedItems.map(({name, type, uniqid, distribution, image}, index) =>  {
                         return (

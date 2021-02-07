@@ -2,7 +2,7 @@ import React from 'react';
 import { useDrop } from 'react-dnd';
 import Constants from './Constants';
 const style = {
-    height: '350px',
+    // height: '350px',
     marginRight: '10%',
     marginLeft: '5%',
     width: '90%',
@@ -12,7 +12,6 @@ const style = {
     textAlign: 'center',
     fontSize: '5rem',
     lineHeight: 'normal',
-    float: 'left',
 };
 export const DustBin = ({ accept, onDrop, }) => {
     // useDrop denotes droppable

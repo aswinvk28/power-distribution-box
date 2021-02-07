@@ -111,33 +111,47 @@ export const Container = ({ snapToGrid }) => {
     ]);
     const [boxes, setBoxes] = useState([
         { name: 'Plugs@1', type: ItemTypes.PLUGS_1, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-1.png' },
+        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-1.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '150px'} },
         { name: 'Plugs@2', type: ItemTypes.PLUGS_2, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-2.png' },
+        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-2.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '80px'} },
         { name: 'Plugs@3', type: ItemTypes.PLUGS_3, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-3.png' },
+        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-3.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '80px'} },
         { name: 'Plugs@4', type: ItemTypes.PLUGS_4, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-4.png' },
+        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-4.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '80px'} },
         { name: 'Plugs@5', type: ItemTypes.PLUGS_5, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-5.png' },
+        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-5.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '80px'} },
         { name: 'Sockets@1', type: ItemTypes.SOCKETS_1, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-1.png' },
+        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-1.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '100px'} },
         { name: 'Sockets@2', type: ItemTypes.SOCKETS_2, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-2.png' },
+        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-2.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '100px'} },
         { name: 'Sockets@3', type: ItemTypes.SOCKETS_3, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-3.png' },
+        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-3.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '100px'} },
         { name: 'Pilot-Lights', type: ItemTypes.PILOT_LIGHTS, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 2, image: 'images/dist_box/pilot-lights.jpg' },
+        distribution: null, left: 0, top: 0, index: 2, image: 'images/dist_box/pilot-lights.gif', element_type: Constants.ElementType.FRONTS, 
+        size: {width: '60px'} },
         { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 3, image: 'images/dist_box/multimeter.png' },
+        distribution: null, left: 0, top: 0, index: 3, image: 'images/dist_box/multimeter.png', element_type: Constants.ElementType.FRONTS, 
+        size: {width: '60px'} },
         { name: 'Live-Pins-Input', type: ItemTypes.LIVE_PINS_INPUT, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 4, image: 'images/dist_box/Live-Pins-Inputs.png' },
+        distribution: null, left: 0, top: 0, index: 4, image: 'images/dist_box/Live-Pins-Inputs.png', element_type: Constants.ElementType.ADDONS, 
+        size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH} },
         { name: 'Loop-Through', type: ItemTypes.LIVE_PINS_OUTPUT, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 5, image: 'images/dist_box/Live-Pins-Outputs.png' },
+        distribution: null, left: 0, top: 0, index: 5, image: 'images/dist_box/Live-Pins-Outputs.png', element_type: Constants.ElementType.ADDONS, 
+        size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH} },
         { name: 'Pins-Input@1', type: ItemTypes.PINS_INPUT_1, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 4, image: 'images/dist_box/Inputs-Pin-1.png' },
+        distribution: null, left: 0, top: 0, index: 4, image: 'images/dist_box/Inputs-Pin-1.png', element_type: Constants.ElementType.INPUTS, 
+        size: {width: '80px'} },
         { name: 'Pins-Input@2', type: ItemTypes.PINS_INPUT_2, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 5, image: 'images/dist_box/Inputs-Pin-2.png' },
+        distribution: null, left: 0, top: 0, index: 5, image: 'images/dist_box/Inputs-Pin-2.png', element_type: Constants.ElementType.INPUTS, 
+        size: {width: '80px'} },
     ]);
     const [droppedBoxNames, setDroppedBoxNames] = useState([]);
     function isDropped(boxName) {
@@ -203,14 +217,37 @@ export const Container = ({ snapToGrid }) => {
 
     // render the draggable box
     function renderBox(item, index) {
-        return (<DraggableBox key={index} id={index}
-        name={item.name} type={item.type} 
-        uniqid={item.uniqid}
-        distribution={item.distribution}
-        image={item.image}
-        isDropped={isDropped(item.name)}
-        {...item} />)
+        return (<div className="draggable-box-container">
+            <DraggableBox key={index} id={index}
+            name={item.name} type={item.type} 
+            uniqid={item.uniqid}
+            distribution={item.distribution}
+            image={item.image}
+            width={item.width}
+            isDropped={isDropped(item.name)}
+            {...item} />
+        </div>)
     }
+
+    let element_outputs = [], element_fronts = [], element_addons = [], element_inputs = [];
+    boxes.map((item, index) => {
+        switch(item.element_type) {
+            case Constants.ElementType.OUTPUTS:
+                element_outputs.push([item, index]);
+                break;
+            case Constants.ElementType.FRONTS:
+                element_fronts.push([item, index]);
+                break;
+            case Constants.ElementType.ADDONS:
+                element_addons.push([item, index]);
+                break;
+            case Constants.ElementType.INPUTS:
+                element_inputs.push([item, index]);
+                break;
+            default:
+                break;
+        }
+    })
 
     return (<div className="AppInnerContainer">
     <div style={{ overflow: 'hidden', clear: 'both' }}>
@@ -223,11 +260,52 @@ export const Container = ({ snapToGrid }) => {
         </div>
     </div>
 
-    <div drop={drop} style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
-    height: 300, border: '1px solid black', position: 'relative' }} className="boxes-container">
-        {boxes.map((item, index) => (
-            renderBox(item, index)
-        ))}
+    <div className="boxes-container-draggable">
+
+        <div className="boxes-container-holder-left">
+            <div drop={drop} style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
+            position: 'relative' }} className="boxes-container">
+                <em>{element_fronts[0][0].element_type}</em>
+                {
+                    element_fronts.map((element, index) => (
+                        renderBox(element[0], element[1])
+                    ))
+                }
+            </div>
+        </div>
+
+        <div className="boxes-container-holder-right">
+            <div drop={drop} style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
+            position: 'relative' }} className="boxes-container">
+                <em>{element_outputs[0][0].element_type}</em>
+                {
+                    element_outputs.map((element, index) => (
+                        renderBox(element[0], element[1])
+                    ))
+                }
+            </div>
+
+            <div drop={drop} style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
+            position: 'relative' }} className="boxes-container">
+                <em>{element_addons[0][0].element_type}</em>
+                {
+                    element_addons.map((element, index) => (
+                        renderBox(element[0], element[1])
+                    ))
+                }
+            </div>
+
+            <div drop={drop} style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
+            position: 'relative' }} className="boxes-container">
+                <em>{element_inputs[0][0].element_type}</em>
+                {
+                    element_inputs.map((element, index) => (
+                        renderBox(element[0], element[1])
+                    ))
+                }
+            </div>
+        </div>
+
     </div>
 
     {dustbins.map(({accepts}, num) => (
