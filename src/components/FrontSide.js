@@ -1,11 +1,9 @@
 import PowerDist from './PowerDist'
 
-function FrontSide() {
+export function FrontSide() {
     return (
-        <div className="App">
-            
+        <div className="App" id="svg_container">
+
         </div>
     )
 }
-
-export default FrontSide;
