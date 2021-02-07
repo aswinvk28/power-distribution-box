@@ -223,7 +223,7 @@ export const Container = ({ snapToGrid }) => {
             uniqid={item.uniqid}
             distribution={item.distribution}
             image={item.image}
-            width={item.width}
+            width={item.size.width}
             isDropped={isDropped(item.name)}
             {...item} />
         </div>)

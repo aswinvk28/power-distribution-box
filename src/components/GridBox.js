@@ -36,14 +36,14 @@ widths[ItemTypes.PLUGS_5] = "40px";
 widths[ItemTypes.SOCKETS_1] = "40px";
 widths[ItemTypes.SOCKETS_2] = "40px";
 widths[ItemTypes.SOCKETS_3] = "40px";
-export const GridBox = ({ name, type, uniqid, distribution, image, e_name, isDropped }) => {
+export const GridBox = ({ name, type, uniqid, distribution, image, top, left, e_name, isDropped }) => {
     let shortClassName = "grid-box-item-" + name;
     let className = "grid-box " + shortClassName;
     let width = "20px";
     if(name == ItemTypes.LIVE_PINS_INPUT || name == ItemTypes.LIVE_PINS_OUTPUT) {
         width = "50px";
     }
-    
+
     // specify an id for styling purposes
     let id = shortClassName + "-" + uniqid;
 
@@ -108,7 +108,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, e_name, isDro
         
         return { mouseX: x, mouseY: y }
     }
-    return (<div ref={drag} style={{...style, opacity}} className={className} id={id}>
+    return (<div ref={drag} style={{...style, opacity, top, left}} className={className} id={id}>
             <DistributionMenu image={image} name={name} width={widths[type]} height="auto" />
 		</div>);
 };

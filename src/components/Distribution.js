@@ -114,10 +114,11 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
 
             <div ref={drop} className="distribution_container">
                 {
-                    totalDroppedItems.map(({name, type, uniqid, distribution, image}, index) =>  {
+                    totalDroppedItems.map(({name, type, uniqid, distribution, image, top, left}, index) =>  {
                         return (
                             <GridBox name={name} type={type} uniqid={uniqid} key={index}
                             distribution={distribution} image={image} e_name={e_name}
+                            top={top} left={left}
                             isDropped={true} />
                         )
                     })
