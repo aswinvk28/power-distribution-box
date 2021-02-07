@@ -8,7 +8,7 @@ function DrawingApp() {
     return (
         <div className="App">
             <DndProvider backend={HTML5Backend}>
-                <PowerDist />
+                <PowerDist ref={powerdist => this.powerdist = powerdist} />
             </DndProvider>
         </div>
     )
