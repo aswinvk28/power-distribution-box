@@ -1,16 +1,32 @@
 import './App.css';
 import React from 'react'
-import PowerDist from './components/PowerDist'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import DrawingApp from './components/DrawingApp'
+import FrontSide from './components/FrontSide'
+import RearSide from './components/RearSide'
 
 function App() {
   return (
-    <div className="App">
-      <DndProvider backend={HTML5Backend}>
-        <PowerDist />
-      </DndProvider>
-    </div>
+    <Router>
+      <div>
+        <Switch>
+          <Route path="/">
+            <DrawingApp />
+          </Route>
+          <Route path="/front-side">
+            <FrontSide />
+          </Route>
+          <Route path="/rear-side">
+            <RearSide />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 

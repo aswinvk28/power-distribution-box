@@ -96,6 +96,8 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             let [left, top] = doSnapToGrid(x, y);
             document.getElementById(item.highlightComponent).style.left = left.toString() + "px";
             document.getElementById(item.highlightComponent).style.top = top.toString() + "px";
+            item.left = left.toString() + "px";
+            item.top = top.toString() + "px";
         }
 
         return { mouseX: x, mouseY: y }

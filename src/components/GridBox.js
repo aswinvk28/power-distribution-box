@@ -52,7 +52,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, e_name, isDro
     // useDrag denotes draggable
     const [{ opacity, initialOffset, currentOffset, clientOffset }, drag] = useDrag({
         // add attributes here
-        item: { name, type, uniqid, distribution, image },
+        item: { name, type, uniqid, distribution, image, width },
         collect: (monitor) => ({
             opacity: monitor.isDragging() ? 0.4 : 1,
             initialOffset: monitor.getInitialClientOffset(),
