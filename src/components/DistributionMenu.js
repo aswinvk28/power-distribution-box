@@ -16,12 +16,12 @@ class DistributionMenu extends React.Component {
         let { image, name, width, height } = this.props;
         return (
             <div className="distribution-box-menu">
-                <ContextMenuTrigger id="same_unique_identifier">
+                <ContextMenuTrigger id="distribution-box-contextmenu">
                     <div className="well"></div>
                     <img src={image} alt={name} title={name} width={width} height={height} />
                 </ContextMenuTrigger>
             
-                <ContextMenu id="same_unique_identifier">
+                <ContextMenu id="distribution-box-contextmenu">
                     <MenuItem data={{}} onClick={this.handleClick}>Remove</MenuItem>
                 </ContextMenu>
             </div>

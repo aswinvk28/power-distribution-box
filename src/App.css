@@ -167,3 +167,15 @@ body, html, #root {
   display: block;
   font-weight: bold;
 }
+
+.react-contextmenu {
+  background-color: white;
+  opacity: 0.6;
+  padding: 10px 3px;
+  border: 1px dashed #333;
+}
+
+.react-contextmenu-item:hover {
+  background-color: gray;
+  opacity: 0.6;
+}
