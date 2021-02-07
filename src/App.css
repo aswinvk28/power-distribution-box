@@ -136,3 +136,34 @@ body, html, #root {
   font-style: normal;
   font-size: 8px;
 }
+
+.boxes-container-holder-right {
+  float: right;
+  width: 45%;
+  padding: 16px;
+  border: 1px dashed #333;
+}
+
+.boxes-container-holder-left {
+  float: left;
+  width: 45%;
+  padding: 16px;
+  border: 1px dashed #333;
+}
+
+.boxes-container-draggable {
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.boxes-container-draggable::before, .boxes-container-draggable::after {
+  content: "";
+  clear: both;
+  display: block;
+}
+
+.boxes-container em {
+  margin-bottom: 10px;
+  display: block;
+  font-weight: bold;
+}
