@@ -57,14 +57,6 @@ export const CustomDragLayer = (props) => {
     }));
     let position = useMousePosition();
 
-    useEffect(() => {
-        // left and top are saved on refresh
-        if(currentOffset) {
-            document.getElementById(id).style.position = "absolute";
-            document.getElementById(id).style.left = (currentOffset.x).toString() + "px";
-            document.getElementById(id).style.top = (currentOffset.y).toString() + "px";
-        }
-    }, []);
     // mouse tracking
     function useMousePosition() {
         const [x, setX] = useState(null)
@@ -89,7 +81,7 @@ export const CustomDragLayer = (props) => {
             // We use [] here so that this effect fires exactly once.
             // (After the first render)
         }, [])
-        
+
         return { mouseX: x, mouseY: y }
     }
     function renderItem() {
@@ -108,7 +100,7 @@ export const CustomDragLayer = (props) => {
             case ItemTypes.LIVE_PINS_OUTPUT:
             case ItemTypes.PINS_INPUT_1: 
             case ItemTypes.PINS_INPUT_2:
-                return <BoxDragPreview type={item.type} name={item.name} image={item.image} />;
+                return <BoxDragPreview type={item.type} name={item.name} image={item.image} width={item.width} />;
             default:
                 return null;
         }

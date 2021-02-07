@@ -111,33 +111,47 @@ export const Container = ({ snapToGrid }) => {
     ]);
     const [boxes, setBoxes] = useState([
         { name: 'Plugs@1', type: ItemTypes.PLUGS_1, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-1.png', element_type: Constants.ElementType.OUTPUTS },
+        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-1.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '150px'} },
         { name: 'Plugs@2', type: ItemTypes.PLUGS_2, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-2.png', element_type: Constants.ElementType.OUTPUTS },
+        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-2.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '80px'} },
         { name: 'Plugs@3', type: ItemTypes.PLUGS_3, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-3.png', element_type: Constants.ElementType.OUTPUTS },
+        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-3.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '80px'} },
         { name: 'Plugs@4', type: ItemTypes.PLUGS_4, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-4.png', element_type: Constants.ElementType.OUTPUTS },
+        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-4.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '80px'} },
         { name: 'Plugs@5', type: ItemTypes.PLUGS_5, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-5.png', element_type: Constants.ElementType.OUTPUTS },
+        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-5.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '80px'} },
         { name: 'Sockets@1', type: ItemTypes.SOCKETS_1, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-1.png', element_type: Constants.ElementType.OUTPUTS },
+        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-1.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '100px'} },
         { name: 'Sockets@2', type: ItemTypes.SOCKETS_2, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-2.png', element_type: Constants.ElementType.OUTPUTS },
+        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-2.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '100px'} },
         { name: 'Sockets@3', type: ItemTypes.SOCKETS_3, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-3.png', element_type: Constants.ElementType.OUTPUTS },
+        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-3.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '100px'} },
         { name: 'Pilot-Lights', type: ItemTypes.PILOT_LIGHTS, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 2, image: 'images/dist_box/pilot-lights.jpg', element_type: Constants.ElementType.FRONTS },
+        distribution: null, left: 0, top: 0, index: 2, image: 'images/dist_box/pilot-lights.gif', element_type: Constants.ElementType.FRONTS, 
+        size: {width: '60px'} },
         { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 3, image: 'images/dist_box/multimeter.png', element_type: Constants.ElementType.FRONTS },
+        distribution: null, left: 0, top: 0, index: 3, image: 'images/dist_box/multimeter.png', element_type: Constants.ElementType.FRONTS, 
+        size: {width: '60px'} },
         { name: 'Live-Pins-Input', type: ItemTypes.LIVE_PINS_INPUT, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 4, image: 'images/dist_box/Live-Pins-Inputs.png', element_type: Constants.ElementType.ADDONS },
+        distribution: null, left: 0, top: 0, index: 4, image: 'images/dist_box/Live-Pins-Inputs.png', element_type: Constants.ElementType.ADDONS, 
+        size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH} },
         { name: 'Loop-Through', type: ItemTypes.LIVE_PINS_OUTPUT, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 5, image: 'images/dist_box/Live-Pins-Outputs.png', element_type: Constants.ElementType.ADDONS },
+        distribution: null, left: 0, top: 0, index: 5, image: 'images/dist_box/Live-Pins-Outputs.png', element_type: Constants.ElementType.ADDONS, 
+        size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH} },
         { name: 'Pins-Input@1', type: ItemTypes.PINS_INPUT_1, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 4, image: 'images/dist_box/Inputs-Pin-1.png', element_type: Constants.ElementType.INPUTS },
+        distribution: null, left: 0, top: 0, index: 4, image: 'images/dist_box/Inputs-Pin-1.png', element_type: Constants.ElementType.INPUTS, 
+        size: {width: '80px'} },
         { name: 'Pins-Input@2', type: ItemTypes.PINS_INPUT_2, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 5, image: 'images/dist_box/Inputs-Pin-2.png', element_type: Constants.ElementType.INPUTS },
+        distribution: null, left: 0, top: 0, index: 5, image: 'images/dist_box/Inputs-Pin-2.png', element_type: Constants.ElementType.INPUTS, 
+        size: {width: '80px'} },
     ]);
     const [droppedBoxNames, setDroppedBoxNames] = useState([]);
     function isDropped(boxName) {
@@ -209,6 +223,7 @@ export const Container = ({ snapToGrid }) => {
             uniqid={item.uniqid}
             distribution={item.distribution}
             image={item.image}
+            width={item.width}
             isDropped={isDropped(item.name)}
             {...item} />
         </div>)

@@ -10,11 +10,11 @@ const style = {
     cursor: 'move',
     float: 'left'
 };
-export const Box = ({ name, type, uniqid, distribution, image, isDropped }) => {
+export const Box = ({ name, type, uniqid, distribution, image, width, isDropped }) => {
     // useDrag denotes draggable
     const [{ opacity }, drag] = useDrag({
         // add item attributes here
-        item: { name, type, uniqid, distribution, image },
+        item: { name, type, uniqid, distribution, image, width },
         collect: (monitor) => {
             return {
                 opacity: monitor.isDragging() ? 0.4 : 1
@@ -22,10 +22,6 @@ export const Box = ({ name, type, uniqid, distribution, image, isDropped }) => {
         }
     });
     let className = "box-item box-item-" + name;
-    let width = "20px";
-    if(type == ItemTypes.LIVE_PINS_INPUT || type == ItemTypes.LIVE_PINS_OUTPUT) {
-        width = "80px";
-    }
     return (<div style={{ ...style, opacity }} className={className}>
             <img src={image} alt={name} title={name} width={width} height="auto" />
 		</div>);
