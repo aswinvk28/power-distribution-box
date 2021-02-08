@@ -23,20 +23,40 @@ export default class Controller extends React.Component {
         this.changeToMonitoring = this.changeToMonitoring.bind(this);
         this.changeToPower = this.changeToPower.bind(this);
         this.changeToDefault = this.changeToDefault.bind(this);
+        this.cartesianWidth = null; this.cartesianHeight = null; this.templateWidth = null; this.templateHeight = null;
     }
 
     changeToMonitoring() {
-        this.setState({svg_monitoring: true, svg_power: false, viewBox: '0 0 ' + ($('.cartesian').width() * Constants.SCALE.FRONT_SIDE).toString() + " " + 
-        ($('.cartesian').height() * Constants.SCALE.FRONT_SIDE).toString()})
+        this.setState({svg_monitoring: true, svg_power: false, viewBox: '0 0 ' + (this.cartesianWidth * Constants.SCALE.FRONT_SIDE).toString() + " " + 
+        (this.cartesianHeight * Constants.SCALE.FRONT_SIDE).toString()})
     }
 
     changeToPower() {
-        this.setState({svg_monitoring: false, svg_power: true, viewBox: '0 0 ' + ($('.templated_inputs_row1').width() * Constants.SCALE.FRONT_SIDE).toString() + " " + 
-            ($('.templated_inputs_row1').height() * Constants.SCALE.FRONT_SIDE).toString()})
+        this.setState({svg_monitoring: false, svg_power: true, viewBox: '0 0 ' + (this.templateWidth * Constants.SCALE.REAR_SIDE).toString() + " " + 
+            (this.cartesianHeight * Constants.SCALE.REAR_SIDE).toString()})
     }
 
     changeToDefault() {
-        this.setState({svg_monitoring: false, svg_power: false})
+        this.setState({svg_monitoring: false, svg_power: false, viewBox: ''})
+    }
+
+    componentDidMount() {
+        if(!this.cartesianWidth) {
+            this.cartesianWidth = $('.cartesian').width()
+        }
+        if(!this.cartesianHeight) {
+            this.cartesianHeight = $('.cartesian').height()
+        }
+        if(!this.templateWidth) {
+            this.templateWidth = $('.templated_inputs_row1').width()
+        }
+        if(!this.templateHeight) {
+            this.templateHeight = $('.templated_inputs_row1').height()
+        }
+    }
+
+    scrollCanvas(event) {
+        
     }
 
     render() {
@@ -47,9 +67,9 @@ export default class Controller extends React.Component {
             <button onClick={this.changeToPower}>Power</button>
         </div>;
         if(this.state['svg_monitoring'] == true) {
-            elem = <FrontSide viewBox={this.state['viewBox']} />;
+            elem = <g onScroll={this.scrollCanvas}><FrontSide viewBox={this.state['viewBox']} /></g>;
         } else if(this.state['svg_power'] == true) {
-            elem = <RearSide viewBox={this.state['viewBox']} />;
+            elem = <g onScroll={this.scrollCanvas}><RearSide viewBox={this.state['viewBox']} /></g>;
         } else {
             designer = <div className="bodyContainer">
             <CustomDragLayer snapToGrid={this.state['snapToGridWhileDragging']}/>

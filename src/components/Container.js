@@ -224,6 +224,7 @@ export const Container = ({ snapToGrid }) => {
             distribution={item.distribution}
             image={item.image}
             width={item.size.width}
+            height={item.size.height}
             isDropped={isDropped(item.name)}
             {...item} />
         </div>)

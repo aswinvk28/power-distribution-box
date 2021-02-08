@@ -39,6 +39,7 @@
 
 body, html {
   height: 100%;
+  overflow: hidden;
 }
 
 .AppInnerContainerHolder {
@@ -178,4 +179,8 @@ body, html {
 .react-contextmenu-item:hover {
   background-color: gray;
   opacity: 0.6;
+}
+
+#distribution_front_side {
+  border: 1px dashed red;
 }

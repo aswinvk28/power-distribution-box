@@ -34,7 +34,10 @@ class FrontSide extends React.Component {
     image(objects) {
         for(var i = 0; i < objects.length; i++) {
             let image = objects[i].image;
-            this.paper.image(image, objects[i].left, objects[i].top, objects[i].width, objects[i].height)
+            let width = parseInt(objects[i].width.replace('px', ''));
+            let height = parseInt(objects[i].height.replace('px', ''));
+            this.paper.image(image, objects[i].left, objects[i].top, (width / Constants.SCALE.FRONT_SIDE).toString() + 'px', 
+            (height / Constants.SCALE.FRONT_SIDE).toString() + 'px')
         }
     }
 
