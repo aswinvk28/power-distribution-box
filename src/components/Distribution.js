@@ -5,12 +5,13 @@ import { snapToGrid as doSnapToGrid } from './snapToGrid';
 import { useDrop } from 'react-dnd';
 import { GridBox } from './GridBox';
 import Constants from './Constants';
-import { HighlightComponent } from './HighlighComponent';
+import { HighlightComponent } from './HighlightComponent';
+import $ from 'jquery';
 const useLocalStorage = Constants.useLocalStorage;
 
 let style = {
     marginBottom: '0.5rem',
-    padding: Constants.gridSize.toString() + 'px',
+    padding: '5%',
     textAlign: 'center',
     fontSize: '1rem',
     lineHeight: 'normal'
@@ -44,7 +45,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         }
     });
     const isActive = isOver && canDrop;
-    let backgroundColor = 'rgb(30, 80, 155)';
+    let backgroundColor = 'transparent';
     if (isActive) {
         backgroundColor = 'darkgreen';
     }
@@ -103,7 +104,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         return { mouseX: x, mouseY: y }
     }
 
-    return (<div style={{ ...style, backgroundColor }} className={e_name}>
+    return (<div style={{ ...style, backgroundColor }} className={e_name} id={e_name}>
             <em style={{position: 'absolute', fontSize: '24px', color: 'rgb(50, 55, 165)'}}>
             {e_name.indexOf("addons") > -1 ? 'addons' : ''}
             {e_name.indexOf("inputs") > -1 ? 'inputs' : ''}
@@ -112,7 +113,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
 
             {$elem}
 
-            <div ref={drop} className="distribution_container">
+            <div ref={drop} className="distribution_container" id={e_name + "_distribution_container"}>
                 {
                     totalDroppedItems.map(({name, type, uniqid, distribution, image, top, left}, index) =>  {
                         return (

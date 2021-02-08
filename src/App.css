@@ -39,7 +39,7 @@
 
 body, html {
   height: 100%;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .AppInnerContainerHolder {
@@ -47,15 +47,22 @@ body, html {
 }
 
 .templated-distributions-container {
-  display: flex;
+  display: block;
   position: relative;
 }
 
+.templated-distributions-container::before, .templated-distributions-container::after {
+  content: "";
+  clear: both;
+  display: block;
+}
+
 .templated-distributions-container .cartesian {
-  flex: wrap;
-  width: 45%;
+  float: left;
+  width: 32%;
   height: 646px;
-  background: url('images/grid/grid_image-10.jpg') 0px 0px transparent repeat;
+  background: url('images/power_box/canvas_wheel.png') 0px 0px transparent no-repeat;
+  background-size: 100%;
 }
 
 .distribution_container {
@@ -66,58 +73,11 @@ body, html {
   color: #ababab;
 }
 
-.templated-distributions-container .templated_inputs_row1 {
-  flex: wrap;
-  position: absolute;
-  width: 45%;
-  height: 80px;
-  margin-top: 0px;
-  margin-left: 50%;
-}
-
-.templated-distributions-container .templated_inputs_row2 {
-  flex: wrap;
-  position: absolute;
-  width: 45%;
-  height: 80px;
-  margin-top: 113px;
-  margin-left: 50%;
-}
-
-.templated-distributions-container .templated_outputs_row1 {
-  flex: wrap;
-  position: absolute;
-  width: 45%;
-  height: 80px;
-  margin-top: 226px;
-  margin-left: 50%;
-}
-
-.templated-distributions-container .templated_outputs_row2 {
-  flex: wrap;
-  position: absolute;
-  width: 45%;
-  height: 80px;
-  margin-top: 339px;
-  margin-left: 50%;
-}
-
-.templated-distributions-container .templated_addons_row1 {
-  flex: wrap;
-  position: absolute;
-  width: 45%;
-  height: 80px;
-  margin-top: 452px;
-  margin-left: 50%;
-}
-
-.templated-distributions-container .templated_addons_row2 {
-  flex: wrap;
-  position: absolute;
-  width: 45%;
-  height: 80px;
-  margin-top: 565px;
-  margin-left: 50%;
+.templated-distributions-container .templated {
+  float: right;
+  width: 32%;
+  background: url('images/power_box/canvas_wheel.png') 0px 0px transparent no-repeat;
+  background-size: 100%;
 }
 
 .cartesian .grid-box, .templated_inputs_row1 .grid-box, .templated_inputs_row2 .grid-box, .templated_outputs_row1 .grid-box, 

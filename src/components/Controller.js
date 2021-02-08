@@ -29,15 +29,21 @@ export default class Controller extends React.Component {
     changeToMonitoring() {
         this.setState({svg_monitoring: true, svg_power: false, viewBox: '0 0 ' + (this.cartesianWidth * Constants.SCALE.FRONT_SIDE).toString() + " " + 
         (this.cartesianHeight * Constants.SCALE.FRONT_SIDE).toString()})
+        $(document.body).css('overflow', 'hidden');
+        $(document.documentElement).css('overflow', 'hidden');
     }
 
     changeToPower() {
         this.setState({svg_monitoring: false, svg_power: true, viewBox: '0 0 ' + (this.templateWidth * Constants.SCALE.REAR_SIDE).toString() + " " + 
             (this.cartesianHeight * Constants.SCALE.REAR_SIDE).toString()})
+        $(document.body).css('overflow', 'hidden');
+        $(document.documentElement).css('overflow', 'hidden');
     }
 
     changeToDefault() {
         this.setState({svg_monitoring: false, svg_power: false, viewBox: ''})
+        $(document.body).css('overflow', 'visible');
+        $(document.documentElement).css('overflow', 'visible');
     }
 
     componentDidMount() {
@@ -48,10 +54,10 @@ export default class Controller extends React.Component {
             this.cartesianHeight = $('.cartesian').height()
         }
         if(!this.templateWidth) {
-            this.templateWidth = $('.templated_inputs_row1').width()
+            this.templateWidth = $('.templated').width()
         }
         if(!this.templateHeight) {
-            this.templateHeight = $('.templated_inputs_row1').height()
+            this.templateHeight = $('.templated').height()
         }
     }
 

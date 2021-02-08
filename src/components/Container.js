@@ -9,16 +9,12 @@ import Constants from './Constants';
 import { snapToGrid as doSnapToGrid } from './snapToGrid';
 import { DraggableBox } from './DraggableBox';
 import { useDrop } from 'react-dnd';
+import TableDist from './TableDist';
 const useLocalStorage = Constants.useLocalStorage;
 
 const buckets = {
     "cartesian": null, 
-    "templated_inputs_row1": null,
-    "templated_inputs_row2": null,
-    "templated_outputs_row1": null,
-    "templated_outputs_row2": null,
-    "templated_addons_row1": null,
-    "templated_addons_row2": null
+    "templated": null,
 };
 
 const plugsAndSockets = [ItemTypes.PLUGS_1, ItemTypes.PLUGS_2, ItemTypes.PLUGS_3, ItemTypes.PLUGS_4, ItemTypes.PLUGS_5, 
@@ -44,51 +40,19 @@ const style = {
 export const Container = ({ snapToGrid }) => {
     // load from localStorage the distributions
 
-    let cartesianDroppedItems = null, 
-    templatedInput1DroppedItems = null, templatedInput2DroppedItems = null, templatedOutput1DroppedItems = null,
-    templatedOutput2DroppedItems = null, templatedAddon1DroppedItems = null, templatedAddon2DroppedItems = null;
+    let cartesianDroppedItems = null, templatedDroppedItems = null;
     if(useLocalStorage) {
         cartesianDroppedItems = localStorage.getItem("cartesian" + ": items");
-        templatedInput1DroppedItems = localStorage.getItem("templated_inputs_row1" + ": items");
-        templatedInput2DroppedItems = localStorage.getItem("templated_inputs_row2" + ": items");
-        templatedOutput1DroppedItems = localStorage.getItem("templated_outputs_row1" + ": items");
-        templatedOutput2DroppedItems = localStorage.getItem("templated_outputs_row2" + ": items");
-        templatedAddon1DroppedItems = localStorage.getItem("templated_addons_row1" + ": items");
-        templatedAddon2DroppedItems = localStorage.getItem("templated_addons_row2" + ": items");
+        templatedDroppedItems = localStorage.getItem("templated" + ": items");
         if(!cartesianDroppedItems) {
             cartesianDroppedItems = [];
         } else {
             cartesianDroppedItems = JSON.parse(cartesianDroppedItems);
         }
-        if(!templatedInput1DroppedItems) {
-            templatedInput1DroppedItems = [];
+        if(!templatedDroppedItems) {
+            templatedDroppedItems = [];
         } else {
-            templatedInput1DroppedItems = JSON.parse(templatedInput1DroppedItems);
-        }
-        if(!templatedInput2DroppedItems) {
-            templatedInput2DroppedItems = [];
-        } else {
-            templatedInput2DroppedItems = JSON.parse(templatedInput2DroppedItems);
-        }
-        if(!templatedOutput1DroppedItems) {
-            templatedOutput1DroppedItems = [];
-        } else {
-            templatedOutput1DroppedItems = JSON.parse(templatedOutput1DroppedItems);
-        }
-        if(!templatedOutput2DroppedItems) {
-            templatedOutput2DroppedItems = [];
-        } else {
-            templatedOutput2DroppedItems = JSON.parse(templatedOutput2DroppedItems);
-        }
-        if(!templatedAddon1DroppedItems) {
-            templatedAddon1DroppedItems = [];
-        } else {
-            templatedAddon1DroppedItems = JSON.parse(templatedAddon1DroppedItems);
-        }
-        if(!templatedAddon2DroppedItems) {
-            templatedAddon2DroppedItems = [];
-        } else {
-            templatedAddon2DroppedItems = JSON.parse(templatedAddon2DroppedItems);
+            templatedDroppedItems = JSON.parse(templatedDroppedItems);
         }
     }
     
@@ -97,17 +61,7 @@ export const Container = ({ snapToGrid }) => {
         { accepts: [ItemTypes.PILOT_LIGHTS, ItemTypes.MULTIMETER], lastDroppedItem: null, 
             totalDroppedItems: cartesianDroppedItems, e_name: "cartesian" },
         { accepts: plugsAndSockets, lastDroppedItem: null, 
-            totalDroppedItems: templatedInput1DroppedItems, e_name: "templated_inputs_row1" },
-        { accepts: plugsAndSockets, lastDroppedItem: null, 
-            totalDroppedItems: templatedInput2DroppedItems, e_name: "templated_inputs_row2" },
-        { accepts: plugsAndSockets, lastDroppedItem: null, 
-            totalDroppedItems: templatedOutput1DroppedItems, e_name: "templated_outputs_row1" },
-        { accepts: plugsAndSockets, lastDroppedItem: null, 
-            totalDroppedItems: templatedOutput2DroppedItems, e_name: "templated_outputs_row2" },
-        { accepts: plugsAndSockets, lastDroppedItem: null, 
-            totalDroppedItems: templatedAddon1DroppedItems, e_name: "templated_addons_row1" },
-        { accepts: plugsAndSockets, lastDroppedItem: null, 
-            totalDroppedItems: templatedAddon2DroppedItems, e_name: "templated_addons_row2" }
+            totalDroppedItems: templatedDroppedItems, e_name: "templated" },
     ]);
     const [boxes, setBoxes] = useState([
         { name: 'Plugs@1', type: ItemTypes.PLUGS_1, uniqid: null, 
@@ -253,11 +207,13 @@ export const Container = ({ snapToGrid }) => {
     return (<div className="AppInnerContainer">
     <div style={{ overflow: 'hidden', clear: 'both' }} key="0000">
         <div style={style} className="templated-distributions-container" key="1">
-            {distributions.map(({ accepts, lastDroppedItem, totalDroppedItems, e_name }, index) => (<Distribution accept={accepts} 
-            lastDroppedItem={lastDroppedItem} 
-            totalDroppedItems={totalDroppedItems} 
-            e_name={e_name}
-            onDrop={(item) => handleDrop(index, item)} key={index}/>))}
+            {distributions.map(({ accepts, lastDroppedItem, totalDroppedItems, e_name }, index) => (
+                <TableDist accept={accepts} 
+                lastDroppedItem={lastDroppedItem} 
+                totalDroppedItems={totalDroppedItems} 
+                e_name={e_name}
+                onDrop={(item) => handleDrop(index, item)} key={index}></TableDist>
+            ))}
         </div>
     </div>
 
