@@ -5,12 +5,13 @@ import { snapToGrid as doSnapToGrid } from './snapToGrid';
 import { useDrop } from 'react-dnd';
 import { GridBox } from './GridBox';
 import Constants from './Constants';
-import { HighlightComponent } from './HighlighComponent';
+import { HighlightComponent } from './HighlightComponent';
+import $ from 'jquery';
 const useLocalStorage = Constants.useLocalStorage;
 
 let style = {
     marginBottom: '0.5rem',
-    padding: Constants.gridSize.toString() + 'px',
+    padding: '5%',
     textAlign: 'center',
     fontSize: '1rem',
     lineHeight: 'normal'
@@ -37,14 +38,14 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         hover: (item, monitor) => {
             currentItem = item;
             // specify an id for styling purposes
-            let id = "box-drag-preview-" + item.name;
+            let id = "element-box-item-" + item.name;
             item.dragElementId = id;
             item.highlightComponent = "highlight-component-" + item.name;
             return false;
         }
     });
     const isActive = isOver && canDrop;
-    let backgroundColor = 'rgb(30, 80, 155)';
+    let backgroundColor = 'transparent';
     if (isActive) {
         backgroundColor = 'darkgreen';
     }
@@ -73,14 +74,14 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
 
         useEffect(() => {
             // Subscribe to the mousemove event
-            const sub = fromEvent(document, 'dragover')
+            const sub = fromEvent(document, 'drag')
             // Extract out current mouse position from the event
             .pipe(map(event => [event.clientX, event.clientY]))
             // We have closure over the updater functions for our two state variables
             // Use these updaters to bridge the gap between RxJS and React
             .subscribe(([newX, newY]) => {
-                setX(newX)
-                setY(newY)
+                setX(newX + window.scrollX)
+                setY(newY + window.scrollY)
             })
 
             // When the component unmounts, remove the event listener
@@ -96,6 +97,8 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             let [left, top] = doSnapToGrid(x, y);
             document.getElementById(item.highlightComponent).style.left = left.toString() + "px";
             document.getElementById(item.highlightComponent).style.top = top.toString() + "px";
+            document.getElementById(item.dragElementId).style.left = left.toString() + "px";
+            document.getElementById(item.dragElementId).style.top = top.toString() + "px";
             item.left = left.toString() + "px";
             item.top = top.toString() + "px";
         }
@@ -103,8 +106,8 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         return { mouseX: x, mouseY: y }
     }
 
-    return (<div style={{ ...style, backgroundColor }} className={e_name}>
-			<em style={{position: 'absolute', fontSize: '24px', color: 'rgb(50, 55, 165)'}}>
+    return (<div style={{ ...style }} className={e_name} id={e_name}>
+            <em style={{position: 'absolute', fontSize: '24px', color: 'rgb(50, 55, 165)'}}>
             {e_name.indexOf("addons") > -1 ? 'addons' : ''}
             {e_name.indexOf("inputs") > -1 ? 'inputs' : ''}
             {e_name.indexOf("outputs") > -1 ? 'outputs' : ''}
@@ -112,12 +115,13 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
 
             {$elem}
 
-            <div ref={drop} className="distribution_container">
+            <div ref={drop} style={{ backgroundColor }} className="distribution_container" id={e_name + "_distribution_container"}>
                 {
-                    totalDroppedItems.map(({name, type, uniqid, distribution, image}, index) =>  {
+                    totalDroppedItems.map((item, index) =>  {
                         return (
-                            <GridBox name={name} type={type} uniqid={uniqid} key={index}
-                            distribution={distribution} image={image} e_name={e_name}
+                            <GridBox name={item.name} type={item.type} uniqid={item.uniqid} key={item.index}
+                            distribution={item.distribution} image={item.image} e_name={e_name}
+                            top={item.top} left={item.left}
                             isDropped={true} />
                         )
                     })

@@ -36,79 +36,40 @@ widths[ItemTypes.PLUGS_5] = "40px";
 widths[ItemTypes.SOCKETS_1] = "40px";
 widths[ItemTypes.SOCKETS_2] = "40px";
 widths[ItemTypes.SOCKETS_3] = "40px";
-export const GridBox = ({ name, type, uniqid, distribution, image, e_name, isDropped }) => {
+export const GridBox = ({ name, type, uniqid, distribution, image, top, left, e_name, isDropped }) => {
     let shortClassName = "grid-box-item-" + name;
     let className = "grid-box " + shortClassName;
-    let width = "20px";
-    if(name == ItemTypes.LIVE_PINS_INPUT || name == ItemTypes.LIVE_PINS_OUTPUT) {
-        width = "50px";
-    }
-    
+
     // specify an id for styling purposes
     let id = shortClassName + "-" + uniqid;
 
-    let position = useMousePosition();
+    let width = widths[type];
 
     // useDrag denotes draggable
-    const [{ opacity, initialOffset, currentOffset, clientOffset }, drag] = useDrag({
+    const [{ opacity, initialOffset, currentOffset, clientOffset, item }, drag] = useDrag({
         // add attributes here
-        item: { name, type, uniqid, distribution, image, width },
+        item: { name, type, uniqid, distribution, image, top, left, width },
         collect: (monitor) => ({
+            item: monitor.getItem(),
             opacity: monitor.isDragging() ? 0.4 : 1,
             initialOffset: monitor.getInitialClientOffset(),
             currentOffset: monitor.getSourceClientOffset(),
-            clientOffset: monitor.getClientOffset()
+            clientOffset: monitor.getClientOffset(),
+            canDrag: monitor.canDrag()
         })
     });
-    useEffect(() => {
-        // left and top are saved on refresh
-        if(currentOffset && e_name == "cartesian") {
-            document.getElementById(id).style.position = "absolute";
-            let [left, top] = doSnapToGrid(clientOffset.x, currentOffset.y);
-            document.getElementById(id).style.left = left.toString() + "px";
-            document.getElementById(id).style.top = top.toString() + "px";
-        } else if(currentOffset && e_name.indexOf("templated") !== -1) {
-            document.getElementById(id).style.position = "absolute";
-            let [left, top] = doSnapToGrid(currentOffset.x, currentOffset.y);
-            let elem = document.getElementsByClassName(e_name).item(0);
-            let marginLeft = parseInt($(elem).css('marginLeft').replace('px', '')), 
-            marginTop = parseInt($(elem).css('marginTop').replace('px', '')), 
-            paddingLeft = parseInt($(elem).css('paddingLeft').replace('px', '')),
-            paddingTop = parseInt($(elem).css('paddingTop').replace('px', '')),
-            containerPaddingLeft = parseInt($('.templated-distributions-container').css('paddingLeft').replace('px', '')),
-            containerPaddingTop = parseInt($('.templated-distributions-container').css('paddingTop').replace('px', ''));
-            document.getElementById(id).style.left = (left-marginLeft-paddingLeft-containerPaddingLeft+312).toString() + "px";
-            document.getElementById(id).style.top = (top-marginTop-paddingTop-containerPaddingTop).toString() + "px";
-        }
-    }, [])
-    // mouse tracking
-    function useMousePosition() {
-        const [x, setX] = useState(null)
-        const [y, setY] = useState(null)
-        
-        useEffect(() => {
-            // Subscribe to the mousemove event
-            const sub = fromEvent(document, 'mousemove')
-            // Extract out current mouse position from the event
-            .pipe(map(event => [event.clientX, event.clientY]))
-            // We have closure over the updater functions for our two state variables
-            // Use these updaters to bridge the gap between RxJS and React
-            .subscribe(([newX, newY]) => {
-                setX(newX)
-                setY(newY)
-            })
-        
-            // When the component unmounts, remove the event listener
-            return () => {
-                sub.unsubscribe()
+    function saveItem(item) {
+        let key = item.distribution == 0 ? "cartesian: items" : "templated: items";
+        let items = JSON.parse(localStorage.getItem(key));
+        for(var i in items) {
+            if(items[i] == item.uniqid) {
+                items[i] = item;
+                break;
             }
-            // We use [] here so that this effect fires exactly once.
-            // (After the first render)
-        }, [])
-        
-        return { mouseX: x, mouseY: y }
+        }
+        localStorage.setItem(key, JSON.stringify(items));
     }
-    return (<div ref={drag} style={{...style, opacity}} className={className} id={id}>
+    return (<div ref={drag} style={{...style, opacity, top, left}} className={className} id={id}>
             <DistributionMenu image={image} name={name} width={widths[type]} height="auto" />
 		</div>);
 };

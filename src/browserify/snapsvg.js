@@ -1,0 +1,1 @@
+const Snap = require('snapsvg')
