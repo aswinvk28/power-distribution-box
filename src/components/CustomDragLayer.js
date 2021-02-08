@@ -100,7 +100,8 @@ export const CustomDragLayer = (props) => {
             case ItemTypes.LIVE_PINS_OUTPUT:
             case ItemTypes.PINS_INPUT_1: 
             case ItemTypes.PINS_INPUT_2:
-                return <BoxDragPreview type={item.type} name={item.name} image={item.image} width={item.width} />;
+                // return <BoxDragPreview type={item.type} name={item.name} image={item.image} width={item.width} />;
+                return null;
             default:
                 return null;
         }

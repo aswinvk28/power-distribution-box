@@ -18,6 +18,35 @@ class RearSide extends React.Component {
         this.importCartesianObjectsByCache = this.importCartesianObjectsByCache.bind(this);
         this.importCartesianObjectsByCache = this.importCartesianObjectsByCache.bind(this);
         this.draw = this.draw.bind(this);
+
+        this.object_types = Object.fromEntries(this.type_mapping());
+        // import function is a Promise
+        this.importAllObjects("local_storage").then((objects) => this.draw(objects)).catch(err => console.error(err))
+
+        let mousePosition = 0, instance = this;
+        $('#'+this.id).mousedown(function(event1) {
+            $(this).css('cursor', 'grab');
+            if(mousePosition == 0) {
+                mousePosition = {'x': event1.clientX, 'y': event1.clientY}
+            }
+            $(this).mousemove(function (event2) {
+                $(this).css('cursor', 'grab');
+                const difference = {'x': event2.clientX - mousePosition.x, 'y': event2.clientY - mousePosition.y};
+                let viewBox = instance.obtainViewBox();
+                viewBox[0] -= (difference.x);
+                viewBox[1] -= (difference.y);
+                viewBox = viewBox.map(v => v.toString())
+                instance.viewBox = viewBox.join(" ");
+                instance.setState({change: !instance.state['change']})
+            });
+        }).mouseup(function () {
+            $(this).css('cursor', 'default');
+            $(this).unbind('mousemove');
+            mousePosition = 0
+        }).mouseout(function () {
+            $(this).css('cursor', 'default');
+            $(this).unbind('mousemove');
+        });
     }
 
     type_mapping() {
@@ -43,8 +72,8 @@ class RearSide extends React.Component {
             let image = objects[i].image;
             let width = parseInt(objects[i].width.replace('px', ''));
             let height = parseInt(objects[i].height.replace('px', ''));
-            this.paper.image(image, objects[i].left, objects[i].top, (width * Constants.SCALE.FRONT_SIDE).toString() + 'px', 
-            (height * Constants.SCALE.FRONT_SIDE).toString() + 'px')
+            this.paper.image(image, objects[i].left, objects[i].top, (width / Constants.SCALE.FRONT_SIDE).toString() + 'px', 
+            (height / Constants.SCALE.FRONT_SIDE).toString() + 'px')
         }
     }
 
@@ -84,13 +113,15 @@ class RearSide extends React.Component {
         }
     }
 
+    obtainViewBox() {
+        let viewBox = this.viewBox.split(" ").map(v => parseInt(v)); // viewBox array
+        return viewBox;
+    }
+
     render() {
         // alert(this.props.viewBox)
         $(document.getElementById(this.id)).attr('viewBox', this.props.viewBox);
-        this.object_types = Object.fromEntries(this.type_mapping());
-        // import function is a Promise
-        this.importAllObjects("local_storage").then((objects) => this.draw(objects)).catch(err => console.error(err))
-        return null
+        return <input type="range" name="zoom" id="zoom" min="0" max="50" step="1" onChange={this.changeSlider} />;
     }
 
 }

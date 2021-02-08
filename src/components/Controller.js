@@ -74,7 +74,6 @@ export default class Controller extends React.Component {
             elem = <RearSide viewBox={this.state['viewBox']} />;
         } else {
             designer = <div className="bodyContainer">
-            <CustomDragLayer snapToGrid={this.state['snapToGridWhileDragging']}/>
             <div className="AppInnerContainerHolder">
                 <Container snapToGrid={this.state['snapToGridAfterDrop']}/>
             </div></div>;

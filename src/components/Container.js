@@ -159,12 +159,12 @@ export const Container = ({ snapToGrid }) => {
         accept: allTypes,
         drop(item, monitor) {
             const delta = monitor.getDifferenceFromInitialOffset();
-            let left = Math.round(item.left + delta.x);
-            let top = Math.round(item.top + delta.y);
-            if (snapToGrid) {
-                ;
-                [left, top] = doSnapToGrid(left, top);
-            }
+            // let left = Math.round(item.left + delta.x);
+            // let top = Math.round(item.top + delta.y);
+            // if (snapToGrid) {
+            //     ;
+            //     [left, top] = doSnapToGrid(left, top);
+            // }
             return undefined;
         },
     });

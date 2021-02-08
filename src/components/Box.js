@@ -22,7 +22,7 @@ export const Box = ({ name, type, uniqid, distribution, image, width, height, is
         }
     });
     let className = "box-item box-item-" + name;
-    return (<div ref={drag} style={{ ...style, opacity }} className={className}>
+    return (<div ref={drag} style={{ ...style, opacity }} className={className} id={"element-box-item-" + name}>
             <img src={image} alt={name} title={name} width={width} height="auto" />
 		</div>);
 };

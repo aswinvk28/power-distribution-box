@@ -83,8 +83,7 @@ body, html {
   background-size: 100%;
 }
 
-.cartesian .grid-box, .templated_inputs_row1 .grid-box, .templated_inputs_row2 .grid-box, .templated_outputs_row1 .grid-box, 
-.templated_outputs_row2 .grid-box, .templated_addons_row1 .grid-box, .templated_addons_row2 .grid-box {
+.cartesian .grid-box, .templated .grid-box {
   position: absolute;
 }
 

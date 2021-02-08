@@ -38,7 +38,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         hover: (item, monitor) => {
             currentItem = item;
             // specify an id for styling purposes
-            let id = "box-drag-preview-" + item.name;
+            let id = "element-box-item-" + item.name;
             item.dragElementId = id;
             item.highlightComponent = "highlight-component-" + item.name;
             return false;
@@ -74,14 +74,14 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
 
         useEffect(() => {
             // Subscribe to the mousemove event
-            const sub = fromEvent(document, 'dragover')
+            const sub = fromEvent(document, 'drag')
             // Extract out current mouse position from the event
             .pipe(map(event => [event.clientX, event.clientY]))
             // We have closure over the updater functions for our two state variables
             // Use these updaters to bridge the gap between RxJS and React
             .subscribe(([newX, newY]) => {
-                setX(newX)
-                setY(newY)
+                setX(newX + window.scrollX)
+                setY(newY + window.scrollY)
             })
 
             // When the component unmounts, remove the event listener
@@ -97,6 +97,8 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             let [left, top] = doSnapToGrid(x, y);
             document.getElementById(item.highlightComponent).style.left = left.toString() + "px";
             document.getElementById(item.highlightComponent).style.top = top.toString() + "px";
+            document.getElementById(item.dragElementId).style.left = left.toString() + "px";
+            document.getElementById(item.dragElementId).style.top = top.toString() + "px";
             item.left = left.toString() + "px";
             item.top = top.toString() + "px";
         }
@@ -115,11 +117,11 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
 
             <div ref={drop} style={{ backgroundColor }} className="distribution_container" id={e_name + "_distribution_container"}>
                 {
-                    totalDroppedItems.map(({name, type, uniqid, distribution, image, top, left}, index) =>  {
+                    totalDroppedItems.map((item, index) =>  {
                         return (
-                            <GridBox name={name} type={type} uniqid={uniqid} key={index}
-                            distribution={distribution} image={image} e_name={e_name}
-                            top={top} left={left}
+                            <GridBox name={item.name} type={item.type} uniqid={item.uniqid} key={item.index}
+                            distribution={item.distribution} image={item.image} e_name={e_name}
+                            top={item.top} left={item.left}
                             isDropped={true} />
                         )
                     })
