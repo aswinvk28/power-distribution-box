@@ -55,10 +55,6 @@ export default class Controller extends React.Component {
         }
     }
 
-    scrollCanvas(event) {
-        
-    }
-
     render() {
         let elem = null;
         let designer = null, 
@@ -67,9 +63,9 @@ export default class Controller extends React.Component {
             <button onClick={this.changeToPower}>Power</button>
         </div>;
         if(this.state['svg_monitoring'] == true) {
-            elem = <g onScroll={this.scrollCanvas}><FrontSide viewBox={this.state['viewBox']} /></g>;
+            elem = <FrontSide viewBox={this.state['viewBox']} />;
         } else if(this.state['svg_power'] == true) {
-            elem = <g onScroll={this.scrollCanvas}><RearSide viewBox={this.state['viewBox']} /></g>;
+            elem = <RearSide viewBox={this.state['viewBox']} />;
         } else {
             designer = <div className="bodyContainer">
             <CustomDragLayer snapToGrid={this.state['snapToGridWhileDragging']}/>

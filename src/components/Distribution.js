@@ -104,7 +104,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
     }
 
     return (<div style={{ ...style, backgroundColor }} className={e_name}>
-			<em style={{position: 'absolute', fontSize: '24px', color: 'rgb(50, 55, 165)'}}>
+            <em style={{position: 'absolute', fontSize: '24px', color: 'rgb(50, 55, 165)'}}>
             {e_name.indexOf("addons") > -1 ? 'addons' : ''}
             {e_name.indexOf("inputs") > -1 ? 'inputs' : ''}
             {e_name.indexOf("outputs") > -1 ? 'outputs' : ''}
