@@ -95,23 +95,28 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         if(canDrop && item && document.getElementById(item.highlightComponent)) {
             // left and top are saved on refresh
             let [left, top] = doSnapToGrid(x, y);
-            document.getElementById(item.highlightComponent).style.left = left.toString() + "px";
-            document.getElementById(item.highlightComponent).style.top = top.toString() + "px";
-            document.getElementById(item.dragElementId).style.left = left.toString() + "px";
-            document.getElementById(item.dragElementId).style.top = top.toString() + "px";
-            item.left = left.toString() + "px";
-            item.top = top.toString() + "px";
+            if(item.distribution_name == "cartesian") {
+                document.getElementById(item.highlightComponent).style.left = left.toString() + "px";
+                document.getElementById(item.highlightComponent).style.top = top.toString() + "px";
+                document.getElementById(item.dragElementId).style.left = left.toString() + "px";
+                document.getElementById(item.dragElementId).style.top = top.toString() + "px";
+                item.left = left.toString() + "px";
+                item.top = top.toString() + "px";
+            } else if(item.distribution_name == "templated") {
+                let offset = $('#templated_distribution_container').offset();
+                document.getElementById(item.highlightComponent).style.left = (left-offset['left']).toString() + "px";
+                document.getElementById(item.highlightComponent).style.top = (top-offset['top']).toString() + "px";
+                document.getElementById(item.dragElementId).style.left = (left-offset['left']).toString() + "px";
+                document.getElementById(item.dragElementId).style.top = (top-offset['top']).toString() + "px";
+                item.left = (left-offset['left']).toString() + "px";
+                item.top = (top-offset['top']).toString() + "px";
+            }
         }
 
         return { mouseX: x, mouseY: y }
     }
 
     return (<div style={{ ...style }} className={e_name} id={e_name}>
-            <em style={{position: 'absolute', fontSize: '24px', color: 'rgb(50, 55, 165)'}}>
-            {e_name.indexOf("addons") > -1 ? 'addons' : ''}
-            {e_name.indexOf("inputs") > -1 ? 'inputs' : ''}
-            {e_name.indexOf("outputs") > -1 ? 'outputs' : ''}
-            </em>
 
             {$elem}
 

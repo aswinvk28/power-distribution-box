@@ -18,7 +18,8 @@ const buckets = {
 };
 
 const plugsAndSockets = [ItemTypes.PLUGS_1, ItemTypes.PLUGS_2, ItemTypes.PLUGS_3, ItemTypes.PLUGS_4, ItemTypes.PLUGS_5, 
-    ItemTypes.SOCKETS_1, ItemTypes.SOCKETS_2, ItemTypes.SOCKETS_3];
+    ItemTypes.SOCKETS_1, ItemTypes.SOCKETS_2, ItemTypes.SOCKETS_3, ItemTypes.LIVE_PINS_INPUT, ItemTypes.LIVE_PINS_OUTPUT, 
+    ItemTypes.PINS_INPUT_1, ItemTypes.PINS_INPUT_2];
     
     const allTypes = [ItemTypes.PLUGS_1, ItemTypes.PLUGS_2, ItemTypes.PLUGS_3, ItemTypes.PLUGS_4, ItemTypes.PLUGS_5, 
         ItemTypes.SOCKETS_1, ItemTypes.SOCKETS_2, ItemTypes.SOCKETS_3, ItemTypes.PILOT_LIGHTS, 
@@ -65,47 +66,47 @@ export const Container = ({ snapToGrid }) => {
     ]);
     const [boxes, setBoxes] = useState([
         { name: 'Plugs@1', type: ItemTypes.PLUGS_1, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-1.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '100px', height: '98px'} },
+        distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-1.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '100px', height: '98px'}, distribution_name: "templated" },
         { name: 'Plugs@2', type: ItemTypes.PLUGS_2, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-2.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '80px', height: '102px'} },
+        distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-2.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '80px', height: '102px'}, distribution_name: "templated" },
         { name: 'Plugs@3', type: ItemTypes.PLUGS_3, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-3.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '80px', height: '120px'} },
+        distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-3.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '80px', height: '120px'}, distribution_name: "templated" },
         { name: 'Plugs@4', type: ItemTypes.PLUGS_4, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-4.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '80px', height: '119px'} },
+        distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-4.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '80px', height: '119px'}, distribution_name: "templated" },
         { name: 'Plugs@5', type: ItemTypes.PLUGS_5, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-5.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '80px', height: '121px'} },
+        distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-5.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '80px', height: '121px'}, distribution_name: "templated" },
         { name: 'Sockets@1', type: ItemTypes.SOCKETS_1, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-1.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '80px', height: '89px'} },
+        distribution: null, left: 0, top: 0,  index: 1, image: 'images/dist_box/Output-Socket-1.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '80px', height: '89px'}, distribution_name: "templated" },
         { name: 'Sockets@2', type: ItemTypes.SOCKETS_2, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-2.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '80px', height: '111px'} },
+        distribution: null, left: 0, top: 0,  index: 1, image: 'images/dist_box/Output-Socket-2.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '80px', height: '111px'}, distribution_name: "templated" },
         { name: 'Sockets@3', type: ItemTypes.SOCKETS_3, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-3.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '80px', height: '122px'} },
+        distribution: null, left: 0, top: 0,   index: 1, image: 'images/dist_box/Output-Socket-3.png', element_type: Constants.ElementType.OUTPUTS, 
+        size: {width: '80px', height: '122px'}, distribution_name: "templated" },
         { name: 'Pilot-Lights', type: ItemTypes.PILOT_LIGHTS, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 2, image: 'images/dist_box/pilot-lights.gif', element_type: Constants.ElementType.FRONTS, 
-        size: {width: '60px', height: '60px'} },
+        distribution: null, left: 0, top: 0,  index: 2, image: 'images/dist_box/pilot-lights.gif', element_type: Constants.ElementType.FRONTS, 
+        size: {width: '60px', height: '60px'}, distribution_name: "cartesian" },
         { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 3, image: 'images/dist_box/multimeter.png', element_type: Constants.ElementType.FRONTS, 
-        size: {width: '60px', height: '60px'} },
+        distribution: null, left: 0, top: 0,  index: 3, image: 'images/dist_box/multimeter.png', element_type: Constants.ElementType.FRONTS, 
+        size: {width: '60px', height: '60px'}, distribution_name: "cartesian" },
         { name: 'Live-Pins-Input', type: ItemTypes.LIVE_PINS_INPUT, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 4, image: 'images/dist_box/Live-Pins-Inputs.png', element_type: Constants.ElementType.ADDONS, 
-        size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '67px'} },
+        distribution: null, left: 0, top: 0,  index: 4, image: 'images/dist_box/Live-Pins-Inputs.png', element_type: Constants.ElementType.ADDONS, 
+        size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '67px'}, distribution_name: "templated" },
         { name: 'Loop-Through', type: ItemTypes.LIVE_PINS_OUTPUT, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 5, image: 'images/dist_box/Live-Pins-Outputs.png', element_type: Constants.ElementType.ADDONS, 
-        size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '67px'} },
+        distribution: null, left: 0, top: 0,  index: 5, image: 'images/dist_box/Live-Pins-Outputs.png', element_type: Constants.ElementType.ADDONS, 
+        size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '67px'}, distribution_name: "templated" },
         { name: 'Pins-Input@1', type: ItemTypes.PINS_INPUT_1, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 4, image: 'images/dist_box/Inputs-Pin-1.png', element_type: Constants.ElementType.INPUTS, 
-        size: {width: '80px', height: '90px'} },
+        distribution: null, left: 0, top: 0,  index: 4, image: 'images/dist_box/Inputs-Pin-1.png', element_type: Constants.ElementType.INPUTS, 
+        size: {width: '80px', height: '90px'}, distribution_name: "templated" },
         { name: 'Pins-Input@2', type: ItemTypes.PINS_INPUT_2, uniqid: null, 
-        distribution: null, left: 0, top: 0, index: 5, image: 'images/dist_box/Inputs-Pin-2.png', element_type: Constants.ElementType.INPUTS, 
-        size: {width: '80px', height: '80px'} },
+        distribution: null, left: 0, top: 0,  index: 5, image: 'images/dist_box/Inputs-Pin-2.png', element_type: Constants.ElementType.INPUTS, 
+        size: {width: '80px', height: '80px'}, distribution_name: "templated" },
     ]);
     const [droppedBoxNames, setDroppedBoxNames] = useState([]);
     function isDropped(boxName) {
@@ -180,6 +181,7 @@ export const Container = ({ snapToGrid }) => {
             width={item.size.width}
             height={item.size.height}
             isDropped={isDropped(item.name)}
+            distribution_name={item.distribution_name}
             {...item} />
         </div>)
     }
@@ -207,6 +209,9 @@ export const Container = ({ snapToGrid }) => {
     return (<div className="AppInnerContainer">
     <div style={{ overflow: 'hidden', clear: 'both' }} key="0000">
         <div style={style} className="templated-distributions-container" key="1">
+            <em style={{fontSize: '48px', color: 'rgb(50, 55, 165)'}}>
+                24U
+            </em>
             {distributions.map(({ accepts, lastDroppedItem, totalDroppedItems, e_name }, index) => (
                 <TableDist accept={accepts} 
                 lastDroppedItem={lastDroppedItem} 
