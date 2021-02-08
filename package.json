@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.2",
+    "browserify": "^17.0.0",
     "crypto-js": "^4.0.0",
     "immutability-helper": "^3.1.1",
     "imports-loader": "^2.0.0",
@@ -26,7 +27,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "compile": "browserify src/browserify/snapsvg.js -o public/scripts/snapsvg.js"
   },
   "eslintConfig": {
     "extends": [

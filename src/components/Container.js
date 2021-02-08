@@ -112,46 +112,46 @@ export const Container = ({ snapToGrid }) => {
     const [boxes, setBoxes] = useState([
         { name: 'Plugs@1', type: ItemTypes.PLUGS_1, uniqid: null, 
         distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-1.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '100px'} },
+        size: {width: '100px', height: '98px'} },
         { name: 'Plugs@2', type: ItemTypes.PLUGS_2, uniqid: null, 
         distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-2.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '80px'} },
+        size: {width: '80px', height: '102px'} },
         { name: 'Plugs@3', type: ItemTypes.PLUGS_3, uniqid: null, 
         distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-3.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '80px'} },
+        size: {width: '80px', height: '120px'} },
         { name: 'Plugs@4', type: ItemTypes.PLUGS_4, uniqid: null, 
         distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-4.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '80px'} },
+        size: {width: '80px', height: '119px'} },
         { name: 'Plugs@5', type: ItemTypes.PLUGS_5, uniqid: null, 
         distribution: null, left: 0, top: 0, index: 0, image: 'images/dist_box/Output-Plug-5.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '80px'} },
+        size: {width: '80px', height: '121px'} },
         { name: 'Sockets@1', type: ItemTypes.SOCKETS_1, uniqid: null, 
         distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-1.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '80px'} },
+        size: {width: '80px', height: '89px'} },
         { name: 'Sockets@2', type: ItemTypes.SOCKETS_2, uniqid: null, 
         distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-2.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '80px'} },
+        size: {width: '80px', height: '111px'} },
         { name: 'Sockets@3', type: ItemTypes.SOCKETS_3, uniqid: null, 
         distribution: null, left: 0, top: 0, index: 1, image: 'images/dist_box/Output-Socket-3.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '80px'} },
+        size: {width: '80px', height: '122px'} },
         { name: 'Pilot-Lights', type: ItemTypes.PILOT_LIGHTS, uniqid: null, 
         distribution: null, left: 0, top: 0, index: 2, image: 'images/dist_box/pilot-lights.gif', element_type: Constants.ElementType.FRONTS, 
-        size: {width: '60px'} },
+        size: {width: '60px', height: '60px'} },
         { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, 
         distribution: null, left: 0, top: 0, index: 3, image: 'images/dist_box/multimeter.png', element_type: Constants.ElementType.FRONTS, 
-        size: {width: '60px'} },
+        size: {width: '60px', height: '60px'} },
         { name: 'Live-Pins-Input', type: ItemTypes.LIVE_PINS_INPUT, uniqid: null, 
         distribution: null, left: 0, top: 0, index: 4, image: 'images/dist_box/Live-Pins-Inputs.png', element_type: Constants.ElementType.ADDONS, 
-        size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH} },
+        size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '67px'} },
         { name: 'Loop-Through', type: ItemTypes.LIVE_PINS_OUTPUT, uniqid: null, 
         distribution: null, left: 0, top: 0, index: 5, image: 'images/dist_box/Live-Pins-Outputs.png', element_type: Constants.ElementType.ADDONS, 
-        size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH} },
+        size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '67px'} },
         { name: 'Pins-Input@1', type: ItemTypes.PINS_INPUT_1, uniqid: null, 
         distribution: null, left: 0, top: 0, index: 4, image: 'images/dist_box/Inputs-Pin-1.png', element_type: Constants.ElementType.INPUTS, 
-        size: {width: '80px'} },
+        size: {width: '80px', height: '90px'} },
         { name: 'Pins-Input@2', type: ItemTypes.PINS_INPUT_2, uniqid: null, 
         distribution: null, left: 0, top: 0, index: 5, image: 'images/dist_box/Inputs-Pin-2.png', element_type: Constants.ElementType.INPUTS, 
-        size: {width: '80px'} },
+        size: {width: '80px', height: '80px'} },
     ]);
     const [droppedBoxNames, setDroppedBoxNames] = useState([]);
     function isDropped(boxName) {
@@ -250,7 +250,7 @@ export const Container = ({ snapToGrid }) => {
     })
 
     return (<div className="AppInnerContainer">
-    <div style={{ overflow: 'hidden', clear: 'both' }} key="0">
+    <div style={{ overflow: 'hidden', clear: 'both' }} key="0000">
         <div style={style} className="templated-distributions-container" key="1">
             {distributions.map(({ accepts, lastDroppedItem, totalDroppedItems, e_name }, index) => (<Distribution accept={accepts} 
             lastDroppedItem={lastDroppedItem} 
@@ -260,13 +260,13 @@ export const Container = ({ snapToGrid }) => {
         </div>
     </div>
 
-    <div className="boxes-container-draggable" key="1">
+    <div className="boxes-container-draggable" key="1111">
 
         <div className="boxes-container-holder-left" key="1">
             <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
             position: 'relative' }} className="boxes-container">
-                <em>{element_fronts[0][0].element_type}</em>
-                <div className="draggable-box-inputs">
+                <em key="0">{element_fronts[0][0].element_type}</em>
+                <div key="1" className="draggable-box-inputs">
                 {
                     element_fronts.map((element, index) => (
                         renderBox(element[0], element[1])
@@ -279,8 +279,8 @@ export const Container = ({ snapToGrid }) => {
         <div className="boxes-container-holder-right" key="2">
             <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
             position: 'relative' }} className="boxes-container" key="1">
-                <em>{element_outputs[0][0].element_type}</em>
-                <div className="draggable-box-inputs">
+                <em key="0">{element_outputs[0][0].element_type}</em>
+                <div key="1" className="draggable-box-inputs">
                 {
                     element_outputs.map((element, index) => (
                         renderBox(element[0], element[1])
@@ -291,8 +291,8 @@ export const Container = ({ snapToGrid }) => {
 
             <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
             position: 'relative' }} className="boxes-container" key="2">
-                <em>{element_addons[0][0].element_type}</em>
-                <div className="draggable-box-inputs">
+                <em key="0">{element_addons[0][0].element_type}</em>
+                <div key="1" className="draggable-box-inputs">
                 {
                     element_addons.map((element, index) => (
                         renderBox(element[0], element[1])
@@ -303,8 +303,8 @@ export const Container = ({ snapToGrid }) => {
 
             <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
             position: 'relative' }} className="boxes-container" key="3">
-                <em>{element_inputs[0][0].element_type}</em>
-                <div className="draggable-box-inputs">
+                <em key="0">{element_inputs[0][0].element_type}</em>
+                <div key="1" className="draggable-box-inputs">
                 {
                     element_inputs.map((element, index) => (
                         renderBox(element[0], element[1])

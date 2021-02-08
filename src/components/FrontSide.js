@@ -1,12 +1,23 @@
 import React from 'react'
-import PowerDist from './PowerDist'
-import Snap from 'imports-loader?imports=snapsvg';
+import Controller from './Controller'
 import { ItemTypes } from './ItemTypes'
+import $ from 'jquery'
+import Constants from './Constants';
 
-class FrontSide {
+class FrontSide extends React.Component {
 
-    constructor() {
-        this.paper = Snap('#distribution_front_side')
+    id = 'distribution_front_side'
+    
+    constructor(props) {
+        super(props)
+        this.paper = window.Snap('#'+this.id)
+        this.image = this.image.bind(this);
+        this.objects = this.objects.bind(this);
+        this.type_mapping = this.type_mapping.bind(this);
+        this.importAllObjects = this.importAllObjects.bind(this);
+        this.importCartesianObjectsByCache = this.importCartesianObjectsByCache.bind(this);
+        this.importCartesianObjectsByCache = this.importCartesianObjectsByCache.bind(this);
+        this.draw = this.draw.bind(this);
     }
 
     type_mapping() {
@@ -23,7 +34,7 @@ class FrontSide {
     image(objects) {
         for(var i = 0; i < objects.length; i++) {
             let image = objects[i].image;
-            this.paper.image(image, objects[i].left, objects[i].top, objects[i].width, "auto")
+            this.paper.image(image, objects[i].left, objects[i].top, objects[i].width, objects[i].height)
         }
     }
 
@@ -43,11 +54,11 @@ class FrontSide {
     }
 
     importCartesianObjectsByCache() {
-        let objects = localStorage.getItem("cartesian:items");
+        let objects = window.localStorage.getItem("cartesian: items");
         return JSON.parse(objects);
     }
 
-    importCartesianObjectsByCache() {
+    importCartesianObjectsFromDatabase() {
         return null;
     }
 
@@ -59,14 +70,17 @@ class FrontSide {
             }
         }
         if(function_to_execute != null) {
-            function_to_execute(objects) // call this.image function
+            this[function_to_execute](objects) // call this.image function
         }
     }
 
     render() {
-        this.object_types = Object.fromEntries(this.type_mapping);
+        // alert(this.props.viewBox)
+        $(document.getElementById(this.id)).attr('viewBox', this.props.viewBox);
+        this.object_types = Object.fromEntries(this.type_mapping());
         // import function is a Promise
         this.importAllObjects("local_storage").then((objects) => this.draw(objects)).catch(err => console.error(err))
+        return null
     }
 
 }
