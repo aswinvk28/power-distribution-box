@@ -104,7 +104,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         return { mouseX: x, mouseY: y }
     }
 
-    return (<div style={{ ...style, backgroundColor }} className={e_name} id={e_name}>
+    return (<div style={{ ...style }} className={e_name} id={e_name}>
             <em style={{position: 'absolute', fontSize: '24px', color: 'rgb(50, 55, 165)'}}>
             {e_name.indexOf("addons") > -1 ? 'addons' : ''}
             {e_name.indexOf("inputs") > -1 ? 'inputs' : ''}
@@ -113,7 +113,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
 
             {$elem}
 
-            <div ref={drop} className="distribution_container" id={e_name + "_distribution_container"}>
+            <div ref={drop} style={{ backgroundColor }} className="distribution_container" id={e_name + "_distribution_container"}>
                 {
                     totalDroppedItems.map(({name, type, uniqid, distribution, image, top, left}, index) =>  {
                         return (
