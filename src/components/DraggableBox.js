@@ -17,9 +17,9 @@ function getStyles(left, top, isDragging) {
     };
 }
 export const DraggableBox = (props) => {
-    const { name, type, uniqid, distribution, image, width, height, isDropped, left, top, id } = props;
+    const { name, type, uniqid, distribution, image, width, height, isDropped, left, top, distribution_name, id } = props;
     const [{ isDragging }, drag, preview] = useDrag({
-        item: { name, type, uniqid, distribution, image, width },
+        item: { name, type, uniqid, distribution, image, width, distribution_name },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
@@ -29,7 +29,7 @@ export const DraggableBox = (props) => {
     }, []);
     return (<div style={getStyles(left, top, isDragging)} className="draggable-box" key={id}>
             <Box name={name} type={type} uniqid={uniqid} distribution={distribution} image={image}
-            width={width} height={height}
+            width={width} height={height} distribution_name={distribution_name}
             isDropped={isDropped} />
 		</div>);
 };

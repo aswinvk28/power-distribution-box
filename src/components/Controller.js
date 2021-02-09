@@ -24,6 +24,10 @@ export default class Controller extends React.Component {
         this.changeToPower = this.changeToPower.bind(this);
         this.changeToDefault = this.changeToDefault.bind(this);
         this.cartesianWidth = null; this.cartesianHeight = null; this.templateWidth = null; this.templateHeight = null;
+        this.changeGridSizes = this.changeGridSizes.bind(this);
+        this.state = {
+            value: 10
+        };
     }
 
     changeToMonitoring() {
@@ -61,12 +65,29 @@ export default class Controller extends React.Component {
         }
     }
 
+    changeGridSizes(event) {
+        let value = (event.target.value - 50) + 100;
+        $(document.getElementById("cartesian_distribution_container")).css('backgroundSize', value + '%');
+        $(document.getElementById("templated_distribution_container")).css('backgroundSize', value + '%');
+        localStorage.setItem("cartesian: grid", JSON.stringify({'size': value}));
+        localStorage.setItem("templated: grid", JSON.stringify({'size': value}));
+        this.setState({'value': event.target.value});
+    }
+
+    componentWillMount() {
+        let cartesian_value = JSON.parse(localStorage.getItem("cartesian: grid"));
+        if(cartesian_value && ('size' in cartesian_value)) {
+            this.setState({value: cartesian_value['size'] - 100 + 50});
+        }
+    }
+
     render() {
         let elem = null;
         let designer = null, 
         buttons = <div className="buttons">
             <button onClick={this.changeToMonitoring}>Monitoring</button>
-            <button onClick={this.changeToPower}>Power</button>
+            <button onClick={this.changeToPower}>Power</button><br/>
+            <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} />
         </div>;
         if(this.state['svg_monitoring'] == true) {
             elem = <FrontSide viewBox={this.state['viewBox']} />;

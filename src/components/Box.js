@@ -10,11 +10,11 @@ const style = {
     cursor: 'move',
     float: 'left'
 };
-export const Box = ({ name, type, uniqid, distribution, image, width, height, isDropped }) => {
+export const Box = ({ name, type, uniqid, distribution, image, width, height, distribution_name, isDropped }) => {
     // useDrag denotes draggable
     const [{ opacity }, drag] = useDrag({
         // add item attributes here
-        item: { name, type, uniqid, distribution, image, width, height },
+        item: { name, type, uniqid, distribution, image, width, height, distribution_name },
         collect: (monitor) => {
             return {
                 opacity: monitor.isDragging() ? 0.4 : 1

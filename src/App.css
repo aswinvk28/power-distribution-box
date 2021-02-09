@@ -83,6 +83,10 @@ body, html {
   background-size: 100%;
 }
 
+#templated_distribution_container {
+  position: relative;
+}
+
 .cartesian .grid-box, .templated .grid-box {
   position: absolute;
 }
@@ -92,6 +96,10 @@ body, html {
   font-style: normal;
   text-decoration: none;
   font-size: 8px;
+}
+
+.highlight-component {
+  border: 1px dashed black;
 }
 
 .box-item {
