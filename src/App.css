@@ -98,6 +98,10 @@ body, html {
   font-size: 8px;
 }
 
+.highlight-component {
+  border: 1px dashed black;
+}
+
 .box-item {
   color: black;
   font-style: normal;

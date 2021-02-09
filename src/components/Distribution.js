@@ -7,6 +7,7 @@ import { GridBox } from './GridBox';
 import Constants from './Constants';
 import { HighlightComponent } from './HighlightComponent';
 import $ from 'jquery';
+import Singleton from './Singleton';
 const useLocalStorage = Constants.useLocalStorage;
 
 let style = {
@@ -96,12 +97,13 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             // left and top are saved on refresh
             let [left, top] = doSnapToGrid(x, y);
             if(item.distribution_name == "cartesian") {
-                document.getElementById(item.highlightComponent).style.left = left.toString() + "px";
-                document.getElementById(item.highlightComponent).style.top = top.toString() + "px";
-                document.getElementById(item.dragElementId).style.left = left.toString() + "px";
-                document.getElementById(item.dragElementId).style.top = top.toString() + "px";
-                item.left = left.toString() + "px";
-                item.top = top.toString() + "px";
+                let offset = $('#cartesian_distribution_container').offset();
+                document.getElementById(item.highlightComponent).style.left = (left-offset['left']).toString() + "px";
+                document.getElementById(item.highlightComponent).style.top = (top-offset['top']).toString() + "px";
+                document.getElementById(item.dragElementId).style.left = (left-offset['left']).toString() + "px";
+                document.getElementById(item.dragElementId).style.top = (top-offset['top']).toString() + "px";
+                item.left = (left-offset['left']).toString() + "px";
+                item.top = (top-offset['top']).toString() + "px";
             } else if(item.distribution_name == "templated") {
                 let offset = $('#templated_distribution_container').offset();
                 document.getElementById(item.highlightComponent).style.left = (left-offset['left']).toString() + "px";
@@ -120,7 +122,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
 
             {$elem}
 
-            <div ref={drop} style={{ backgroundColor }} className="distribution_container" id={e_name + "_distribution_container"}>
+            <div ref={drop} style={{ backgroundColor, backgroundSize: Singleton.__singletonRef.controller.state['value']-50+100 + '%' }} className="distribution_container" id={e_name + "_distribution_container"}>
                 {
                     totalDroppedItems.map((item, index) =>  {
                         return (
