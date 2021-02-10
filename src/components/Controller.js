@@ -100,12 +100,22 @@ export default class Controller extends React.Component {
         let elem = null;
         let designer = null, 
         buttons = <div className="buttons">
+            <div class="header-logo">
+                <div className="header-title">
+                    <h2 style={{color: '#b00110'}}>Customize your Distro</h2>
+                </div>
+                <div className="header-logo-image">
+                    <div className="header-logo-image-container">
+                        <img src="images/logo/power_distros_logo-01.png" width="40%" alt="Power Distros Logo" title="Power Distros Logo" />
+                    </div>
+                </div>
+            </div>
             <button onClick={this.changeToMonitoring}>Monitoring</button>
             <button onClick={this.changeToPower}>Power</button><br/>
             <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} /><br/>
-            <button className="button-full" style={{padding: '10px 20px', width: '100%', backgroundColor: 'rgb(50, 55, 165)', color: 'white', fontSize: '24px'}} 
+            <div className="header-tag-full" style={{padding: '10px 20px', width: '100%', backgroundColor: 'rgb(50, 55, 165)', color: 'white', fontSize: '24px'}} 
             onMouseOver={this.showPanel}
-            onMouseOut={this.hidePanel}>Power Distribution Box</button>
+            onMouseOut={this.hidePanel}></div>
         </div>;
         if(this.state['svg_monitoring'] == true) {
             elem = <FrontSide viewBox={this.state['viewBox']} />;
