@@ -28,6 +28,8 @@ export default class Controller extends React.Component {
         this.state = {
             value: 10
         };
+        this.showPanel = this.showPanel.bind(this);
+        this.hidePanel = this.hidePanel.bind(this);
     }
 
     changeToMonitoring() {
@@ -81,13 +83,26 @@ export default class Controller extends React.Component {
         }
     }
 
+    showPanel() {
+        $(document.getElementById("boxes_container_draggable"))
+        .slideDown(200);
+    }
+
+    hidePanel() {
+        $(document.getElementById("boxes_container_draggable"))
+        .slideUp(200);
+    }
+
     render() {
         let elem = null;
         let designer = null, 
         buttons = <div className="buttons">
             <button onClick={this.changeToMonitoring}>Monitoring</button>
             <button onClick={this.changeToPower}>Power</button><br/>
-            <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} />
+            <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} /><br/>
+            <button className="button-full" style={{padding: '10px 20px', width: '100%', backgroundColor: 'rgb(50, 55, 165)', color: 'white', fontSize: '24px'}} 
+            onMouseOver={this.showPanel}
+            onMouseOut={this.hidePanel}>Power Distribution Box</button>
         </div>;
         if(this.state['svg_monitoring'] == true) {
             elem = <FrontSide viewBox={this.state['viewBox']} />;
