@@ -91,16 +91,16 @@ export const Container = ({ snapToGrid }) => {
         distribution: null, left: 0, top: 0,   index: 1, image: 'images/dist_box/Output-Socket-3.png', element_type: Constants.ElementType.OUTPUTS, 
         size: {width: '60px', height: '102px'}, distribution_name: "templated" },
         { name: 'Pilot-Lights', type: ItemTypes.PILOT_LIGHTS, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 2, image: 'images/dist_box/pilot-lights.gif', element_type: Constants.ElementType.FRONTS, 
+        distribution: null, left: 0, top: 0,  index: 2, image: 'images/dist_box/pilot-lights.gif', element_type: Constants.ElementType.THROUGH_OUTPUTS, 
         size: {width: '40px', height: '40px'}, distribution_name: "cartesian" },
         { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 3, image: 'images/dist_box/multimeter.png', element_type: Constants.ElementType.FRONTS, 
+        distribution: null, left: 0, top: 0,  index: 3, image: 'images/dist_box/multimeter.png', element_type: Constants.ElementType.THROUGH_OUTPUTS, 
         size: {width: '40px', height: '40px'}, distribution_name: "cartesian" },
         { name: 'Live-Pins-Input', type: ItemTypes.LIVE_PINS_INPUT, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 4, image: 'images/dist_box/Live-Pins-Inputs.png', element_type: Constants.ElementType.ADDONS, 
+        distribution: null, left: 0, top: 0,  index: 4, image: 'images/dist_box/Live-Pins-Inputs.png', element_type: Constants.ElementType.INPUTS, 
         size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '47px'}, distribution_name: "templated" },
         { name: 'Loop-Through', type: ItemTypes.LIVE_PINS_OUTPUT, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 5, image: 'images/dist_box/Live-Pins-Outputs.png', element_type: Constants.ElementType.ADDONS, 
+        distribution: null, left: 0, top: 0,  index: 5, image: 'images/dist_box/Live-Pins-Outputs.png', element_type: Constants.ElementType.INPUTS, 
         size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '47px'}, distribution_name: "templated" },
         { name: 'Pins-Input@1', type: ItemTypes.PINS_INPUT_1, uniqid: null, 
         distribution: null, left: 0, top: 0,  index: 4, image: 'images/dist_box/Inputs-Pin-1.png', element_type: Constants.ElementType.INPUTS, 
@@ -187,20 +187,20 @@ export const Container = ({ snapToGrid }) => {
         </div>)
     }
 
-    let element_outputs = [], element_fronts = [], element_addons = [], element_inputs = [];
+    let element_outputs = [], element_through_outputs = [], element_addons = [], element_inputs = [];
     boxes.map((item, index) => {
         switch(item.element_type) {
+            case Constants.ElementType.INPUTS:
+                element_inputs.push([item, index]);
+                break;
             case Constants.ElementType.OUTPUTS:
                 element_outputs.push([item, index]);
                 break;
-            case Constants.ElementType.FRONTS:
-                element_fronts.push([item, index]);
+            case Constants.ElementType.THROUGH_OUTPUTS:
+                element_through_outputs.push([item, index]);
                 break;
             case Constants.ElementType.ADDONS:
                 element_addons.push([item, index]);
-                break;
-            case Constants.ElementType.INPUTS:
-                element_inputs.push([item, index]);
                 break;
             default:
                 break;
@@ -238,58 +238,54 @@ export const Container = ({ snapToGrid }) => {
 
     <div className="boxes-container-draggable" id="boxes_container_draggable" key="1111" sliding-panel="on">
 
-        <div className="boxes-container-holder-left" key="1">
-            <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
-            position: 'relative' }} className="boxes-container">
-                <em key="0">{element_fronts[0][0].element_type}</em>
-                <div key="1" className="draggable-box-inputs">
-                {
-                    element_fronts.map((element, index) => (
-                        renderBox(element[0], element[1])
-                    ))
-                }
-                </div>
+        <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
+        position: 'relative' }} className="boxes-container" key="3">
+            <em key="0">{element_inputs.length > 0 ? element_inputs[0][0].element_type : ''}</em>
+            <div key="1" className="draggable-box-inputs">
+            {
+                element_inputs.map((element, index) => (
+                    renderBox(element[0], element[1])
+                ))
+            }
             </div>
         </div>
 
-        <div className="boxes-container-holder-right" key="2">
-            <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
-            position: 'relative' }} className="boxes-container" key="1">
-                <em key="0">{element_outputs[0][0].element_type}</em>
-                <div key="1" className="draggable-box-inputs">
-                {
-                    element_outputs.map((element, index) => (
-                        renderBox(element[0], element[1])
-                    ))
-                }
-                </div>
-            </div>
-
-            <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
-            position: 'relative' }} className="boxes-container" key="2">
-                <em key="0">{element_addons[0][0].element_type}</em>
-                <div key="1" className="draggable-box-inputs">
-                {
-                    element_addons.map((element, index) => (
-                        renderBox(element[0], element[1])
-                    ))
-                }
-                </div>
-            </div>
-
-            <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
-            position: 'relative' }} className="boxes-container" key="3">
-                <em key="0">{element_inputs[0][0].element_type}</em>
-                <div key="1" className="draggable-box-inputs">
-                {
-                    element_inputs.map((element, index) => (
-                        renderBox(element[0], element[1])
-                    ))
-                }
-                </div>
+        <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
+        position: 'relative' }} className="boxes-container" key="1">
+            <em key="0">{element_outputs.length > 0 ? element_outputs[0][0].element_type : ''}</em>
+            <div key="1" className="draggable-box-inputs">
+            {
+                element_outputs.map((element, index) => (
+                    renderBox(element[0], element[1])
+                ))
+            }
             </div>
         </div>
 
+        <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
+        position: 'relative' }} className="boxes-container">
+            <em key="0">{element_through_outputs.length > 0 ? element_through_outputs[0][0].element_type : ''}</em>
+            <div key="1" className="draggable-box-inputs">
+            {
+                element_through_outputs.map((element, index) => (
+                    renderBox(element[0], element[1])
+                ))
+            }
+            </div>
+        </div>
+
+        <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
+        position: 'relative' }} className="boxes-container" key="2">
+            <em key="0">{element_addons.length > 0 ? element_addons[0][0].element_type : ''}</em>
+            <div key="1" className="draggable-box-inputs">
+            {
+                element_addons.map((element, index) => (
+                    renderBox(element[0], element[1])
+                ))
+            }
+            </div>
+        </div>
+        
     </div>
 
     <div style={{ overflow: 'hidden', clear: 'both' }} key="0000">

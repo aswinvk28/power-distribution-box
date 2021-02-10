@@ -1,8 +1,8 @@
 const ElementType = {
+    INPUTS: 'Inputs',
     OUTPUTS: 'Outputs',
-    FRONTS: 'Front',
-    ADDONS: 'Addons',
-    INPUTS: 'Inputs'
+    THROUGH_OUTPUTS: 'Through Output',
+    ADDONS: 'Add-ons',
 };
 
 const COLORS = {
