@@ -4,10 +4,20 @@ import { Distribution } from './Distribution';
 
 export default class TableDist extends React.Component {
 
+    heights = [
+        {size: '24U', height: 1137},
+        {size: '20U', height: 890},
+        {size: '16U', height: 600},
+        {size: '12U', height: 400},
+        {size: '8U', height: 200},
+    ];
+    
     constructor(props) {
         super(props)
     }
 
+    // #cartesian_distribution_container.height()
+    // #templated_distribution_container.height()
     componentDidMount() {
         $(document.getElementById(this.e_name)).css('height', ($(document).width() * 0.40 / 681 * 1455).toString() + "px");
         document.getElementById(this.e_name + "_distribution_container").style.height = 

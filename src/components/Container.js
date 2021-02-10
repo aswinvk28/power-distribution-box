@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useLayoutEffect } from 'react';
 import { Distribution } from './Distribution';
 import { DustBin } from './DustBin';
 import { Box } from './Box';
@@ -215,9 +215,21 @@ export const Container = ({ snapToGrid }) => {
         {size: '8U', color: 'rgb(150, 55, 165)'},
     ];
 
+    const [distributionSize, setDistributionSize] = useState(0);
+    useLayoutEffect(() => {
+        const size = localStorage.getItem("cartesian: size");
+        if (size) {
+            setDistributionSize(size);
+        }
+        $('#unit_size').trigger('change');
+    }, [distributionSize]);
+
     function changeUniSize(event) {
         let select = event.target;
-        $(document.getElementById("cartesian")).css('data-size', $(select).val());
+        $(document.getElementById("cartesian")).attr('data-size', $(select).val());
+        $(document.getElementById("templated")).attr('data-size', $(select).val());
+        localStorage.setItem("cartesian: size", $(select).val());
+        localStorage.setItem("templated: size", $(select).val());
     }
 
     return (<div className="AppInnerContainer">
