@@ -103,7 +103,7 @@ body, html {
   background-size: 100%;
 }
 
-#templated_distribution_container {
+#templated_distribution_container, #cartesian_distribution_container {
   position: relative;
 }
 
