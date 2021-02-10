@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useLayoutEffect } from 'react';
 import { fromEvent } from 'rxjs'
 import { map, throttleTime } from 'rxjs/operators'
 import { snapToGrid as doSnapToGrid } from './snapToGrid';
@@ -117,6 +117,30 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
 
         return { mouseX: x, mouseY: y }
     }
+
+    const [distributionSize, setDistributionSize] = useState(0);
+    useLayoutEffect(() => {
+        const size = localStorage.getItem("cartesian: size");
+        if (size) {
+            setDistributionSize(size);
+            let heights = new Map([
+                ['24U', 1137],
+                ['20U', 937],
+                ['16U', 743],
+                ['12U', 550],
+                ['8U', 350],
+            ]);
+
+            if(distributionSize != '24U') {
+                style['padding'] = '5.2%';
+            }
+        
+            heights = Object.fromEntries(heights);
+            $(document.getElementById(e_name)).css('height', ($(document).width() * 0.40 / 681 * 1455).toString() + "px");
+            document.getElementById(e_name + "_distribution_container").style.height = 
+            (heights[distributionSize] * $(document.getElementById(e_name)).outerWidth() / 681).toString() + "px"; // outerWidth
+        }
+    }, [distributionSize]);
 
     return (<div style={{ ...style }} className={e_name} id={e_name}>
 

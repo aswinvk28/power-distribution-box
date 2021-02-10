@@ -67,6 +67,9 @@ export default class Controller extends React.Component {
         }
     }
 
+    // #cartesian_distribution_container.height()
+    // #templated_distribution_container.height()
+
     changeGridSizes(event) {
         let value = (event.target.value - 50) + 100;
         $(document.getElementById("cartesian_distribution_container")).css('backgroundSize', value + '%');

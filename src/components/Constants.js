@@ -5,6 +5,11 @@ const ElementType = {
     INPUTS: 'Inputs'
 };
 
+const COLORS = {
+    'BRAND_TITLE': 'b00110',
+    
+}
+
 const SCALE = {
     FRONT_SIDE: 5,
     REAR_SIDE: 5

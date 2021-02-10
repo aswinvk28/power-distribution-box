@@ -220,8 +220,10 @@ export const Container = ({ snapToGrid }) => {
         const size = localStorage.getItem("cartesian: size");
         if (size) {
             setDistributionSize(size);
+            $("#cartesian").attr('data-size',distributionSize);
+            $("#templated").attr('data-size', distributionSize);
+            $('#unit_size').val(distributionSize);
         }
-        $('#unit_size').trigger('change');
     }, [distributionSize]);
 
     function changeUniSize(event) {
