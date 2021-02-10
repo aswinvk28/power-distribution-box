@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from "react-dom";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
+import Singleton from './Singleton'
 
 class DistributionMenu extends React.Component {
 
@@ -8,12 +9,13 @@ class DistributionMenu extends React.Component {
         super(props)
     }
 
-    handleClick() {
-
+    handleClick(event) {
+        Singleton.removeItem(this.item)
     }
     
     render() {
         let { image, name, width, height } = this.props;
+        this.item = {image, name, width, height};
         return (
             <div className="distribution-box-menu">
                 <ContextMenuTrigger id="distribution-box-contextmenu">

@@ -8,6 +8,7 @@ import { ItemTypes } from './ItemTypes';
 import { snapToGrid as doSnapToGrid } from './snapToGrid';
 import DistributionMenu from './DistributionMenu';
 import $ from 'jquery';
+import Singleton from './Singleton';
 const style = {
     border: '1px dashed gray',
     backgroundColor: 'transparent',
@@ -37,12 +38,6 @@ widths[ItemTypes.SOCKETS_1] = "60px";
 widths[ItemTypes.SOCKETS_2] = "60px";
 widths[ItemTypes.SOCKETS_3] = "60px";
 export const GridBox = ({ name, type, uniqid, distribution, image, top, left, e_name, isDropped }) => {
-    let shortClassName = "grid-box-item-" + name;
-    let className = "grid-box " + shortClassName;
-
-    // specify an id for styling purposes
-    let id = shortClassName + "-" + uniqid;
-
     let width = widths[type];
 
     // useDrag denotes draggable
@@ -69,6 +64,10 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, e_
         }
         localStorage.setItem(key, JSON.stringify(items));
     }
+
+    // specify an id for styling purposes
+    let {className, id} = Singleton.getGridBoxId({name, uniqid});
+
     return (<div ref={drag} style={{...style, opacity, top, left}} className={className} id={id}>
             <DistributionMenu image={image} name={name} width={widths[type]} height="auto" />
 		</div>);
