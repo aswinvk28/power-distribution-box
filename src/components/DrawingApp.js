@@ -1,4 +1,3 @@
-import '../App.css';
 import React from 'react'
 import Controller from './Controller'
 import { DndProvider } from 'react-dnd'

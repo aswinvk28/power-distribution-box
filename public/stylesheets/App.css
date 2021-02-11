@@ -65,32 +65,32 @@ body, html {
   float: left;
   width: 45%;
   height: 646px;
-  background: url('images/power_box/canvas_wheel.png') 0px 0px transparent no-repeat;
+  background: url('../images/power_box/canvas_wheel.png') 0px 0px transparent no-repeat;
   background-size: 100%;
 }
 
 .templated-distributions-container #cartesian[data-size="24U"], .templated-distributions-container #templated[data-size="24U"] {
-  background: url('images/power_box/canvas_wheel.png') 0px 0px transparent no-repeat;
+  background: url('../images/power_box/canvas_wheel.png') 0px 0px transparent no-repeat;
   background-size: 100%;
 }
 
 .templated-distributions-container #cartesian[data-size="20U"], .templated-distributions-container #templated[data-size="20U"] {
-  background: url('images/power_box/canvas_wheel-20u.png') 0px 0px transparent no-repeat;
+  background: url('../images/power_box/canvas_wheel-20u.png') 0px 0px transparent no-repeat;
   background-size: 100%;
 }
 
 .templated-distributions-container #cartesian[data-size="16U"], .templated-distributions-container #templated[data-size="16U"] {
-  background: url('images/power_box/canvas_wheel-16u.png') 0px 0px transparent no-repeat;
+  background: url('../images/power_box/canvas_wheel-16u.png') 0px 0px transparent no-repeat;
   background-size: 100%;
 }
 
 .templated-distributions-container #cartesian[data-size="12U"], .templated-distributions-container #templated[data-size="12U"] {
-  background: url('images/power_box/canvas_wheel-12u.png') 0px 0px transparent no-repeat;
+  background: url('../images/power_box/canvas_wheel-12u.png') 0px 0px transparent no-repeat;
   background-size: 100%;
 }
 
 .templated-distributions-container #cartesian[data-size="8U"], .templated-distributions-container #templated[data-size="8U"] {
-  background: url('images/power_box/canvas_wheel-8u.png') 0px 0px transparent no-repeat;
+  background: url('../images/power_box/canvas_wheel-8u.png') 0px 0px transparent no-repeat;
   background-size: 100%;
 }
 
@@ -101,14 +101,14 @@ body, html {
   margin-top: 1%;
   border-radius: 3px;
   color: #ababab;
-  background-image: url('images/power_box/canvas_grid-2.png');
+  background-image: url('../images/power_box/canvas_grid-2.png');
   background-repeat: repeat;
 }
 
 .templated-distributions-container .templated {
   float: right;
   width: 45%;
-  background: url('images/power_box/canvas_wheel.png') 0px 0px transparent no-repeat;
+  background: url('../images/power_box/canvas_wheel.png') 0px 0px transparent no-repeat;
   background-size: 100%;
 }
 
@@ -305,7 +305,7 @@ body, html {
 
 #distros_designer::before {
   opacity: 0.09;
-  background-image: url('images/power_box/canvas_grid-2.png');
+  background-image: url('../images/power_box/canvas_grid-2.png');
   background-repeat: repeat;
   position: absolute;
   width: 100%;

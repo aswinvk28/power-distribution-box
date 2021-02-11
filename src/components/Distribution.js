@@ -22,7 +22,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
     let currentItem = null;
 
     // useDrop denotes droppable
-    const [{ isOver, canDrop, initialOffset, currentOffset, clientOffset, item }, drop] = useDrop({
+    const [{ isOver, canDrop, initialOffset, currentOffset, clientOffset, diffOffset, item }, drop] = useDrop({
         accept,
         drop: onDrop,
         collect: (monitor) => ({
@@ -31,6 +31,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             initialOffset: monitor.getInitialClientOffset(),
             currentOffset: monitor.getSourceClientOffset(),
             clientOffset: monitor.getClientOffset(),
+            diffOffset: monitor.getInitialSourceClientOffset(),
             item: monitor.getItem()
         }),
         canDrop: (item, monitor) => {
@@ -98,20 +99,25 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             let [left, top] = doSnapToGrid(x, y);
             if(item.distribution_name == "cartesian") {
                 let offset = $('#cartesian_distribution_container').offset();
+                document.getElementById(item.highlightComponent).style.width = item.width;
+                document.getElementById(item.highlightComponent).style.height = item.height;
                 document.getElementById(item.highlightComponent).style.left = (left-offset['left']).toString() + "px";
                 document.getElementById(item.highlightComponent).style.top = (top-offset['top']).toString() + "px";
-                document.getElementById(item.dragElementId).style.left = (left-offset['left']).toString() + "px";
-                document.getElementById(item.dragElementId).style.top = (top-offset['top']).toString() + "px";
-                item.left = (left-offset['left']).toString() + "px";
-                item.top = (top-offset['top']).toString() + "px";
+                document.getElementById(item.dragElementId).style.left = (left-offset['left']-80).toString() + "px";
+                document.getElementById(item.dragElementId).style.top = (top-offset['top']-80).toString() + "px";
+                item.left = (left-offset['left']-80).toString() + "px";
+                item.top = (top-offset['top']-80).toString() + "px";
             } else if(item.distribution_name == "templated") {
                 let offset = $('#templated_distribution_container').offset();
-                document.getElementById(item.highlightComponent).style.left = (left-offset['left']).toString() + "px";
+                let width = $('#boxes_container_draggable_holder').width();
+                document.getElementById(item.highlightComponent).style.width = item.width;
+                document.getElementById(item.highlightComponent).style.height = item.height;
+                document.getElementById(item.highlightComponent).style.left = (left-width-120).toString() + "px";
                 document.getElementById(item.highlightComponent).style.top = (top-offset['top']).toString() + "px";
-                document.getElementById(item.dragElementId).style.left = (left-offset['left']).toString() + "px";
-                document.getElementById(item.dragElementId).style.top = (top-offset['top']).toString() + "px";
-                item.left = (left-offset['left']).toString() + "px";
-                item.top = (top-offset['top']).toString() + "px";
+                document.getElementById(item.dragElementId).style.left = (left-offset['left']-80).toString() + "px";
+                document.getElementById(item.dragElementId).style.top = (top-offset['top']-80).toString() + "px";
+                item.left = (left-offset['left']-80).toString() + "px";
+                item.top = (top-offset['top']-80).toString() + "px";
             }
         }
 
@@ -152,7 +158,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
                         return (
                             <GridBox name={item.name} type={item.type} uniqid={item.uniqid} key={item.index}
                             distribution={item.distribution} image={item.image} e_name={e_name}
-                            top={item.top} left={item.left}
+                            top={item.top} left={item.left} width={item.width} height={item.height}
                             isDropped={true} />
                         )
                     })

@@ -18,26 +18,25 @@ export default class Controller extends React.Component {
         {size: '12U', color: 'rgb(50, 155, 165)'},
         {size: '8U', color: 'rgb(150, 55, 165)'},
     ];
+
+    state = {
+        svg_monitoring: false,
+        svg_power: false,
+        snapToGridAfterDrop: true,
+        snapToGridWhileDragging: true,
+        viewBox: '',
+        value: 10
+    }
     
     constructor(props) {
         super(props)
         Singleton.__singletonRef = new Singleton();
         Singleton.__singletonRef.controller = this;
-        this.state = {
-            svg_monitoring: false,
-            svg_power: false,
-            snapToGridAfterDrop: true,
-            snapToGridWhileDragging: true,
-            viewBox: ''
-        };
         this.changeToMonitoring = this.changeToMonitoring.bind(this);
         this.changeToPower = this.changeToPower.bind(this);
         this.changeToDefault = this.changeToDefault.bind(this);
         this.cartesianWidth = null; this.cartesianHeight = null; this.templateWidth = null; this.templateHeight = null;
         this.changeGridSizes = this.changeGridSizes.bind(this);
-        this.state = {
-            value: 10
-        };
         this.showPanel = this.showPanel.bind(this);
         if(JSON.parse(localStorage.getItem("designer: slider")) == true) {
             this.sliding = JSON.parse(localStorage.getItem("designer: slider"));

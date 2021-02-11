@@ -8,6 +8,7 @@ const style = {
     marginRight: '1.5rem',
     marginBottom: '1.5rem',
     cursor: 'move',
+    zIndex: 100,
 };
 export const Box = ({ name, type, uniqid, distribution, image, width, height, distribution_name, description, isDropped }) => {
     // useDrag denotes draggable

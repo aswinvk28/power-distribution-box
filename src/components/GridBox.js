@@ -20,26 +20,24 @@ const style = {
 };
 let styleCopy = {};
 // define the widths here
-let widths = {};
-widths[ItemTypes.PLUGS] = "60px";
-widths[ItemTypes.SOCKETS] = "60px";
-widths[ItemTypes.PILOT_LIGHTS] = "20px";
-widths[ItemTypes.MULTIMETER] = "50px";
-widths[ItemTypes.LIVE_PINS_INPUT] = "300px";
-widths[ItemTypes.LIVE_PINS_OUTPUT] = "300px";
-widths[ItemTypes.PINS_INPUT_1] = "60px";
-widths[ItemTypes.PINS_INPUT_2] = "60px";
-widths[ItemTypes.PLUGS_1] = "60px";
-widths[ItemTypes.PLUGS_2] = "60px";
-widths[ItemTypes.PLUGS_3] = "60px";
-widths[ItemTypes.PLUGS_4] = "60px";
-widths[ItemTypes.PLUGS_5] = "60px";
-widths[ItemTypes.SOCKETS_1] = "60px";
-widths[ItemTypes.SOCKETS_2] = "60px";
-widths[ItemTypes.SOCKETS_3] = "60px";
-export const GridBox = ({ name, type, uniqid, distribution, image, top, left, e_name, isDropped }) => {
-    let width = widths[type];
-
+// let widths = {};
+// widths[ItemTypes.PLUGS] = "60px";
+// widths[ItemTypes.SOCKETS] = "60px";
+// widths[ItemTypes.PILOT_LIGHTS] = "20px";
+// widths[ItemTypes.MULTIMETER] = "50px";
+// widths[ItemTypes.LIVE_PINS_INPUT] = "300px";
+// widths[ItemTypes.LIVE_PINS_OUTPUT] = "300px";
+// widths[ItemTypes.PINS_INPUT_1] = "60px";
+// widths[ItemTypes.PINS_INPUT_2] = "60px";
+// widths[ItemTypes.PLUGS_1] = "60px";
+// widths[ItemTypes.PLUGS_2] = "60px";
+// widths[ItemTypes.PLUGS_3] = "60px";
+// widths[ItemTypes.PLUGS_4] = "60px";
+// widths[ItemTypes.PLUGS_5] = "60px";
+// widths[ItemTypes.SOCKETS_1] = "60px";
+// widths[ItemTypes.SOCKETS_2] = "60px";
+// widths[ItemTypes.SOCKETS_3] = "60px";
+export const GridBox = ({ name, type, uniqid, distribution, image, top, left, width, e_name, isDropped }) => {
     // useDrag denotes draggable
     const [{ opacity, initialOffset, currentOffset, clientOffset, item }, drag] = useDrag({
         // add attributes here
@@ -69,6 +67,6 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, e_
     let {className, id} = Singleton.getGridBoxId({name, uniqid});
 
     return (<div ref={drag} style={{...style, opacity, top, left}} className={className} id={id}>
-            <DistributionMenu image={image} name={name} width={widths[type]} height="auto" />
+            <DistributionMenu image={image} name={name} width={width} height="auto" />
 		</div>);
 };
