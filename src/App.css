@@ -42,6 +42,10 @@ body, html {
   /* overflow: hidden; */
 }
 
+#root {
+  min-width: 520px;
+}
+
 .AppInnerContainerHolder {
   position: relative;
 }
@@ -91,7 +95,7 @@ body, html {
 }
 
 .distribution_container {
-  width: 100%;
+  /* width: 100%; */
   height: 100%;
   border: 1px solid #beb3b3;
   margin-top: 1%;
@@ -117,6 +121,27 @@ body, html {
   position: absolute;
 }
 
+#boxes_container_draggable em {
+  padding: 10px 20px;
+  background-color: #e7e7e5;
+  color: #777777;
+  font-style: normal;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  text-align: left;
+}
+
+@media (max-width: 520px) {
+  h2.header-tagline {
+    font-size: 36px;
+  }
+}
+
+@media (min-width: 521px) {
+  h2.header-tagline {
+    font-size: 48px;
+  }
+}
+
 .header-logo, .header-logo::before, .header-logo::after {
   clear: both;
   display: block;
@@ -138,12 +163,12 @@ body, html {
   float: right;
   display: inline-block;
   margin-right: 20px;
-  max-width: 800px;
+  max-width: 600px;
 }
 
 .header-logo-image-container {
-  margin-top: 0.83em;
-  margin-bottom: 0.83em;
+  margin-top: 40px;
+  margin-bottom: 40px;
   text-align: right;
 }
 
@@ -162,19 +187,69 @@ body, html {
   color: black;
   font-style: normal;
   font-size: 8px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.boxes-container-draggable[sliding-panel="on"] {
-  position: absolute;
-  width: 100%;
+.box-item abbr {
+  margin-top: 10px; 
+  display: block;
 }
 
-.boxes-container-draggable[sliding-panel="on"]::before {
-  position: absolute;
+.draggable-box-inputs {
+  padding-left: 16px;
+  clear: both;
+  display: block;
+  text-align: center;
+}
+
+.draggable-box-inputs::before, .draggable-box-inputs::after {
+  clear: both;
+  display: block;
+  content: "";
+}
+
+.draggable-box-container, .draggable-box-container::before, .draggable-box-container::after {
+  clear: both;
+  display: block;
   width: 100%;
+  content: "";
+}
+
+.draggable-box, .draggable-box::before, .draggable-box::after {
+  clear: both;
+  display: block; 
+  width: 100%;
+  content: "";
+}
+
+#boxes_container_draggable {
+  border: 2px dashed #4a0d12;
+  border-radius: 4px;
+}
+
+#boxes_container_draggable[sliding-panel="on"] {
+  position: absolute;
+  width: 300px;
+}
+
+#boxes_container_draggable::before {
+  background-color: #f1f1f1;
+  position: absolute;
+}
+
+#boxes_container_draggable[sliding-panel="on"]::before {
+  position: absolute;
+  width: 300px;
   height: 100%;
-  background-color: rgb(50, 55, 165);
-  opacity: 0.4;
+}
+
+#distros_designer[sliding-panel="on"] {
+
+}
+
+#distros_designer[sliding-panel="off"] {
+  
 }
 
 .boxes-container-holder-right {
@@ -196,8 +271,11 @@ body, html {
 }
 
 .boxes-container-draggable {
-  padding: 16px;
+  /* padding: 16px; */
   margin-bottom: 16px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 700px;
 }
 
 .boxes-container-draggable::before, .boxes-container-draggable::after {
@@ -210,6 +288,7 @@ body, html {
   margin-bottom: 10px;
   display: block;
   font-weight: bold;
+  width: 100%;
 }
 
 .react-contextmenu {

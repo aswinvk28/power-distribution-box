@@ -16,7 +16,7 @@ const SCALE = {
 };
 
 const SVG_ELEMENTS = {
-    FULL_WIDTH: '480px'
+    FULL_WIDTH: '280px'
 };
 
 const Constants = {

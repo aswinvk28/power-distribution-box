@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Container } from './Container';
+import '../style/fontawesome.min.css';
+import '../bootstrap-grid.min.css';
 import { CustomDragLayer } from './CustomDragLayer';
 import FrontSide from './FrontSide';
 import RearSide from './RearSide';
@@ -29,7 +31,8 @@ export default class Controller extends React.Component {
             value: 10
         };
         this.showPanel = this.showPanel.bind(this);
-        this.hidePanel = this.hidePanel.bind(this);
+        this.sliding = false;
+        this.toggleSliging = this.toggleSliging.bind(this);
     }
 
     changeToMonitoring() {
@@ -86,14 +89,15 @@ export default class Controller extends React.Component {
         }
     }
 
-    showPanel() {
-        $(document.getElementById("boxes_container_draggable"))
-        .slideDown(200);
+    showPanel(event) {
+        this.toggleSliging();
+        $('#boxes_container_draggable, #distros_designer').attr('sliding-panel', (this.sliding ? 'on' : 'off'));
+        event.preventDefault();
+        return false;
     }
 
-    hidePanel() {
-        $(document.getElementById("boxes_container_draggable"))
-        .slideUp(200);
+    toggleSliging() {
+        this.sliding = !this.sliding;
     }
 
     render() {
@@ -102,20 +106,20 @@ export default class Controller extends React.Component {
         buttons = <div className="buttons">
             <div class="header-logo">
                 <div className="header-title">
-                    <h2 style={{color: '#b00110'}}>Customize your Distro</h2>
+                    <h2 className="header-tagline" style={{color: '#b00110'}}>Customize your Distro</h2>
                 </div>
                 <div className="header-logo-image">
                     <div className="header-logo-image-container">
-                        <img src="images/logo/power_distros_logo-01.png" width="40%" alt="Power Distros Logo" title="Power Distros Logo" />
+                        <img src="images/logo/power_distros_logo-01.png" width="60%" alt="Power Distros Logo" title="Power Distros Logo" />
                     </div>
                 </div>
             </div>
             <button onClick={this.changeToMonitoring}>Monitoring</button>
             <button onClick={this.changeToPower}>Power</button><br/>
             <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} /><br/>
-            <div className="header-tag-full" style={{padding: '10px 20px', width: '100%', backgroundColor: 'rgb(50, 55, 165)', color: 'white', fontSize: '24px'}} 
-            onMouseOver={this.showPanel}
-            onMouseOut={this.hidePanel}></div>
+            <div className="header-tag-full" style={{padding: '10px 20px', width: '100%', backgroundColor: '#4a0d12', color: 'white', fontSize: '24px', textAlign: 'left'}}>
+                <i class="fas fa-bars" onClick={this.showPanel}></i>
+            </div>
         </div>;
         if(this.state['svg_monitoring'] == true) {
             elem = <FrontSide viewBox={this.state['viewBox']} />;
@@ -124,10 +128,10 @@ export default class Controller extends React.Component {
         } else {
             designer = <div className="bodyContainer">
             <div className="AppInnerContainerHolder">
-                <Container snapToGrid={this.state['snapToGridAfterDrop']}/>
+                <Container ref={ref => this.container = ref} snapToGrid={this.state['snapToGridAfterDrop']}/>
             </div></div>;
         }
-        return (<div className="container">
+        return (<div className="container-fluid">
 
             { buttons }
             
