@@ -39,7 +39,11 @@ export default class Controller extends React.Component {
             value: 10
         };
         this.showPanel = this.showPanel.bind(this);
-        this.sliding = false;
+        if(JSON.parse(localStorage.getItem("designer: slider")) == true) {
+            this.sliding = JSON.parse(localStorage.getItem("designer: slider"));
+        } else {
+            this.sliding = false;
+        }
         this.toggleSliging = this.toggleSliging.bind(this);
         this.changeUnitSize = this.changeUnitSize.bind(this);
     }
@@ -84,8 +88,9 @@ export default class Controller extends React.Component {
 
     changeGridSizes(event) {
         let value = (event.target.value - 50) + 100;
-        $(document.getElementById("cartesian_distribution_container")).css('backgroundSize', value + '%');
-        $(document.getElementById("templated_distribution_container")).css('backgroundSize', value + '%');
+        $("#cartesian_distribution_container").css('backgroundSize', value + '%');
+        $("#templated_distribution_container").css('backgroundSize', value + '%');
+        $("#distros_designer").css('backgroundSize', (value * 0.45) + '%');
         localStorage.setItem("cartesian: grid", JSON.stringify({'size': value}));
         localStorage.setItem("templated: grid", JSON.stringify({'size': value}));
         this.setState({'value': event.target.value});
@@ -101,9 +106,6 @@ export default class Controller extends React.Component {
     showPanel(event) {
         this.toggleSliging();
         $('#boxes_container_draggable, #distros_designer').attr('sliding-panel', (this.sliding ? 'on' : 'off'));
-        setTimeout(function() {
-
-        }, 3000);
         $(event.target).toggleClass("fa-anchor").toggleClass("fa-bars");
         $('#distros_designer').toggleClass("col-lg-8 col-sm-8 col-md-8").toggleClass("col-lg-12 col-sm-12 col-md-12");
         event.preventDefault();
@@ -112,6 +114,8 @@ export default class Controller extends React.Component {
 
     toggleSliging() {
         this.sliding = !this.sliding;
+        localStorage.setItem("designer: slider", this.sliding.toString());
+        $('#boxes_container_draggable').css('width', '100%');       
     }
 
     changeUnitSize(event) {

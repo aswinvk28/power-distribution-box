@@ -11,6 +11,7 @@ import { DraggableBox } from './DraggableBox';
 import { useDrop } from 'react-dnd';
 import TableDist from './TableDist';
 import $ from 'jquery';
+import Singleton from './Singleton';
 const useLocalStorage = Constants.useLocalStorage;
 
 const buckets = {
@@ -286,7 +287,7 @@ export const Container = ({ snapToGrid }) => {
 
     </div>
 
-    <div className="col col-lg-8 col-md-8 col-sm-8" id="distros_designer" sliding-panel="off">
+    <div className="col col-lg-8 col-md-8 col-sm-8" id="distros_designer" sliding-panel="off" style={{backgroundSize: (Singleton.__singletonRef.controller.state['value']-50+100)*0.45 + '%'}}>
 
         <div style={{ overflow: 'hidden', clear: 'both' }} key="0000">
             <div style={style} className="templated-distributions-container" key="1">

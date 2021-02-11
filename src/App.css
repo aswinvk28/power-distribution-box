@@ -303,6 +303,19 @@ body, html {
   background-color: white;
 }
 
+#distros_designer::before {
+  opacity: 0.09;
+  background-image: url('images/power_box/canvas_grid-2.png');
+  background-repeat: repeat;
+  position: absolute;
+  width: 100%;
+  content: "";
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-size: inherit;
+}
+
 #distros_designer[sliding-panel="on"] {
 
 }
