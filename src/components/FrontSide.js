@@ -11,7 +11,7 @@ class FrontSide extends React.Component {
 
     state = {
         change: false,
-        value: 0
+        value: 50
     }
     
     constructor(props) {
@@ -120,20 +120,22 @@ class FrontSide extends React.Component {
         }
     }
 
-    obtainViewBox() {
-        let viewBox = this.viewBox.split(" ").map(v => parseInt(v)); // viewBox array
+    obtainViewBox(vb) {
+        let viewBox = vb.split(" ").map(v => parseInt(v)); // viewBox array
         return viewBox;
     }
 
     changeSlider(event) {
-        let viewBox = this.obtainViewBox();
+        let vb = this.obtainViewBox(this.props.viewBox);
+        let viewBox = this.obtainViewBox(this.viewBox);
         let value = event.target.value;
-        viewBox[2] -= ((50-value) * 1);
-        viewBox[3] -= ((50-value) * 1);
+        viewBox[2] = vb[2] + value * 20;
+        viewBox[3] = vb[3] + value * 20;
         viewBox = viewBox.map(v => v.toString())
         this.viewBox = viewBox.join(" ");
         // console.log(this.viewBox);
         this.setState({change: !this.state['change']})
+        this.setState({'value': value});
     }
 
     showGrid() {
@@ -147,7 +149,7 @@ class FrontSide extends React.Component {
     render() {
         $(document.getElementById(this.id)).attr('viewBox', this.viewBox);
         return <div className="distros_controls">
-            <input type="range" name="zoom" id="zoom" min="-25" max="25" step="1" value={this.state['value']} onChange={this.changeSlider} />
+            <input type="range" name="zoom" id="zoom" min="-50" max="0" step="1" value={this.state['value']} onChange={this.changeSlider} />
         <input type="checkbox" name="show_grid" id="show_grid" value="" onChange={this.showGrid} />
         <input type="checkbox" name="show_wheel" id="show_wheel" value="" onChange={this.showWheel} /></div>
         ;
