@@ -92,6 +92,11 @@ export default class Controller extends React.Component {
     showPanel(event) {
         this.toggleSliging();
         $('#boxes_container_draggable, #distros_designer').attr('sliding-panel', (this.sliding ? 'on' : 'off'));
+        setTimeout(function() {
+
+        }, 3000);
+        $(event.target).toggleClass("fa-anchor").toggleClass("fa-bars");
+        $('#distros_designer').toggleClass("col-lg-8 col-sm-8 col-md-8").toggleClass("col-lg-12 col-sm-12 col-md-12");
         event.preventDefault();
         return false;
     }
@@ -117,8 +122,16 @@ export default class Controller extends React.Component {
             <button onClick={this.changeToMonitoring}>Monitoring</button>
             <button onClick={this.changeToPower}>Power</button><br/>
             <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} /><br/>
-            <div className="header-tag-full" style={{padding: '10px 20px', width: '100%', backgroundColor: '#4a0d12', color: 'white', fontSize: '24px', textAlign: 'left'}}>
-                <i class="fas fa-bars" onClick={this.showPanel}></i>
+            <div className="header-tag-full" style={{padding: '3px 20px', width: '100%', backgroundColor: '#4a0d12', color: 'white', fontSize: '24px', textAlign: 'left'}}>
+                <i class="fas fa-anchor" style={{color: 'red', cursor: 'alias'}} onClick={this.showPanel}></i>
+                <nav className="menu-navigation">
+                    <ul className="menu_navigation" id="menu_navigation">
+                        <li class="menu-item">NEW</li>
+                        <li class="menu-item">OPEN</li>
+                        <li class="menu-item">SAVE</li>
+                        <li class="menu-item">PRINT</li>
+                    </ul>
+                </nav>
             </div>
         </div>;
         if(this.state['svg_monitoring'] == true) {
