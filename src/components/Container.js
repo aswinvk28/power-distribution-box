@@ -227,14 +227,6 @@ export const Container = ({ snapToGrid }) => {
         }
     }, [distributionSize]);
 
-    function changeUnitSize(event) {
-        let select = event.target;
-        $(document.getElementById("cartesian")).attr('data-size', $(select).val());
-        $(document.getElementById("templated")).attr('data-size', $(select).val());
-        localStorage.setItem("cartesian: size", $(select).val());
-        localStorage.setItem("templated: size", $(select).val());
-    }
-
     return (<div className="AppInnerContainer">
 
 <div className="row">
@@ -298,13 +290,6 @@ export const Container = ({ snapToGrid }) => {
 
         <div style={{ overflow: 'hidden', clear: 'both' }} key="0000">
             <div style={style} className="templated-distributions-container" key="1">
-                <select name="unit_size" id="unit_size" style={{fontSize: '48px', color: 'rgb(50, 55, 165)'}} onChange={changeUnitSize}>
-                    {colors.map(({ size, color }, index) => (
-                        <option key={size} style={{fontSize: '48px', color: color}} value={size}>
-                            {size}
-                        </option>
-                    ))}
-                </select>
                 {distributions.map(({ accepts, lastDroppedItem, totalDroppedItems, e_name }, index) => (
                     <TableDist accept={accepts} 
                     lastDroppedItem={lastDroppedItem} 

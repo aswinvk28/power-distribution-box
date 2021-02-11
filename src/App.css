@@ -63,7 +63,7 @@ body, html {
 
 .templated-distributions-container .cartesian {
   float: left;
-  width: 32%;
+  width: 45%;
   height: 646px;
   background: url('images/power_box/canvas_wheel.png') 0px 0px transparent no-repeat;
   background-size: 100%;
@@ -107,7 +107,7 @@ body, html {
 
 .templated-distributions-container .templated {
   float: right;
-  width: 32%;
+  width: 45%;
   background: url('images/power_box/canvas_wheel.png') 0px 0px transparent no-repeat;
   background-size: 100%;
 }
@@ -132,13 +132,13 @@ body, html {
 
 @media (max-width: 520px) {
   h2.header-tagline {
-    font-size: 36px;
+    font-size: 24px;
   }
 }
 
 @media (min-width: 521px) {
   h2.header-tagline {
-    font-size: 48px;
+    font-size: 36px;
   }
 }
 
@@ -151,6 +151,11 @@ body, html {
   content: "";
   clear: both;
   display: block;
+}
+
+#header_controls {
+  margin-top: 40px;
+  margin-bottom: 40px;
 }
 
 .header-title {

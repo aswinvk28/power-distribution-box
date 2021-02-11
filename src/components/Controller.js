@@ -11,6 +11,14 @@ import Constants from './Constants';
 
 export default class Controller extends React.Component {
     
+    colors = [
+        {size: '24U', color: 'rgb(50, 55, 165)'},
+        {size: '20U', color: 'rgb(150, 55, 105)'},
+        {size: '16U', color: 'rgb(20, 155, 105)'},
+        {size: '12U', color: 'rgb(50, 155, 165)'},
+        {size: '8U', color: 'rgb(150, 55, 165)'},
+    ];
+    
     constructor(props) {
         super(props)
         Singleton.__singletonRef = new Singleton();
@@ -33,6 +41,7 @@ export default class Controller extends React.Component {
         this.showPanel = this.showPanel.bind(this);
         this.sliding = false;
         this.toggleSliging = this.toggleSliging.bind(this);
+        this.changeUnitSize = this.changeUnitSize.bind(this);
     }
 
     changeToMonitoring() {
@@ -105,23 +114,40 @@ export default class Controller extends React.Component {
         this.sliding = !this.sliding;
     }
 
+    changeUnitSize(event) {
+        let select = event.target;
+        $(document.getElementById("cartesian")).attr('data-size', $(select).val());
+        $(document.getElementById("templated")).attr('data-size', $(select).val());
+        localStorage.setItem("cartesian: size", $(select).val());
+        localStorage.setItem("templated: size", $(select).val());
+    }
+
     render() {
         let elem = null;
         let designer = null, 
         buttons = <div className="buttons">
-            <div class="header-logo">
-                <div className="header-title">
+            <div class="header-logo row">
+                <div className="col col-lg-4 col-md-4 col-sm-4">
                     <h2 className="header-tagline" style={{color: '#b00110'}}>Customize your Distro</h2>
                 </div>
-                <div className="header-logo-image">
+                <div className="col col-lg-4 col-md-4 col-sm-4" id="header_controls">
+                    <button onClick={this.changeToMonitoring}>Monitoring</button>
+                    <button onClick={this.changeToPower}>Power</button><br/>
+                    <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} /><br/>
+                    <select name="unit_size" id="unit_size" style={{fontSize: '48px', color: 'rgb(50, 55, 165)'}} onChange={this.changeUnitSize}>
+                        {this.colors.map(({ size, color }, index) => (
+                            <option key={size} style={{fontSize: '48px', color: color}} value={size}>
+                                {size}
+                            </option>
+                        ))}
+                    </select><br/>
+                </div>
+                <div className="col col-lg-4 col-md-4 col-sm-4">
                     <div className="header-logo-image-container">
                         <img src="images/logo/power_distros_logo-01.png" width="60%" alt="Power Distros Logo" title="Power Distros Logo" />
                     </div>
                 </div>
             </div>
-            <button onClick={this.changeToMonitoring}>Monitoring</button>
-            <button onClick={this.changeToPower}>Power</button><br/>
-            <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} /><br/>
             <div className="header-tag-full" style={{padding: '3px 20px', width: '100%', backgroundColor: '#4a0d12', color: 'white', fontSize: '24px', textAlign: 'left'}}>
                 <i class="fas fa-anchor" style={{color: 'red', cursor: 'alias'}} onClick={this.showPanel}></i>
                 <nav className="menu-navigation">

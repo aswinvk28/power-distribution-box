@@ -132,7 +132,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             ]);
 
             if(distributionSize != '24U') {
-                style['padding'] = '5.2%';
+                style['padding'] = '5.4%';
             }
         
             heights = Object.fromEntries(heights);
