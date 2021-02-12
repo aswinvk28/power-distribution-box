@@ -122,6 +122,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         const size = localStorage.getItem("cartesian: size");
         if (size) {
             setDistributionSize(size);
+            // predetermined heights
             let heights = new Map([
                 ['24U', 1137],
                 ['20U', 937],

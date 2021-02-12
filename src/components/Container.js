@@ -47,7 +47,7 @@ class Container extends React.Component {
         boxes: [],
         droppedBoxNames: [],
         dustbins: [],
-        distributionSize: []
+        distributionSize: [],
     }
     
     constructor(props) {

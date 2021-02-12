@@ -81,6 +81,10 @@ export default class Controller extends React.Component {
         if(!this.templateHeight) {
             this.templateHeight = $('.templated').height()
         }
+        if(localStorage.getItem("cartesian: size")) {
+            $(document.getElementById("cartesian")).attr('data-size', localStorage.getItem("cartesian: size"));
+            $(document.getElementById("templated")).attr('data-size', localStorage.getItem("templated: size"));
+        }
     }
 
     // #cartesian_distribution_container.height()
@@ -124,6 +128,19 @@ export default class Controller extends React.Component {
         $(document.getElementById("templated")).attr('data-size', $(select).val());
         localStorage.setItem("cartesian: size", $(select).val());
         localStorage.setItem("templated: size", $(select).val());
+        let heights = new Map([
+            ['24U', 1137],
+            ['20U', 937],
+            ['16U', 743],
+            ['12U', 550],
+            ['8U', 350],
+        ]);
+        heights = Object.fromEntries(heights);
+        $("#templated, #cartesian").css('height', ($(document).width() * 0.40 / 681 * 1455).toString() + "px");
+        $("#templated" + "_distribution_container").css('height', 
+        (heights[$(select).val()] * $(document.getElementById("templated")).outerWidth() / 681).toString() + "px");
+        $("#cartesian_distribution_container").css('height', 
+        (heights[$(select).val()] * $(document.getElementById("cartesian")).outerWidth() / 681).toString() + "px"); // outerWidth
     }
 
     render() {
@@ -140,7 +157,7 @@ export default class Controller extends React.Component {
                     <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} /><br/>
                     <select name="unit_size" id="unit_size" style={{fontSize: '48px', color: 'rgb(50, 55, 165)'}} onChange={this.changeUnitSize}>
                         {this.colors.map(({ size, color }, index) => (
-                            <option key={size} style={{fontSize: '48px', color: color}} value={size}>
+                            <option selected={size == localStorage.getItem("cartesian: size") ? 'selected' : false} key={size} style={{fontSize: '48px', color: color}} value={size}>
                                 {size}
                             </option>
                         ))}
@@ -171,7 +188,7 @@ export default class Controller extends React.Component {
         } else {
             designer = <div className="bodyContainer">
             <div className="AppInnerContainerHolder">
-                <Container snapToGrid={this.state['snapToGridAfterDrop']}/>
+                <Container ref={(ref) => this.containerRef = ref} snapToGrid={this.state['snapToGridAfterDrop']}/>
             </div></div>;
         }
         return (<div className="container-fluid">
