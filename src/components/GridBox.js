@@ -65,8 +65,12 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
         }, [])
 
         if(isDragging && x && y) {
-            let offset = $('#cartesian_distribution_container').offset();
-            $('#'+id).css({'left': x-offset['left']-40, 'top': y-offset['top']-40}).addClass("box-item-border");
+            let offset = {left: 0, top: 0};
+            if(distribution_name == "cartesian") {
+                offset = $('#cartesian_distribution_container').offset();
+            } else if(distribution_name == "templated") {
+                offset = $('#templated_distribution_container').offset();
+            }
             const item = getItem(uniqid);
             if(item) {
                 item.left = (x-offset['left']-40)+'px';
@@ -87,8 +91,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
         return null;
     }
     function saveItem(item) {
-        let key = item.distribution == 0 ? "cartesian: items" : "templated: items";
-        let items = JSON.parse(localStorage.getItem(key));
+        let items = container.getTotalDroppedItems(item.distribution);
         for(var i in items) {
             if(items[i].uniqid == item.uniqid) {
                 items[i] = item;
