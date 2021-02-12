@@ -196,6 +196,10 @@ body, html {
   margin-right: auto;
 }
 
+.box-item-border {
+  border: 3px dashed rgb(95,0,0);
+}
+
 .box-item abbr {
   margin-top: 10px; 
   display: block;

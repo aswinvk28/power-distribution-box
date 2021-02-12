@@ -150,8 +150,8 @@ class FrontSide extends React.Component {
         $(document.getElementById(this.id)).attr('viewBox', this.viewBox);
         return <div className="distros_controls">
             <input type="range" name="zoom" id="zoom" min="-50" max="0" step="1" value={this.state['value']} onChange={this.changeSlider} />
-        <input type="checkbox" name="show_grid" id="show_grid" value="" onChange={this.showGrid} />
-        <input type="checkbox" name="show_wheel" id="show_wheel" value="" onChange={this.showWheel} /></div>
+        <input title="Show Grid" type="checkbox" name="show_grid" id="show_grid" value="" onChange={this.showGrid} />
+        <input title="Display Wheel" type="checkbox" name="show_wheel" id="show_wheel" value="" onChange={this.showWheel} /></div>
         ;
     }
 

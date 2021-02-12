@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Container } from './Container';
+import Container from './Container';
 import '../style/fontawesome.min.css';
 import '../bootstrap-grid.min.css';
 import { CustomDragLayer } from './CustomDragLayer';
@@ -25,7 +25,8 @@ export default class Controller extends React.Component {
         snapToGridAfterDrop: true,
         snapToGridWhileDragging: true,
         viewBox: '',
-        value: 10
+        value: 10,
+        change: false
     }
     
     constructor(props) {
@@ -129,7 +130,7 @@ export default class Controller extends React.Component {
         let elem = null;
         let designer = null, 
         buttons = <div className="buttons">
-            <div class="header-logo row">
+            <div className="header-logo row">
                 <div className="col col-lg-4 col-md-4 col-sm-4">
                     <h2 className="header-tagline" style={{color: '#b00110'}}>Customize your Distro</h2>
                 </div>
@@ -152,13 +153,13 @@ export default class Controller extends React.Component {
                 </div>
             </div>
             <div className="header-tag-full" style={{padding: '3px 20px', width: '100%', backgroundColor: '#4a0d12', color: 'white', fontSize: '24px', textAlign: 'left'}}>
-                <i class="fas fa-anchor" style={{color: 'red', cursor: 'alias'}} onClick={this.showPanel}></i>
+                <i className="fas fa-anchor" style={{color: 'red', cursor: 'alias'}} onClick={this.showPanel}></i>
                 <nav className="menu-navigation">
                     <ul className="menu_navigation" id="menu_navigation">
-                        <li class="menu-item">NEW</li>
-                        <li class="menu-item">OPEN</li>
-                        <li class="menu-item">SAVE</li>
-                        <li class="menu-item">PRINT</li>
+                        <li className="menu-item">NEW</li>
+                        <li className="menu-item">OPEN</li>
+                        <li className="menu-item">SAVE</li>
+                        <li className="menu-item">PRINT</li>
                     </ul>
                 </nav>
             </div>
@@ -170,7 +171,7 @@ export default class Controller extends React.Component {
         } else {
             designer = <div className="bodyContainer">
             <div className="AppInnerContainerHolder">
-                <Container ref={ref => this.container = ref} snapToGrid={this.state['snapToGridAfterDrop']}/>
+                <Container snapToGrid={this.state['snapToGridAfterDrop']}/>
             </div></div>;
         }
         return (<div className="container-fluid">

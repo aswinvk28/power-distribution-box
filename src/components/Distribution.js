@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useLayoutEffect } from 'react'
 import { fromEvent } from 'rxjs'
 import { map, throttleTime } from 'rxjs/operators'
 import { snapToGrid as doSnapToGrid } from './snapToGrid';
-import { useDrop } from 'react-dnd';
+import { useDrop, useDrag } from 'react-dnd';
 import { GridBox } from './GridBox';
 import Constants from './Constants';
 import { HighlightComponent } from './HighlightComponent';
@@ -18,7 +18,7 @@ let style = {
     lineHeight: 'normal'
 };
 
-export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_name, onDrop, }) => {
+export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_name, container, onDrop, }) => {
     let currentItem = null;
 
     // useDrop denotes droppable
@@ -54,13 +54,6 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
     else if (canDrop) {
         backgroundColor = 'darkkhaki';
     }
-    if(!totalDroppedItems) {
-        totalDroppedItems = [];
-    }
-    if(totalDroppedItems) {
-        localStorage.setItem(e_name + ": items", JSON.stringify(totalDroppedItems));
-    }
-
     let $elem = <div></div>;
     if(item && clientOffset && currentOffset && document.getElementById(item.dragElementId)) {
         $elem = <HighlightComponent item={item} currentOffset={currentOffset}
@@ -148,6 +141,13 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         }
     }, [distributionSize]);
 
+    if(!totalDroppedItems) {
+        totalDroppedItems = [];
+    }
+    // if(totalDroppedItems) {
+    //     localStorage.setItem(e_name + ": items", JSON.stringify(totalDroppedItems));
+    // }
+
     return (<div style={{ ...style }} className={e_name} id={e_name}>
 
             {$elem}
@@ -156,9 +156,10 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
                 {
                     totalDroppedItems.map((item, index) =>  {
                         return (
-                            <GridBox name={item.name} type={item.type} uniqid={item.uniqid} key={item.index}
+                            <GridBox container={container} name={item.name} type={item.type} uniqid={item.uniqid} key={item.index}
                             distribution={item.distribution} image={item.image} e_name={e_name}
                             top={item.top} left={item.left} width={item.width} height={item.height}
+                            distribution_name={item.distribution_name} description={item.description} 
                             isDropped={true} />
                         )
                     })
