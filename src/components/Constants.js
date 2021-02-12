@@ -21,7 +21,7 @@ const SVG_ELEMENTS = {
 
 const Constants = {
     useLocalStorage: true,
-    gridSize: 32,
+    gridSize: 16,
     ElementType: ElementType,
     SVG_ELEMENTS: SVG_ELEMENTS,
     SCALE: SCALE

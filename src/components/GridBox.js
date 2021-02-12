@@ -65,6 +65,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
         }, [])
 
         if(isDragging && x && y) {
+            let [left, top] = doSnapToGrid(x, y);
             let offset = {left: 0, top: 0};
             if(distribution_name == "cartesian") {
                 offset = $('#cartesian_distribution_container').offset();
@@ -73,8 +74,8 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             }
             const item = getItem(uniqid);
             if(item) {
-                item.left = (x-offset['left']-40)+'px';
-                item.top = (y-offset['top']-40)+'px';
+                item.left = (left-offset['left']-40)+'px';
+                item.top = (top-offset['top']-40)+'px';
                 saveItem(item);
             }
         }
