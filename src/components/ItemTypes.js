@@ -15,4 +15,6 @@ export const ItemTypes = {
     SOCKETS_1: 'Sockets@1',
     SOCKETS_2: 'Sockets@2',
     SOCKETS_3: 'Sockets@3',
+    WHEEL: 'Wheel',
+    GRID: 'Grid'
 }

@@ -19,7 +19,7 @@ const style = {
     float: 'left',
     zIndex: 1000,
 };
-export const GridBox = ({ name, type, uniqid, distribution, image, top, left, width, height, distribution_name, description, container, e_name, isDropped }) => {
+export const GridBox = ({ name, type, uniqid, distribution, image, top, left, width, height, distribution_name, description, container, breaker, e_name, isDropped }) => {
     // specify an id for styling purposes
     let {className, id} = Singleton.getGridBoxId({name, uniqid});
 
@@ -102,8 +102,17 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
         }
         container.setTotalDroppedItems(items, item.distribution, item.distribution_name);
     }
+    function default_breaker() {
+        if('default' in breaker) {
+            return (
+                <img className="breaker-default" src={breaker.default} width="30px" height="auto" style={{marginLeft: "15px"}} />
+            )
+        }
+        return null;
+    }
 
     return (<div ref={drag} style={{...style, opacity, top, left}} className={className} id={id}>
+            {default_breaker()}
             <DistributionMenu image={image} name={name} width={width} height="auto" name={name} type={type} 
             uniqid={uniqid} distribution_name={distribution_name} distribution={distribution} />
 		</div>);

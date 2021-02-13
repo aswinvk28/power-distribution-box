@@ -97,9 +97,9 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
                 document.getElementById(item.highlightComponent).style.left = (left-offset['left']).toString() + "px";
                 document.getElementById(item.highlightComponent).style.top = (top-offset['top']).toString() + "px";
                 document.getElementById(item.dragElementId).style.left = (left-offset['left']-80).toString() + "px";
-                document.getElementById(item.dragElementId).style.top = (top-offset['top']-80).toString() + "px";
+                document.getElementById(item.dragElementId).style.top = (top-offset['top']-116).toString() + "px";
                 item.left = (left-offset['left']-80).toString() + "px";
-                item.top = (top-offset['top']-80).toString() + "px";
+                item.top = (top-offset['top']-116).toString() + "px";
             } else if(item.distribution_name == "templated") {
                 let offset = $('#templated_distribution_container').offset();
                 let width = $('#boxes_container_draggable_holder').width();
@@ -108,9 +108,9 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
                 document.getElementById(item.highlightComponent).style.left = (left-width-120).toString() + "px";
                 document.getElementById(item.highlightComponent).style.top = (top-offset['top']).toString() + "px";
                 document.getElementById(item.dragElementId).style.left = (left-offset['left']-80).toString() + "px";
-                document.getElementById(item.dragElementId).style.top = (top-offset['top']-80).toString() + "px";
+                document.getElementById(item.dragElementId).style.top = (top-offset['top']-116).toString() + "px";
                 item.left = (left-offset['left']-80).toString() + "px";
-                item.top = (top-offset['top']-80).toString() + "px";
+                item.top = (top-offset['top']-116).toString() + "px";
             }
         }
 
@@ -161,6 +161,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
                             distribution={item.distribution} image={item.image} e_name={e_name}
                             top={item.top} left={item.left} width={item.width} height={item.height}
                             distribution_name={item.distribution_name} description={item.description} 
+                            breaker={item.breaker} 
                             isDropped={true} />
                         )
                     })
