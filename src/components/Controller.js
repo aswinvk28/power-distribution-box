@@ -155,9 +155,9 @@ export default class Controller extends React.Component {
                     <button onClick={this.changeToMonitoring}>Monitoring</button>
                     <button onClick={this.changeToPower}>Power</button><br/>
                     <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} /><br/>
-                    <select name="unit_size" id="unit_size" style={{fontSize: '48px', color: 'rgb(50, 55, 165)'}} onChange={this.changeUnitSize}>
+                    <select defaultValue={localStorage.getItem("cartesian: size")} name="unit_size" id="unit_size" style={{fontSize: '48px', color: 'rgb(50, 55, 165)'}} onChange={this.changeUnitSize}>
                         {this.colors.map(({ size, color }, index) => (
-                            <option selected={size == localStorage.getItem("cartesian: size") ? 'selected' : false} key={size} style={{fontSize: '48px', color: color}} value={size}>
+                            <option key={size} style={{fontSize: '48px', color: color}} value={size}>
                                 {size}
                             </option>
                         ))}
@@ -188,7 +188,7 @@ export default class Controller extends React.Component {
         } else {
             designer = <div className="bodyContainer">
             <div className="AppInnerContainerHolder">
-                <Container ref={(ref) => this.containerRef = ref} snapToGrid={this.state['snapToGridAfterDrop']}/>
+                <Container ref={(ref) => {this.containerRef = ref}} snapToGrid={this.state['snapToGridAfterDrop']}/>
             </div></div>;
         }
         return (<div className="container-fluid">

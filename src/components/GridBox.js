@@ -17,6 +17,7 @@ const style = {
     marginBottom: '1.5rem',
     cursor: 'move',
     float: 'left',
+    zIndex: 1000,
 };
 export const GridBox = ({ name, type, uniqid, distribution, image, top, left, width, height, distribution_name, description, container, e_name, isDropped }) => {
     // specify an id for styling purposes
@@ -103,6 +104,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
     }
 
     return (<div ref={drag} style={{...style, opacity, top, left}} className={className} id={id}>
-            <DistributionMenu image={image} name={name} width={width} height="auto" />
+            <DistributionMenu image={image} name={name} width={width} height="auto" name={name} type={type} 
+            uniqid={uniqid} distribution_name={distribution_name} distribution={distribution} />
 		</div>);
 };
