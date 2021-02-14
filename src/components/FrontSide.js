@@ -11,7 +11,9 @@ class FrontSide extends React.Component {
 
     state = {
         change: false,
-        value: 50
+        value: 50,
+        grid: 0,
+        wheel: 0
     }
     
     constructor(props) {
@@ -22,13 +24,15 @@ class FrontSide extends React.Component {
         this.image = this.image.bind(this);
         this.objects = this.objects.bind(this);
         this.type_mapping = this.type_mapping.bind(this);
+        this.wheel_image = this.wheel_image.bind(this);
+        this.grid_image = this.grid_image.bind(this);
         this.importAllObjects = this.importAllObjects.bind(this);
         this.importCartesianObjectsByCache = this.importCartesianObjectsByCache.bind(this);
         this.importCartesianObjectsByCache = this.importCartesianObjectsByCache.bind(this);
         this.draw = this.draw.bind(this);
         this.changeSlider = this.changeSlider.bind(this);
         this.obtainViewBox = this.obtainViewBox.bind(this);
-        this.base_image = this.base_image.bind(this);
+        this.wheel = this.wheel.bind(this);
 
         let mousePosition = 0, instance = this, length = 0;
         $('#'+this.id).mousedown(function(event1) {
@@ -37,7 +41,7 @@ class FrontSide extends React.Component {
                 mousePosition = {'x': event1.clientX, 'y': event1.clientY}
             }
             $(this).mousemove(function (event2) {
-                length++; // estimate of pan activity
+                length+=0.95; // estimate of pan activity
                 $(this).css('cursor', 'grab');
                 const difference = {'x': (event2.clientX - mousePosition.x)/length, 'y': (event2.clientY - mousePosition.y)/length};
                 let viewBox = instance.obtainViewBox(instance.viewBox);
@@ -60,6 +64,29 @@ class FrontSide extends React.Component {
 
         this.showGrid = this.showGrid.bind(this);
         this.showWheel = this.showWheel.bind(this);
+
+        this.wheel_svg = Object.fromEntries(this.wheel_image());
+        this.grid_svg = Object.fromEntries(this.grid_image());
+    }
+
+    wheel_image() {
+        return new Map([
+            ['24U', 'images/power_box/canvas_wheel.png'], 
+            ['20U', 'images/power_box/canvas_wheel-20u.png'], 
+            ['16U', 'images/power_box/canvas_wheel-16u.png'],
+            ['12U', 'images/power_box/canvas_wheel-12u.png'],
+            ['8U', 'images/power_box/canvas_wheel-8u.png']
+        ])
+    }
+
+    grid_image() {
+        return new Map([
+            ['24U', 'images/power_box/canvas_grid.png'], 
+            ['20U', 'images/power_box/canvas_grid-20u.png'], 
+            ['16U', 'images/power_box/canvas_grid-16u.png'],
+            ['12U', 'images/power_box/canvas_grid-12u.png'],
+            ['8U', 'images/power_box/canvas_grid-8u.png']
+        ])
     }
 
     type_mapping() {
@@ -74,20 +101,24 @@ class FrontSide extends React.Component {
         return null;
     }
 
-    base_image() {
-        let image = "images/power_box/canvas_wheel.png";
-        let width = Constants.SIZES[ItemTypes.WHEEL][0];
-        let height = Constants.SIZES[ItemTypes.WHEEL][1];
+    wheel() {
+        let val = $('#unit_size').val();
+        let image = this.wheel_svg[val];
+        let width = Constants.SIZES[ItemTypes['WHEEL_'+val.toString()]][0];
+        let height = Constants.SIZES[ItemTypes['WHEEL_'+val.toString()]][1];
         let element = this.paper.image(image, 0, 0, (width).toString() + 'px', (height).toString() + 'px');
-        this.g.add(element);
+        this.g.prepend(element);
+        this.wheelEl = element;
     }
 
     grid() {
-        let image = "images/power_box/canvas_grid.png";
-        let width = Constants.SIZES[ItemTypes.GRID][0];
-        let height = Constants.SIZES[ItemTypes.GRID][1];
+        let val = $('#unit_size').val();
+        let image = this.grid_svg[val];
+        let width = Constants.SIZES[ItemTypes['GRID_'+val.toString()]][0];
+        let height = Constants.SIZES[ItemTypes['GRID_'+val.toString()]][1];
         let element = this.paper.image(image, 100, 65, (width).toString() + 'px', (height).toString() + 'px');
-        this.g.add(element);
+        this.g.prepend(element);
+        this.gridEl = element;
     }
     
     image(objects) {
@@ -97,6 +128,7 @@ class FrontSide extends React.Component {
             let height = parseInt(objects[i].height.replace('px', ''));
             let element = this.paper.image(image, objects[i].left, objects[i].top, (Constants.SIZES[objects[i].type][0]).toString() + 'px', 
             (Constants.SIZES[objects[i].type][1]).toString() + 'px');
+            element.attr('style', 'z-index: ' + 100);
             this.g.add(element);
         }
     }
@@ -126,7 +158,7 @@ class FrontSide extends React.Component {
     }
 
     draw(objects) {
-        var function_to_execute = ["base_image", "grid"];
+        var function_to_execute = [];
         for(var i in objects) {
             if(objects[i].type in this.object_types && !(this.object_types[objects[i].type] in function_to_execute)) {
                 function_to_execute.push(this.object_types[objects[i].type]);
@@ -158,11 +190,23 @@ class FrontSide extends React.Component {
     }
 
     showGrid() {
-
+        if(this.state['grid'] == 0) {
+            this.grid()
+            this.setState({grid: 1});
+        } else {
+            this.gridEl.remove();
+            this.setState({grid: 0});
+        }
     }
 
     showWheel() {
-
+        if(this.state['wheel'] == 0) {
+            this.wheel()
+            this.setState({wheel: 1});
+        } else {
+            this.wheelEl.remove();
+            this.setState({wheel: 0});
+        }
     }
 
     componentDidMount() {
@@ -175,9 +219,8 @@ class FrontSide extends React.Component {
         $(document.getElementById(this.id)).attr('viewBox', this.viewBox);
         return <div className="distros_controls">
             <input type="range" name="zoom" id="zoom" min="-100" max="0" step="1" value={this.state['value']} onChange={this.changeSlider} />
-        <input title="Show Grid" type="checkbox" name="show_grid" id="show_grid" value="" onChange={this.showGrid} />
-        <input title="Display Wheel" type="checkbox" name="show_wheel" id="show_wheel" value="" onChange={this.showWheel} /></div>
-        ;
+        <input title="Show Grid" type="checkbox" name="show_grid" id="show_grid" value={this.state['grid']} onChange={this.showGrid} />
+        <input title="Display Wheel" type="checkbox" name="show_wheel" id="show_wheel" value={this.state['wheel']} onChange={this.showWheel} /></div>
     }
 
 }

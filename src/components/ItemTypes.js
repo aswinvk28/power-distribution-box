@@ -15,6 +15,14 @@ export const ItemTypes = {
     SOCKETS_1: 'Sockets@1',
     SOCKETS_2: 'Sockets@2',
     SOCKETS_3: 'Sockets@3',
-    WHEEL: 'Wheel',
-    GRID: 'Grid'
+    WHEEL_24U: 'Wheel-24U',
+    WHEEL_20U: 'Wheel-20U',
+    WHEEL_16U: 'Wheel-16U',
+    WHEEL_12U: 'Wheel-12U',
+    WHEEL_8U: 'Wheel-8U',
+    GRID_24U: 'Grid-24U',
+    GRID_20U: 'Grid-20U',
+    GRID_16U: 'Grid-16U',
+    GRID_12U: 'Grid-12U',
+    GRID_8U: 'Grid-8U'
 }

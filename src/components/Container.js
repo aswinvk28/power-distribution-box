@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useLayoutEffect } from 'react';
 import { Distribution } from './Distribution';
-import { DustBin } from './DustBin';
 import { Box } from './Box';
 import { ItemTypes } from './ItemTypes';
 import update from 'immutability-helper';
@@ -46,12 +45,12 @@ class Container extends React.Component {
         distributions: [],
         boxes: [],
         droppedBoxNames: [],
-        dustbins: [],
-        distributionSize: [],
+        distributionSize: "24U",
     }
     
     constructor(props) {
         super(props)
+        this.controller = this.props.controller;
         Singleton.__singletonRef.controller.container = this;
         let cartesianDroppedItems = null, templatedDroppedItems = null;
         if(useLocalStorage) {
@@ -68,7 +67,6 @@ class Container extends React.Component {
                 templatedDroppedItems = JSON.parse(templatedDroppedItems);
             }
         }
-        this.handleDustBinDrop = this.handleDustBinDrop.bind(this);
         this.handleDrop = this.handleDrop.bind(this);
         const boxes = [
             { name: 'Plugs@1', type: ItemTypes.PLUGS_1, uniqid: null, 
@@ -114,9 +112,6 @@ class Container extends React.Component {
             distribution: null, left: 0, top: 0,  index: 5, image: 'images/dist_box/Inputs-Pin-2.png', element_type: Constants.ElementType.INPUTS, 
             size: {width: '45px', height: '45px'}, distribution_name: "templated", description: '63A CEE 400V 5P', breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
         ];
-        const dustbins = [
-            { accepts: allTypes },
-        ];
         const distributions = [
             { accepts: [ItemTypes.PILOT_LIGHTS, ItemTypes.MULTIMETER], lastDroppedItem: null, 
                 totalDroppedItems: cartesianDroppedItems, e_name: "cartesian" },
@@ -127,36 +122,11 @@ class Container extends React.Component {
         this.setDistributions = this.setDistributions.bind(this);
         this.setDroppedBoxNames = this.setDroppedBoxNames.bind(this);
         this.handleDrop = this.handleDrop.bind(this);
-        this.handleDustBinDrop = this.handleDustBinDrop.bind(this);
         this.state['boxes'] = boxes;
         this.state['distributions'] = distributions;
-        this.state['dustbins'] = dustbins;
         this.setTotalDroppedItems = this.setTotalDroppedItems.bind(this);
         this.getTotalDroppedItems = this.getTotalDroppedItems.bind(this);
         this.saveTotalDroppedItems = this.saveTotalDroppedItems.bind(this);
-    }
-
-    handleDustBinDrop(num, item) {
-        const distribution = item.distribution;
-        let droppedItems = this.state['distributions'][distribution].totalDroppedItems;
-        
-        // search by uniqid
-        let newDroppedItems = [];
-        for(var i = 0; i < droppedItems.length; i++) {
-            if(item.uniqid === droppedItems[i].uniqid) {
-                //found = i;
-            } else {
-                newDroppedItems.push(droppedItems[i]);
-            }
-        }
-
-        this.setDistributions(update(this.state['distributions'], {
-            [distribution]: {
-                totalDroppedItems: {
-                    $set: newDroppedItems
-                }
-            },
-        }))
     }
 
     setDistributions(distributions) {
@@ -283,9 +253,9 @@ class Container extends React.Component {
         return (<div className="AppInnerContainer">
 
     <div className="row">
-        <div className="col col-lg-4 col-md-4 col-sm-4" id="boxes_container_draggable_holder">
+        <div className="col col-lg-3 col-md-3 col-sm-3" id="boxes_container_draggable_holder">
 
-            <div className="boxes-container-draggable" id="boxes_container_draggable" key="1111" sliding-panel="off">
+            <div className="boxes-container-draggable" id="boxes_container_draggable" key="1111" sliding-panel={this.controller.sliding ? 'on' : 'off'}>
 
                 <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px",
                 position: 'relative' }} className="boxes-container" key="3">
@@ -339,7 +309,7 @@ class Container extends React.Component {
 
         </div>
 
-        <div className="col col-lg-8 col-md-8 col-sm-8" id="distros_designer" sliding-panel="off" style={{backgroundSize: (Singleton.__singletonRef.controller.state['value']-50+100)*0.45 + '%'}}>
+        <div className="col col-lg-9 col-md-9 col-sm-9" id="distros_designer" sliding-panel={this.controller.sliding ? 'on' : 'off'} style={{backgroundSize: (Singleton.__singletonRef.controller.state['value']-50+100)*0.35 + '%'}}>
 
             <div style={{ overflow: 'hidden', clear: 'both' }} key="0000">
                 <div style={style} className="templated-distributions-container" key="1">
@@ -356,10 +326,6 @@ class Container extends React.Component {
         </div>
     </div>
 
-        {this.state['dustbins'].map(({accepts}, num) => (
-            <DustBin key={num} accept={accepts} onDrop={(item) => this.handleDustBinDrop(num, item)}></DustBin>
-        ))}
-            
         </div>);
     }
 };

@@ -12,8 +12,8 @@ const useLocalStorage = Constants.useLocalStorage;
 
 let style = {
     marginBottom: '0.5rem',
-    padding: '5%',
     textAlign: 'center',
+    padding: '66px',
     fontSize: '1rem',
     lineHeight: 'normal'
 };
@@ -124,17 +124,13 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             setDistributionSize(size);
             // predetermined heights
             let heights = new Map([
-                ['24U', 1137],
-                ['20U', 937],
-                ['16U', 743],
-                ['12U', 550],
-                ['8U', 350],
+                ['24U', 1183],
+                ['20U', 983],
+                ['16U', 783],
+                ['12U', 583],
+                ['8U', 403],
             ]);
 
-            if(distributionSize != '24U') {
-                style['padding'] = '5.4%';
-            }
-        
             heights = Object.fromEntries(heights);
             $(document.getElementById(e_name)).css('height', ($(document).width() * 0.40 / 681 * 1455).toString() + "px");
             document.getElementById(e_name + "_distribution_container").style.height = 
@@ -149,7 +145,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
     //     localStorage.setItem(e_name + ": items", JSON.stringify(totalDroppedItems));
     // }
 
-    return (<div style={{ ...style }} className={e_name} id={e_name}>
+    return (<div style={{ ...style }} className={e_name} id={e_name} data-size={container.state['distributionSize']}>
 
             {$elem}
 
