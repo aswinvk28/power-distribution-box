@@ -106,7 +106,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
     function default_breaker() {
         if('default' in breaker) {
             return (
-                <img className="breaker-default" src={breaker.default} width="30px" height="auto" style={{marginLeft: "15px"}} />
+                <img key="0" className="breaker-default" src={breaker.default} width="30px" height="auto" style={{marginLeft: "15px"}} />
             )
         }
         return null;
@@ -116,7 +116,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
 
     return (<div ref={drag} style={{...style, opacity, top, left}} className={className} id={id}>
             {default_breaker()}
-            <DistributionMenu image={image} name={name} width={width} height="auto" name={name} type={type} 
+            <DistributionMenu key="1" image={image} name={name} width={width} height="auto" name={name} type={type} 
             uniqid={uniqid} distribution_name={distribution_name} distribution={distribution} />
 		</div>);
 };
