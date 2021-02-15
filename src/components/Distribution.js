@@ -92,25 +92,28 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             let [left, top] = doSnapToGrid(x, y);
             if(item.distribution_name == "cartesian") {
                 let offset = $('#cartesian_distribution_container').offset();
+                let width2 = $('#templated').parent().width();
+                let width3 = ($('#cartesian').parent().width() - 484) / 2;
                 document.getElementById(item.highlightComponent).style.width = (parseFloat((item.width).replace('px', '')) * Constants.drawingScale).toString() + 'px';
                 document.getElementById(item.highlightComponent).style.height = (parseFloat((item.height).replace('px', '')) * Constants.drawingScale).toString() + 'px';
-                document.getElementById(item.highlightComponent).style.left = ((left-offset['left'])*Constants.drawingScale).toString() + "px";
-                document.getElementById(item.highlightComponent).style.top = ((top-offset['top'])*Constants.drawingScale).toString() + "px";
-                document.getElementById(item.dragElementId).style.left = ((left-offset['left']-80)*Constants.drawingScale).toString() + "px";
-                document.getElementById(item.dragElementId).style.top = ((top-offset['top']-116)*Constants.drawingScale).toString() + "px";
-                item.left = ((left-offset['left']-80)*Constants.drawingScale).toString() + "px";
-                item.top = ((top-offset['top']-116)*Constants.drawingScale).toString() + "px";
+                document.getElementById(item.highlightComponent).style.left = ((left-width2+width3+40)).toString() + "px";
+                document.getElementById(item.highlightComponent).style.top = ((top-offset['top'])).toString() + "px";
+                document.getElementById(item.dragElementId).style.left = ((left-offset['left'])).toString() + "px";
+                document.getElementById(item.dragElementId).style.top = ((top-offset['top'])).toString() + "px";
+                item.left = ((left-offset['left']-40)).toString() + "px";
+                item.top = ((top-offset['top']-40)).toString() + "px";
             } else if(item.distribution_name == "templated") {
                 let offset = $('#templated_distribution_container').offset();
                 let width = $('#boxes_container_draggable_holder').width();
+                let width2 = ($('#templated').parent().width() - 484) / 2;
                 document.getElementById(item.highlightComponent).style.width = (parseFloat((item.width).replace('px', '')) * Constants.drawingScale).toString() + 'px';
                 document.getElementById(item.highlightComponent).style.height = (parseFloat((item.height).replace('px', '')) * Constants.drawingScale).toString() + 'px';
-                document.getElementById(item.highlightComponent).style.left = ((left-width-120)*Constants.drawingScale).toString() + "px";
-                document.getElementById(item.highlightComponent).style.top = ((top-offset['top'])*Constants.drawingScale).toString() + "px";
-                document.getElementById(item.dragElementId).style.left = ((left-offset['left']-80)*Constants.drawingScale).toString() + "px";
-                document.getElementById(item.dragElementId).style.top = ((top-offset['top']-116)*Constants.drawingScale).toString() + "px";
-                item.left = ((left-offset['left']-80)*Constants.drawingScale).toString() + "px";
-                item.top = ((top-offset['top']-116)*Constants.drawingScale).toString() + "px";
+                document.getElementById(item.highlightComponent).style.left = ((left-width-width2)).toString() + "px";
+                document.getElementById(item.highlightComponent).style.top = ((top-offset['top'])).toString() + "px";
+                document.getElementById(item.dragElementId).style.left = ((left-offset['left'])).toString() + "px";
+                document.getElementById(item.dragElementId).style.top = ((top-offset['top'])).toString() + "px";
+                item.left = ((left-offset['left']-40)).toString() + "px"; // !important
+                item.top = ((top-offset['top']-40)).toString() + "px"; // !important
             }
         }
 

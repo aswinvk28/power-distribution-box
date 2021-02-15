@@ -13,7 +13,7 @@ export const HighlightComponent = ({ item, currentOffset, clientOffset }) => {
     return (
         <div className="highlight-component" id={id} style={{
             position: 'absolute',
-            opacity: 0.4,
+            opacity: 0.8,
             display: 'block',
             zIndex: 1,
             backgroundColor: 'pink',
