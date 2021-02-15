@@ -9,7 +9,6 @@ class Singleton {
     }
 
     static removeItem(item) {
-        console.log(Singleton.__singletonRef.controller);
         let distributions = Singleton.__singletonRef.controller.containerRef.state['distributions'];
         let totalDroppedItems = distributions[item.distribution].totalDroppedItems;
         let items = []
