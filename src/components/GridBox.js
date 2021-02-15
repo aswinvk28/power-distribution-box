@@ -9,6 +9,7 @@ import { snapToGrid as doSnapToGrid } from './snapToGrid';
 import DistributionMenu from './DistributionMenu';
 import $ from 'jquery';
 import Singleton from './Singleton';
+import Constants from './Constants';
 const style = {
     border: '1px dashed gray',
     backgroundColor: 'transparent',
@@ -110,6 +111,8 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
         }
         return null;
     }
+
+    width = (parseFloat(width.replace('px', '')) * Constants.drawingScale).toString() + 'px';
 
     return (<div ref={drag} style={{...style, opacity, top, left}} className={className} id={id}>
             {default_breaker()}

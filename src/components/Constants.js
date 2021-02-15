@@ -51,6 +51,7 @@ const SIZES = new Map([
 const Constants = {
     useLocalStorage: true,
     gridSize: 16,
+    drawingScale: 0.47,
     ElementType: ElementType,
     SVG_ELEMENTS: SVG_ELEMENTS,
     SCALE: SCALE,

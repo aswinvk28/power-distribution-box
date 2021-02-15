@@ -92,25 +92,25 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             let [left, top] = doSnapToGrid(x, y);
             if(item.distribution_name == "cartesian") {
                 let offset = $('#cartesian_distribution_container').offset();
-                document.getElementById(item.highlightComponent).style.width = item.width;
-                document.getElementById(item.highlightComponent).style.height = item.height;
-                document.getElementById(item.highlightComponent).style.left = (left-offset['left']).toString() + "px";
-                document.getElementById(item.highlightComponent).style.top = (top-offset['top']).toString() + "px";
-                document.getElementById(item.dragElementId).style.left = (left-offset['left']-80).toString() + "px";
-                document.getElementById(item.dragElementId).style.top = (top-offset['top']-116).toString() + "px";
-                item.left = (left-offset['left']-80).toString() + "px";
-                item.top = (top-offset['top']-116).toString() + "px";
+                document.getElementById(item.highlightComponent).style.width = (parseFloat((item.width).replace('px', '')) * Constants.drawingScale).toString() + 'px';
+                document.getElementById(item.highlightComponent).style.height = (parseFloat((item.height).replace('px', '')) * Constants.drawingScale).toString() + 'px';
+                document.getElementById(item.highlightComponent).style.left = ((left-offset['left'])*Constants.drawingScale).toString() + "px";
+                document.getElementById(item.highlightComponent).style.top = ((top-offset['top'])*Constants.drawingScale).toString() + "px";
+                document.getElementById(item.dragElementId).style.left = ((left-offset['left']-80)*Constants.drawingScale).toString() + "px";
+                document.getElementById(item.dragElementId).style.top = ((top-offset['top']-116)*Constants.drawingScale).toString() + "px";
+                item.left = ((left-offset['left']-80)*Constants.drawingScale).toString() + "px";
+                item.top = ((top-offset['top']-116)*Constants.drawingScale).toString() + "px";
             } else if(item.distribution_name == "templated") {
                 let offset = $('#templated_distribution_container').offset();
                 let width = $('#boxes_container_draggable_holder').width();
-                document.getElementById(item.highlightComponent).style.width = item.width;
-                document.getElementById(item.highlightComponent).style.height = item.height;
-                document.getElementById(item.highlightComponent).style.left = (left-width-120).toString() + "px";
-                document.getElementById(item.highlightComponent).style.top = (top-offset['top']).toString() + "px";
-                document.getElementById(item.dragElementId).style.left = (left-offset['left']-80).toString() + "px";
-                document.getElementById(item.dragElementId).style.top = (top-offset['top']-116).toString() + "px";
-                item.left = (left-offset['left']-80).toString() + "px";
-                item.top = (top-offset['top']-116).toString() + "px";
+                document.getElementById(item.highlightComponent).style.width = (parseFloat((item.width).replace('px', '')) * Constants.drawingScale).toString() + 'px';
+                document.getElementById(item.highlightComponent).style.height = (parseFloat((item.height).replace('px', '')) * Constants.drawingScale).toString() + 'px';
+                document.getElementById(item.highlightComponent).style.left = ((left-width-120)*Constants.drawingScale).toString() + "px";
+                document.getElementById(item.highlightComponent).style.top = ((top-offset['top'])*Constants.drawingScale).toString() + "px";
+                document.getElementById(item.dragElementId).style.left = ((left-offset['left']-80)*Constants.drawingScale).toString() + "px";
+                document.getElementById(item.dragElementId).style.top = ((top-offset['top']-116)*Constants.drawingScale).toString() + "px";
+                item.left = ((left-offset['left']-80)*Constants.drawingScale).toString() + "px";
+                item.top = ((top-offset['top']-116)*Constants.drawingScale).toString() + "px";
             }
         }
 
@@ -145,11 +145,20 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
     //     localStorage.setItem(e_name + ": items", JSON.stringify(totalDroppedItems));
     // }
 
-    return (<div style={{ ...style }} className={e_name} id={e_name} data-size={container.state['distributionSize']}>
+    let distribution_width = (Constants.drawingScale * 681).toString() + 'px';
+    let grid_width = (Constants.drawingScale * 500).toString() + 'px';
+    let heights = Object.fromEntries(Singleton.__singletonRef.controller.heights);
+    let grid_heights = Object.fromEntries(Singleton.__singletonRef.controller.grid_heights);
+    let distribution_height = (Constants.drawingScale * heights[container.state['distributionSize']]).toString() + 'px';
+    let grid_height = (Constants.drawingScale * grid_heights[container.state['distributionSize']]).toString() + 'px';
+    let padding = (66 * Constants.drawingScale).toString() + 'px';
+
+    return (<div className="col-lg-6 col-md-6 col-sm-6">
+        <div style={{ ...style, padding, width: distribution_width, height: distribution_height }} className={e_name} id={e_name} data-size={container.state['distributionSize']}>
 
             {$elem}
 
-            <div ref={drop} style={{ backgroundColor, backgroundSize: Singleton.__singletonRef.controller.state['value']-50+100 + '%' }} className="distribution_container" id={e_name + "_distribution_container"}>
+            <div ref={drop} style={{ width: grid_width, height: grid_height, backgroundColor, backgroundSize: Singleton.__singletonRef.controller.state['value']-50+100 + '%' }} className="distribution_container" id={e_name + "_distribution_container"}>
                 {
                     totalDroppedItems.map((item, index) =>  {
                         return (
@@ -163,5 +172,5 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
                     })
                 }
             </div>
-		</div>);
+		</div></div>);
 };

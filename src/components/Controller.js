@@ -19,13 +19,29 @@ export default class Controller extends React.Component {
         {size: '8U', color: 'rgb(150, 55, 165)'},
     ];
 
+    heights = new Map([
+        ['24U', 1455],
+        ['20U', 1254],
+        ['16U', 1060],
+        ['12U', 865],
+        ['8U', 670],
+    ]);
+
+    grid_heights = new Map([
+        ['24U', 1183],
+        ['20U', 983],
+        ['16U', 783],
+        ['12U', 583],
+        ['8U', 403],
+    ]);
+
     state = {
         svg_monitoring: false,
         svg_power: false,
         snapToGridAfterDrop: true,
         snapToGridWhileDragging: true,
         viewBox: '',
-        value: 10,
+        value: 0,
         change: false,
         monitoring_show: 1,
         power_show: 1
@@ -47,6 +63,8 @@ export default class Controller extends React.Component {
     }
 
     changeToMonitoring() {
+        $('#distribution-front-side').show();
+        $('#distribution-rear-side').hide();
         this.setState({svg_monitoring: true, svg_power: false, viewBox: '0 0 ' + (this.cartesianWidth * Constants.SCALE.FRONT_SIDE).toString() + " " + 
         (this.cartesianHeight * Constants.SCALE.FRONT_SIDE).toString()})
         $(document.body).css('overflow', 'hidden');
@@ -54,6 +72,8 @@ export default class Controller extends React.Component {
     }
 
     changeToPower() {
+        $('#distribution-front-side').hide();
+        $('#distribution-rear-side').show();
         this.setState({svg_monitoring: false, svg_power: true, viewBox: '0 0 ' + (this.templateWidth * Constants.SCALE.REAR_SIDE).toString() + " " + 
             (this.cartesianHeight * Constants.SCALE.REAR_SIDE).toString()})
         $(document.body).css('overflow', 'hidden');
@@ -126,19 +146,12 @@ export default class Controller extends React.Component {
         $(document.getElementById("templated")).attr('data-size', $(select).val());
         localStorage.setItem("cartesian: size", $(select).val());
         localStorage.setItem("templated: size", $(select).val());
-        let heights = new Map([
-            ['24U', 1183],
-            ['20U', 983],
-            ['16U', 783],
-            ['12U', 583],
-            ['8U', 403],
-        ]);
-        heights = Object.fromEntries(heights);
+        let grid_heights = Object.fromEntries(this.grid_heights);
         $("#templated, #cartesian").css('height', ($(document).width() * 0.40 / 681 * 1455).toString() + "px");
         $("#templated" + "_distribution_container").css('height', 
-        (heights[$(select).val()] * $(document.getElementById("templated")).outerWidth() / 681).toString() + "px");
+        (grid_heights[$(select).val()] * $(document.getElementById("templated")).outerWidth() / 681).toString() + "px");
         $("#cartesian_distribution_container").css('height', 
-        (heights[$(select).val()] * $(document.getElementById("cartesian")).outerWidth() / 681).toString() + "px"); // outerWidth
+        (grid_heights[$(select).val()] * $(document.getElementById("cartesian")).outerWidth() / 681).toString() + "px"); // outerWidth
     }
 
     monitoringShow(event) {
@@ -206,18 +219,18 @@ export default class Controller extends React.Component {
                 </nav>
                 <div className="row" id="header-separation">
                     <div className="col-lg-3 col-md-3 col-sm-3">
-                        <label for="monitoring_show">
-                            <input type="checkbox" name="monitoring_show" id="monitoring_show" value="1" onChange={this.monitoringShow} />
-                            <span>Monitoring</span>
-                        </label>
                         <label for="power_show">
                             <input type="checkbox" name="power_show" id="power_show" value="1" onChange={this.powerShow} />
                             <span>Power</span>
                         </label>
+                        <label for="monitoring_show">
+                            <input type="checkbox" name="monitoring_show" id="monitoring_show" value="1" onChange={this.monitoringShow} />
+                            <span>Monitoring</span>
+                        </label>
                     </div>
                     <div className="col-lg-9 col-md-9 col-sm-9">
-                        <h5 className="monitoring-header" onClick={this.changeToMonitoring} style={{margin: '10px 0px', cursor: 'pointer'}}>MONITORING</h5>
                         <h5 className="power-header" onClick={this.changeToPower} style={{margin: '10px 0px', cursor: 'pointer'}}>POWER</h5>
+                        <h5 className="monitoring-header" onClick={this.changeToMonitoring} style={{margin: '10px 0px', cursor: 'pointer'}}>MONITORING</h5>
                     </div>
                 </div>
             </div>

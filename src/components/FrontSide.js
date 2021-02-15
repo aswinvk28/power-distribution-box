@@ -124,8 +124,8 @@ class FrontSide extends React.Component {
     image(objects) {
         for(var i = 0; i < objects.length; i++) {
             let image = objects[i].image;
-            let width = parseInt(objects[i].width.replace('px', ''));
-            let height = parseInt(objects[i].height.replace('px', ''));
+            let width = parseFloat(objects[i].width.replace('px', ''));
+            let height = parseFloat(objects[i].height.replace('px', ''));
             let element = this.paper.image(image, objects[i].left, objects[i].top, (Constants.SIZES[objects[i].type][0]).toString() + 'px', 
             (Constants.SIZES[objects[i].type][1]).toString() + 'px');
             element.attr('style', 'z-index: ' + 100);

@@ -62,9 +62,10 @@ body, html {
 }
 
 .templated-distributions-container .cartesian {
-  float: left;
   width: 681px;
   height: 646px;
+  margin-left: auto;
+  margin-right: auto;
   background: url('../images/power_box/canvas_wheel.png') 0px 0px transparent no-repeat;
   background-size: 100%;
 }
@@ -125,27 +126,38 @@ body, html {
 }
 
 .distribution_container {
-  width: 484px;
+  width: 500px;
   margin-left: auto;
   margin-right: auto;
   height: 100%;
-  border: 1px solid #beb3b3;
-  border-radius: 3px;
   color: #ababab;
+}
+
+.distribution_container::before {
   background-image: url('../images/power_box/canvas_grid-2.png');
   background-repeat: repeat;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  opacity: 0.30;
+  content: "";
+  background-size: inherit;
+  top: 0;
+  left: 0;
 }
 
 .templated-distributions-container .templated {
-  float: right;
   width: 681px;
+  margin-left: auto;
+  margin-right: auto;
   background: url('../images/power_box/canvas_wheel.png') 0px 0px transparent no-repeat;
   background-size: 100%;
 }
 
 #templated_distribution_container, #cartesian_distribution_container {
   position: relative;
-  border: 2px solid #000;
+  border: 1px solid #c3c3c3;
+  border-radius: 3px;
 }
 
 .cartesian .grid-box, .templated .grid-box {
@@ -339,11 +351,11 @@ h2.header-tagline {
 }
 
 .monitoring-header {
-  float: left;
+  float: right;
 }
 
 .power-header {
-  float: right;
+  float: left;
 }
 
 label[for="monitoring_show"] {

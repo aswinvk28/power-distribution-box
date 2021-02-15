@@ -46,6 +46,7 @@ class Container extends React.Component {
         boxes: [],
         droppedBoxNames: [],
         distributionSize: "24U",
+        drawing_scale: Constants.drawingScale
     }
     
     constructor(props) {
@@ -113,10 +114,10 @@ class Container extends React.Component {
             size: {width: '45px', height: '45px'}, distribution_name: "templated", description: '63A CEE 400V 5P', breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
         ];
         const distributions = [
-            { accepts: [ItemTypes.PILOT_LIGHTS, ItemTypes.MULTIMETER], lastDroppedItem: null, 
-                totalDroppedItems: cartesianDroppedItems, e_name: "cartesian" },
             { accepts: plugsAndSockets, lastDroppedItem: null, 
                 totalDroppedItems: templatedDroppedItems, e_name: "templated" },
+            { accepts: [ItemTypes.PILOT_LIGHTS, ItemTypes.MULTIMETER], lastDroppedItem: null, 
+                totalDroppedItems: cartesianDroppedItems, e_name: "cartesian" },
         ];
         this.setDistributionSize = this.setDistributionSize.bind(this);
         this.setDistributions = this.setDistributions.bind(this);
@@ -312,7 +313,7 @@ class Container extends React.Component {
         <div className="col col-lg-9 col-md-9 col-sm-9" id="distros_designer" sliding-panel={this.controller.sliding ? 'on' : 'off'} style={{backgroundSize: (Singleton.__singletonRef.controller.state['value']-50+100)*0.35 + '%'}}>
 
             <div style={{ overflow: 'hidden', clear: 'both' }} key="0000">
-                <div style={style} className="templated-distributions-container" key="1">
+                <div style={style} className="templated-distributions-container row" key="1">
                     {this.state['distributions'].map(({ accepts, lastDroppedItem, totalDroppedItems, e_name }, index) => (
                         <TableDist container={this} accept={accepts} 
                         lastDroppedItem={lastDroppedItem} 
