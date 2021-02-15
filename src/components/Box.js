@@ -6,7 +6,7 @@ const style = {
     backgroundColor: 'white',
     padding: '0px',
     marginRight: '1.5rem',
-    marginBottom: '1.5rem',
+    marginBottom: '1rem',
     cursor: 'move',
     zIndex: 100,
 };

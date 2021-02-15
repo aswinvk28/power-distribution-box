@@ -48,6 +48,20 @@ class Container extends React.Component {
         distributionSize: "24U",
         drawing_scale: Constants.drawingScale
     }
+
+    slide = {
+        inputs: true,
+        outputs: false,
+        through_outputs: false,
+        addons: false
+    }
+
+    slide_keys = new Map([
+        [Constants.ElementType.INPUTS, 'inputs'],
+        [Constants.ElementType.OUTPUTS, 'outputs'],
+        [Constants.ElementType.THROUGH_OUTPUTS, 'through_outputs'],
+        [Constants.ElementType.ADDONS, 'addons'],
+    ])
     
     constructor(props) {
         super(props)
@@ -70,48 +84,48 @@ class Container extends React.Component {
         }
         this.handleDrop = this.handleDrop.bind(this);
         const boxes = [
-            { name: 'Plugs@1', type: ItemTypes.PLUGS_1, uniqid: null, 
+            { name: 'Plugs--1', type: ItemTypes.PLUGS_1, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-1.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '45px', height: '45px'}, distribution_name: "templated", description: '63A CEE 400V 5P', breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
-            { name: 'Plugs@2', type: ItemTypes.PLUGS_2, uniqid: null, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '63A CEE 400V 5P', breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
+            { name: 'Plugs--2', type: ItemTypes.PLUGS_2, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-2.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '45px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
-            { name: 'Plugs@3', type: ItemTypes.PLUGS_3, uniqid: null, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: {  } },
+            { name: 'Plugs--3', type: ItemTypes.PLUGS_3, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-3.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '45px', height: '45px'}, distribution_name: "templated", description: '63A 400V CEE 5P', breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
-            { name: 'Plugs@4', type: ItemTypes.PLUGS_4, uniqid: null, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '63A 400V CEE 5P', breaker: {  } },
+            { name: 'Plugs--4', type: ItemTypes.PLUGS_4, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-4.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '45px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
-            { name: 'Plugs@5', type: ItemTypes.PLUGS_5, uniqid: null, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: {  } },
+            { name: 'Plugs--5', type: ItemTypes.PLUGS_5, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-5.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '45px', height: '45px'}, distribution_name: "templated", description: '63A 400V CEE 5P', breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
-            { name: 'Sockets@1', type: ItemTypes.SOCKETS_1, uniqid: null, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '63A 400V CEE 5P', breaker: {  } },
+            { name: 'Sockets--1', type: ItemTypes.SOCKETS_1, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 1, image: 'images/dist_box/Output-Socket-1.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '45px', height: '45px'}, distribution_name: "templated", description: '125A CEE 400V 5P', breaker: { default: 'images/dist_box/breaker-output-socket-1.png' } },
-            { name: 'Sockets@2', type: ItemTypes.SOCKETS_2, uniqid: null, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '125A CEE 400V 5P', breaker: { default: 'images/dist_box/breaker-output-socket-1.png' } },
+            { name: 'Sockets--2', type: ItemTypes.SOCKETS_2, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 1, image: 'images/dist_box/Output-Socket-2.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '45px', height: '45px'}, distribution_name: "templated", description: '19pin Connector Socket', breaker: { default: 'images/dist_box/breaker-output-socket-2.png' } },
-            { name: 'Sockets@3', type: ItemTypes.SOCKETS_3, uniqid: null, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '19pin Connector Socket', breaker: { default: 'images/dist_box/breaker-output-socket-2.png' } },
+            { name: 'Sockets--3', type: ItemTypes.SOCKETS_3, uniqid: null, 
             distribution: null, left: 0, top: 0,   index: 1, image: 'images/dist_box/Output-Socket-3.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '45px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: { default: 'images/dist_box/breaker-output-socket-1.png' } },
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: {  } },
             { name: 'Pilot-Lights', type: ItemTypes.PILOT_LIGHTS, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 2, image: 'images/dist_box/pilot-lights.gif', element_type: Constants.ElementType.ADDONS, 
-            size: {width: '45px', height: '45px'}, distribution_name: "cartesian", description: 'PILOT LIGHTS', breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
+            size: {width: '55px', height: '45px'}, distribution_name: "cartesian", description: 'PILOT LIGHTS', breaker: {  } },
             { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 3, image: 'images/dist_box/multimeter.png', element_type: Constants.ElementType.THROUGH_OUTPUTS, 
-            size: {width: '45px', height: '45px'}, distribution_name: "cartesian", description: 'MULTIMETER', breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
+            size: {width: '55px', height: '45px'}, distribution_name: "cartesian", description: 'MULTIMETER', breaker: {  } },
             { name: 'Live-Pins-Input', type: ItemTypes.LIVE_PINS_INPUT, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 4, image: 'images/dist_box/Live-Pins-Inputs.png', element_type: Constants.ElementType.INPUTS, 
-            size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '47px'}, distribution_name: "templated", description: <b>400A Power Lock Set <br/> (with 250A Protection)</b>, breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
+            size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '47px'}, distribution_name: "templated", description: <b>400A Power Lock Set <br/> (with 250A Protection)</b>, breaker: {  } },
             { name: 'Loop-Through', type: ItemTypes.LIVE_PINS_OUTPUT, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 5, image: 'images/dist_box/Live-Pins-Outputs.png', element_type: Constants.ElementType.INPUTS, 
-            size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '47px'}, distribution_name: "templated", description: '400A Power Lock Set', breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
-            { name: 'Pins-Input@1', type: ItemTypes.PINS_INPUT_1, uniqid: null, 
-            distribution: null, left: 0, top: 0,  index: 4, image: 'images/dist_box/Inputs-Pin-1.png', element_type: Constants.ElementType.INPUTS, 
-            size: {width: '45px', height: '45px'}, distribution_name: "templated", description: '125A CEE 400V 5P', breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
-            { name: 'Pins-Input@2', type: ItemTypes.PINS_INPUT_2, uniqid: null, 
+            size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '47px'}, distribution_name: "templated", description: '400A Power Lock Set', breaker: {  } },
+            { name: 'Pins-Input--2', type: ItemTypes.PINS_INPUT_2, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 5, image: 'images/dist_box/Inputs-Pin-2.png', element_type: Constants.ElementType.INPUTS, 
-            size: {width: '45px', height: '45px'}, distribution_name: "templated", description: '63A CEE 400V 5P', breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
+            size: {width: '65px', height: '45px'}, distribution_name: "templated", description: '63A CEE 400V 5P', breaker: {  } },
+            { name: 'Pins-Input--1', type: ItemTypes.PINS_INPUT_1, uniqid: null, 
+            distribution: null, left: 0, top: 0,  index: 4, image: 'images/dist_box/Inputs-Pin-1.png', element_type: Constants.ElementType.INPUTS, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '125A CEE 400V 5P', breaker: {  } },
         ];
         const distributions = [
             { accepts: plugsAndSockets, lastDroppedItem: null, 
@@ -128,6 +142,7 @@ class Container extends React.Component {
         this.setTotalDroppedItems = this.setTotalDroppedItems.bind(this);
         this.getTotalDroppedItems = this.getTotalDroppedItems.bind(this);
         this.saveTotalDroppedItems = this.saveTotalDroppedItems.bind(this);
+        this.slideDown = this.slideDown.bind(this);
     }
 
     setDistributions(distributions) {
@@ -195,6 +210,19 @@ class Container extends React.Component {
         }
     }
 
+    slideDown(event) {
+        let id = $(event.target).attr('data-element');
+        let slide_keys = Object.fromEntries(this.slide_keys);
+        let text = slide_keys[$(event.target).text()];
+        if(this.slide[text.toLowerCase()]) {
+            $('#'+id).slideUp(300);
+            this.slide[text.toLowerCase()] = false;
+        } else {
+            $('#'+id).slideDown(300);
+            this.slide[text.toLowerCase()] = true;
+        }
+    }
+
     render() {
 
         // load from localStorage the distributions
@@ -206,8 +234,8 @@ class Container extends React.Component {
         }
 
         // render the draggable box
-        function renderBox(item, index) {
-            return (<div className="draggable-box-container" key={index}>
+        function renderBox(item, index, style, className) {
+            return (<div className={"draggable-box-container" + className} key={index} style={style}>
                 <DraggableBox key={index} id={index}
                 name={item.name} type={item.type} 
                 uniqid={item.uniqid}
@@ -223,11 +251,15 @@ class Container extends React.Component {
             </div>)
         }
 
-        let element_outputs = [], element_through_outputs = [], element_addons = [], element_inputs = [];
+        let element_outputs = [], element_through_outputs = [], element_addons = [], element_live_inputs = [], element_pins_inputs = [];
         this.state['boxes'].map((item, index) => {
             switch(item.element_type) {
                 case Constants.ElementType.INPUTS:
-                    element_inputs.push([item, index]);
+                    if(item.type == ItemTypes.LIVE_PINS_OUTPUT || item.type == ItemTypes.LIVE_PINS_INPUT) {
+                        element_live_inputs.push([item, index]);
+                    } else if(item.type == ItemTypes.PINS_INPUT_1 || item.type == ItemTypes.PINS_INPUT_2) {
+                        element_pins_inputs.push([item, index]);
+                    }
                     break;
                 case Constants.ElementType.OUTPUTS:
                     element_outputs.push([item, index]);
@@ -251,6 +283,9 @@ class Container extends React.Component {
             {size: '8U', color: 'rgb(150, 55, 165)'},
         ];
 
+        let display_accordion_hide = {display: 'none'};
+        let display_accordion_show = {display: 'block'};
+
         return (<div className="AppInnerContainer">
 
     <div className="row">
@@ -258,49 +293,58 @@ class Container extends React.Component {
 
             <div className="boxes-container-draggable" id="boxes_container_draggable" key="1111" sliding-panel={this.controller.sliding ? 'on' : 'off'}>
 
-                <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px",
+                <div style={{ overflow: 'hidden', clear: 'both', marginTop: "0px",
                 position: 'relative' }} className="boxes-container" key="3">
-                    <em key="0">{element_inputs.length > 0 ? element_inputs[0][0].element_type : ''}</em>
-                    <div key="1" className="draggable-box-inputs">
-                    {
-                        element_inputs.map((element, index) => (
-                            renderBox(element[0], element[1])
-                        ))
-                    }
+                    <em key="0" className="accordion-title" onClick={this.slideDown} data-element="inputs-set">{element_live_inputs.length > 0 ? element_live_inputs[0][0].element_type : ''}</em>
+                    <div key="1" id="inputs-set" className="clearfix" style={display_accordion_show}>
+                        <div key="1" className="draggable-box-inputs">
+                        {
+                            element_live_inputs.map((element, index) => (
+                                renderBox(element[0], element[1], {}, "")
+                            ))
+                        }
+                        </div>
+                        <div key="2" className="draggable-box-inputs" style={{display: 'flex'}}>
+                        {
+                            element_pins_inputs.map((element, index) => (
+                                renderBox(element[0], element[1], {flex: 'wrap'}, "")
+                            ))
+                        }
+                        </div>
                     </div>
                 </div>
 
-                <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px",
+                <div style={{ overflow: 'hidden', clear: 'both', marginTop: "0px",
                 position: 'relative' }} className="boxes-container" key="1">
-                    <em key="0">{element_outputs.length > 0 ? element_outputs[0][0].element_type : ''}</em>
-                    <div key="1" className="draggable-box-inputs">
+                    <em key="0" className="accordion-title" onClick={this.slideDown} data-element="outputs-set">{element_outputs.length > 0 ? element_outputs[0][0].element_type : ''}</em>
+                    <div key="1" className="draggable-box-inputs row" id="outputs-set" style={display_accordion_hide}>
                     {
                         element_outputs.map((element, index) => (
-                            renderBox(element[0], element[1])
+                            renderBox(element[0], element[1], {}, "col-lg-6 col-md-6 col-sm-6")
                         ))
                     }
                     </div>
                 </div>
 
-                <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px",
+                <div style={{ overflow: 'hidden', clear: 'both', marginTop: "0px",
                 position: 'relative' }} className="boxes-container">
-                    <em key="0">{element_through_outputs.length > 0 ? element_through_outputs[0][0].element_type : ''}</em>
-                    <div key="1" className="draggable-box-inputs">
+                    <em key="0" className="accordion-title" onClick={this.slideDown} data-element="through-outputs-set">{element_through_outputs.length > 0 ? element_through_outputs[0][0].element_type : ''}</em>
+                    <div key="1" className="draggable-box-inputs" id="through-outputs-set" style={display_accordion_hide}>
                     {
                         element_through_outputs.map((element, index) => (
-                            renderBox(element[0], element[1])
+                            renderBox(element[0], element[1], {}, "")
                         ))
                     }
                     </div>
                 </div>
 
-                <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px",
+                <div style={{ overflow: 'hidden', clear: 'both', marginTop: "0px",
                 position: 'relative' }} className="boxes-container" key="2">
-                    <em key="0">{element_addons.length > 0 ? element_addons[0][0].element_type : ''}</em>
-                    <div key="1" className="draggable-box-inputs">
+                    <em key="0" className="accordion-title" onClick={this.slideDown} data-element="addons-set">{element_addons.length > 0 ? element_addons[0][0].element_type : ''}</em>
+                    <div key="1" className="draggable-box-inputs" id="addons-set" style={display_accordion_hide}>
                     {
                         element_addons.map((element, index) => (
-                            renderBox(element[0], element[1])
+                            renderBox(element[0], element[1], {}, "")
                         ))
                     }
                     </div>

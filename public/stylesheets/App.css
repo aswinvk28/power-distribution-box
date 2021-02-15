@@ -236,12 +236,40 @@ h2.header-tagline {
   border: 1px dashed black;
 }
 
+.accordion-title {
+  cursor: pointer;
+  border-top: 1px solid #b7b7b7;
+  border-bottom: 1px solid #b7b7b7;
+}
+
+em.accordion-title:hover {
+  color: #373737;
+  border-top: 1px dashed #b7b7b7;
+  border-bottom: 1px dashed #b7b7b7;
+}
+
 .box-item {
   color: black;
   font-style: normal;
   font-size: 8px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.box-item-Pins-Input--2 img, .box-item-Pins-Input--1 img,
+.box-item-Plugs--1 img, .box-item-Plugs--2 img,
+.box-item-Plugs--3 img, .box-item-Plugs--4 img,
+.box-item-Sockets--1 img, .box-item-Sockets--2 img,
+.box-item-Sockets--3 img, .box-item-Plugs--5 img,
+.box-item-Pilot-Lights img, .box-item-Multimeter img {
+  padding: 6px;
+  border: 1.5px solid red;
+  border-radius: 3px;
+  background-image: url('../images/power_box/canvas_grid-8u.png');
+  background-repeat: no-repeat;
+  background-position: -50px -50px;
+  background-size: 150px;
+  background-color: #f3f3f3;
 }
 
 .box-item-border {
@@ -252,16 +280,17 @@ h2.header-tagline {
   margin-top: 10px; 
   display: block;
   font-size: 18px;
-  color: rgb(95, 0, 0);
+  color: #333;
 }
 
 .box-item abbr b {
-  font-weight: 600;
+  font-weight: 400;
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .draggable-box-inputs {
   padding-left: 16px;
+  margin-top: 5px;
   clear: both;
   display: block;
   text-align: center;
@@ -447,7 +476,7 @@ label[for="power_show"] span {
 }
 
 .boxes-container em {
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   display: block;
   font-weight: bold;
   width: 100%;

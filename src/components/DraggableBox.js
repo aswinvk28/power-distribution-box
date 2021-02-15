@@ -3,6 +3,7 @@ import { useDrag } from 'react-dnd';
 import { ItemTypes } from './ItemTypes';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { Box } from './Box';
+import Constants from './Constants';
 function getStyles(left, top, isDragging) {
     const transform = `translate3d(${left}px, ${top}px, 0)`;
     return {
@@ -28,6 +29,10 @@ export const DraggableBox = (props) => {
         if('breaker' in box_item && 'default' in box_item.breaker) {
             return (
                 <img className="breaker-default" src={box_item.breaker.default} width="30px" height="auto" style={{marginLeft: "15px"}} />
+            )
+        } else if(box_item.element_type == Constants.ElementType.OUTPUTS) {
+            return (
+                <img className="breaker-default" src="" width="30px" height="auto" style={{marginLeft: "15px"}} />
             )
         }
         return null;
