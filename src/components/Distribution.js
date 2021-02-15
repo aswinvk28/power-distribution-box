@@ -92,12 +92,14 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             let [left, top] = doSnapToGrid(x, y);
             if(item.distribution_name == "cartesian") {
                 let offset = $('#cartesian_distribution_container').offset();
+                let width = $('#boxes_container_draggable_holder').width();
                 let width2 = $('#templated').parent().width();
-                let width3 = ($('#cartesian').parent().width() - 484) / 2;
+                let width3 = ($('#cartesian').parent().width() - 500*Constants.drawingScale) / 2;
+                let offset2 = $('#cartesian').offset();
                 document.getElementById(item.highlightComponent).style.width = (parseFloat((item.width).replace('px', '')) * Constants.drawingScale).toString() + 'px';
                 document.getElementById(item.highlightComponent).style.height = (parseFloat((item.height).replace('px', '')) * Constants.drawingScale).toString() + 'px';
-                document.getElementById(item.highlightComponent).style.left = ((left-width2+width3+40)).toString() + "px";
-                document.getElementById(item.highlightComponent).style.top = ((top-offset['top'])).toString() + "px";
+                document.getElementById(item.highlightComponent).style.left = ((left-offset2['left']-width+width2+width3+185)).toString() + "px";
+                document.getElementById(item.highlightComponent).style.top = ((top-offset['top']-40)).toString() + "px";
                 document.getElementById(item.dragElementId).style.left = ((left-offset['left'])).toString() + "px";
                 document.getElementById(item.dragElementId).style.top = ((top-offset['top'])).toString() + "px";
                 item.left = ((left-offset['left']-40)).toString() + "px";
@@ -105,11 +107,12 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             } else if(item.distribution_name == "templated") {
                 let offset = $('#templated_distribution_container').offset();
                 let width = $('#boxes_container_draggable_holder').width();
-                let width2 = ($('#templated').parent().width() - 484) / 2;
+                let width2 = ($('#templated').parent().width() - 500*Constants.drawingScale) / 2;
+                let offset2 = $('#templated').offset();
                 document.getElementById(item.highlightComponent).style.width = (parseFloat((item.width).replace('px', '')) * Constants.drawingScale).toString() + 'px';
                 document.getElementById(item.highlightComponent).style.height = (parseFloat((item.height).replace('px', '')) * Constants.drawingScale).toString() + 'px';
-                document.getElementById(item.highlightComponent).style.left = ((left-width-width2)).toString() + "px";
-                document.getElementById(item.highlightComponent).style.top = ((top-offset['top'])).toString() + "px";
+                document.getElementById(item.highlightComponent).style.left = ((left-offset['left']-40)).toString() + "px";
+                document.getElementById(item.highlightComponent).style.top = ((top-offset['top']-40)).toString() + "px";
                 document.getElementById(item.dragElementId).style.left = ((left-offset['left'])).toString() + "px";
                 document.getElementById(item.dragElementId).style.top = ((top-offset['top'])).toString() + "px";
                 item.left = ((left-offset['left']-40)).toString() + "px"; // !important
@@ -159,9 +162,9 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
     return (<div className="col-lg-6 col-md-6 col-sm-6">
         <div style={{ ...style, padding, width: distribution_width, height: distribution_height }} className={e_name} id={e_name} data-size={container.state['distributionSize']}>
 
-            {$elem}
 
             <div ref={drop} style={{ width: grid_width, height: grid_height, backgroundColor, backgroundSize: Singleton.__singletonRef.controller.state['value']-50+100 + '%' }} className="distribution_container" id={e_name + "_distribution_container"}>
+            {$elem}
                 {
                     totalDroppedItems.map((item, index) =>  {
                         return (
