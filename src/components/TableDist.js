@@ -8,17 +8,10 @@ export default class TableDist extends React.Component {
         super(props)
     }
 
-    componentDidMount() {
-        $(document.getElementById(this.e_name)).css('height', ($(document).width() * 0.40 / 681 * 1455).toString() + "px");
-        document.getElementById(this.e_name + "_distribution_container").style.height = 
-        (1137 * $(document.getElementById(this.e_name)).outerWidth() / 681).toString() + "px"; // outerWidth
-    }
-
     render() {
         const {accept, lastDroppedItem, totalDroppedItems, e_name, onDrop, index} = this.props;
         this.e_name = e_name;
-        return (
-            <Distribution accept={accept} 
+        return (<Distribution container={this.props.container} accept={accept} 
             lastDroppedItem={lastDroppedItem} 
             totalDroppedItems={totalDroppedItems} 
             e_name={e_name}

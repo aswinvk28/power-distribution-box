@@ -6,15 +6,15 @@ const style = {
     backgroundColor: 'white',
     padding: '0px',
     marginRight: '1.5rem',
-    marginBottom: '1.5rem',
+    marginBottom: '1rem',
     cursor: 'move',
-    float: 'left'
+    zIndex: 100,
 };
-export const Box = ({ name, type, uniqid, distribution, image, width, height, distribution_name, isDropped }) => {
+export const Box = ({ name, type, uniqid, distribution, image, width, height, distribution_name, description, box_item, isDropped }) => {
     // useDrag denotes draggable
     const [{ opacity }, drag] = useDrag({
         // add item attributes here
-        item: { name, type, uniqid, distribution, image, width, height, distribution_name },
+        item: { name, type, uniqid, distribution, image, width, height, distribution_name, description, breaker: box_item.breaker },
         collect: (monitor) => {
             return {
                 opacity: monitor.isDragging() ? 0.4 : 1
@@ -23,6 +23,7 @@ export const Box = ({ name, type, uniqid, distribution, image, width, height, di
     });
     let className = "box-item box-item-" + name;
     return (<div ref={drag} style={{ ...style, opacity }} className={className} id={"element-box-item-" + name}>
-            <img src={image} alt={name} title={name} width={width} height="auto" />
+            <img src={image} alt={name} title={name} width={width} height="auto" /><br/>
+            <abbr style={{width: '100%'}}><React.Fragment><b>{description}</b></React.Fragment></abbr>
 		</div>);
 };

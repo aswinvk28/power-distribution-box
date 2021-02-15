@@ -15,8 +15,10 @@ export const HighlightComponent = ({ item, currentOffset, clientOffset }) => {
             position: 'absolute',
             opacity: 0.4,
             display: 'block',
-            zIndex: 100,
+            zIndex: 1,
             backgroundColor: 'pink',
+            backgroundImage: 'url("images/power_box/canvas_grid-8u.png")',
+            backgroundSize: '25%',
             width: (width).toString() + 'px',
             height: (height).toString() + 'px',
         }}></div>

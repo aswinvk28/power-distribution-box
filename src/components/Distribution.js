@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useLayoutEffect } from 'react';
 import { fromEvent } from 'rxjs'
 import { map, throttleTime } from 'rxjs/operators'
 import { snapToGrid as doSnapToGrid } from './snapToGrid';
-import { useDrop } from 'react-dnd';
+import { useDrop, useDrag } from 'react-dnd';
 import { GridBox } from './GridBox';
 import Constants from './Constants';
 import { HighlightComponent } from './HighlightComponent';
@@ -12,17 +12,17 @@ const useLocalStorage = Constants.useLocalStorage;
 
 let style = {
     marginBottom: '0.5rem',
-    padding: '5%',
     textAlign: 'center',
+    padding: '66px',
     fontSize: '1rem',
     lineHeight: 'normal'
 };
 
-export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_name, onDrop, }) => {
+export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_name, container, onDrop, }) => {
     let currentItem = null;
 
     // useDrop denotes droppable
-    const [{ isOver, canDrop, initialOffset, currentOffset, clientOffset, item }, drop] = useDrop({
+    const [{ isOver, canDrop, initialOffset, currentOffset, clientOffset, diffOffset, item }, drop] = useDrop({
         accept,
         drop: onDrop,
         collect: (monitor) => ({
@@ -31,6 +31,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             initialOffset: monitor.getInitialClientOffset(),
             currentOffset: monitor.getSourceClientOffset(),
             clientOffset: monitor.getClientOffset(),
+            diffOffset: monitor.getInitialSourceClientOffset(),
             item: monitor.getItem()
         }),
         canDrop: (item, monitor) => {
@@ -53,13 +54,6 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
     else if (canDrop) {
         backgroundColor = 'darkkhaki';
     }
-    if(!totalDroppedItems) {
-        totalDroppedItems = [];
-    }
-    if(totalDroppedItems) {
-        localStorage.setItem(e_name + ": items", JSON.stringify(totalDroppedItems));
-    }
-
     let $elem = <div></div>;
     if(item && clientOffset && currentOffset && document.getElementById(item.dragElementId)) {
         $elem = <HighlightComponent item={item} currentOffset={currentOffset}
@@ -98,41 +92,85 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             let [left, top] = doSnapToGrid(x, y);
             if(item.distribution_name == "cartesian") {
                 let offset = $('#cartesian_distribution_container').offset();
-                document.getElementById(item.highlightComponent).style.left = (left-offset['left']).toString() + "px";
-                document.getElementById(item.highlightComponent).style.top = (top-offset['top']).toString() + "px";
-                document.getElementById(item.dragElementId).style.left = (left-offset['left']).toString() + "px";
-                document.getElementById(item.dragElementId).style.top = (top-offset['top']).toString() + "px";
-                item.left = (left-offset['left']).toString() + "px";
-                item.top = (top-offset['top']).toString() + "px";
+                document.getElementById(item.highlightComponent).style.width = (parseFloat((item.width).replace('px', '')) * Constants.drawingScale).toString() + 'px';
+                document.getElementById(item.highlightComponent).style.height = (parseFloat((item.height).replace('px', '')) * Constants.drawingScale).toString() + 'px';
+                document.getElementById(item.highlightComponent).style.left = ((left-offset['left'])*Constants.drawingScale).toString() + "px";
+                document.getElementById(item.highlightComponent).style.top = ((top-offset['top'])*Constants.drawingScale).toString() + "px";
+                document.getElementById(item.dragElementId).style.left = ((left-offset['left']-80)*Constants.drawingScale).toString() + "px";
+                document.getElementById(item.dragElementId).style.top = ((top-offset['top']-116)*Constants.drawingScale).toString() + "px";
+                item.left = ((left-offset['left']-80)*Constants.drawingScale).toString() + "px";
+                item.top = ((top-offset['top']-116)*Constants.drawingScale).toString() + "px";
             } else if(item.distribution_name == "templated") {
                 let offset = $('#templated_distribution_container').offset();
-                document.getElementById(item.highlightComponent).style.left = (left-offset['left']).toString() + "px";
-                document.getElementById(item.highlightComponent).style.top = (top-offset['top']).toString() + "px";
-                document.getElementById(item.dragElementId).style.left = (left-offset['left']).toString() + "px";
-                document.getElementById(item.dragElementId).style.top = (top-offset['top']).toString() + "px";
-                item.left = (left-offset['left']).toString() + "px";
-                item.top = (top-offset['top']).toString() + "px";
+                let width = $('#boxes_container_draggable_holder').width();
+                document.getElementById(item.highlightComponent).style.width = (parseFloat((item.width).replace('px', '')) * Constants.drawingScale).toString() + 'px';
+                document.getElementById(item.highlightComponent).style.height = (parseFloat((item.height).replace('px', '')) * Constants.drawingScale).toString() + 'px';
+                document.getElementById(item.highlightComponent).style.left = ((left-width-120)*Constants.drawingScale).toString() + "px";
+                document.getElementById(item.highlightComponent).style.top = ((top-offset['top'])*Constants.drawingScale).toString() + "px";
+                document.getElementById(item.dragElementId).style.left = ((left-offset['left']-80)*Constants.drawingScale).toString() + "px";
+                document.getElementById(item.dragElementId).style.top = ((top-offset['top']-116)*Constants.drawingScale).toString() + "px";
+                item.left = ((left-offset['left']-80)*Constants.drawingScale).toString() + "px";
+                item.top = ((top-offset['top']-116)*Constants.drawingScale).toString() + "px";
             }
         }
 
         return { mouseX: x, mouseY: y }
     }
 
-    return (<div style={{ ...style }} className={e_name} id={e_name}>
+    const [distributionSize, setDistributionSize] = useState(0);
+    useLayoutEffect(() => {
+        const size = localStorage.getItem("cartesian: size");
+        if (size) {
+            setDistributionSize(size);
+            // predetermined heights
+            let heights = new Map([
+                ['24U', 1183],
+                ['20U', 983],
+                ['16U', 783],
+                ['12U', 583],
+                ['8U', 403],
+            ]);
+
+            heights = Object.fromEntries(heights);
+            $(document.getElementById(e_name)).css('height', ($(document).width() * 0.40 / 681 * 1455).toString() + "px");
+            document.getElementById(e_name + "_distribution_container").style.height = 
+            (heights[distributionSize] * $(document.getElementById(e_name)).outerWidth() / 681).toString() + "px"; // outerWidth
+        }
+    }, [distributionSize]);
+
+    if(!totalDroppedItems) {
+        totalDroppedItems = [];
+    }
+    // if(totalDroppedItems) {
+    //     localStorage.setItem(e_name + ": items", JSON.stringify(totalDroppedItems));
+    // }
+
+    let distribution_width = (Constants.drawingScale * 681).toString() + 'px';
+    let grid_width = (Constants.drawingScale * 500).toString() + 'px';
+    let heights = Object.fromEntries(Singleton.__singletonRef.controller.heights);
+    let grid_heights = Object.fromEntries(Singleton.__singletonRef.controller.grid_heights);
+    let distribution_height = (Constants.drawingScale * heights[container.state['distributionSize']]).toString() + 'px';
+    let grid_height = (Constants.drawingScale * grid_heights[container.state['distributionSize']]).toString() + 'px';
+    let padding = (66 * Constants.drawingScale).toString() + 'px';
+
+    return (<div className="col-lg-6 col-md-6 col-sm-6">
+        <div style={{ ...style, padding, width: distribution_width, height: distribution_height }} className={e_name} id={e_name} data-size={container.state['distributionSize']}>
 
             {$elem}
 
-            <div ref={drop} style={{ backgroundColor, backgroundSize: Singleton.__singletonRef.controller.state['value']-50+100 + '%' }} className="distribution_container" id={e_name + "_distribution_container"}>
+            <div ref={drop} style={{ width: grid_width, height: grid_height, backgroundColor, backgroundSize: Singleton.__singletonRef.controller.state['value']-50+100 + '%' }} className="distribution_container" id={e_name + "_distribution_container"}>
                 {
                     totalDroppedItems.map((item, index) =>  {
                         return (
-                            <GridBox name={item.name} type={item.type} uniqid={item.uniqid} key={item.index}
+                            <GridBox container={container} name={item.name} type={item.type} uniqid={item.uniqid} key={item.index}
                             distribution={item.distribution} image={item.image} e_name={e_name}
-                            top={item.top} left={item.left}
+                            top={item.top} left={item.left} width={item.width} height={item.height}
+                            distribution_name={item.distribution_name} description={item.description} 
+                            breaker={item.breaker} 
                             isDropped={true} />
                         )
                     })
                 }
             </div>
-		</div>);
+		</div></div>);
 };

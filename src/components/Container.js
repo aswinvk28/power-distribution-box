@@ -1,6 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useLayoutEffect } from 'react';
 import { Distribution } from './Distribution';
-import { DustBin } from './DustBin';
 import { Box } from './Box';
 import { ItemTypes } from './ItemTypes';
 import update from 'immutability-helper';
@@ -11,6 +10,7 @@ import { DraggableBox } from './DraggableBox';
 import { useDrop } from 'react-dnd';
 import TableDist from './TableDist';
 import $ from 'jquery';
+import Singleton from './Singleton';
 const useLocalStorage = Constants.useLocalStorage;
 
 const buckets = {
@@ -39,86 +39,147 @@ const style = {
     float: 'left',
 };
 
-export const Container = ({ snapToGrid }) => {
-    // load from localStorage the distributions
+class Container extends React.Component {
 
-    let cartesianDroppedItems = null, templatedDroppedItems = null;
-    if(useLocalStorage) {
-        cartesianDroppedItems = localStorage.getItem("cartesian" + ": items");
-        templatedDroppedItems = localStorage.getItem("templated" + ": items");
-        if(!cartesianDroppedItems) {
-            cartesianDroppedItems = [];
-        } else {
-            cartesianDroppedItems = JSON.parse(cartesianDroppedItems);
-        }
-        if(!templatedDroppedItems) {
-            templatedDroppedItems = [];
-        } else {
-            templatedDroppedItems = JSON.parse(templatedDroppedItems);
-        }
+    state = {
+        distributions: [],
+        boxes: [],
+        droppedBoxNames: [],
+        distributionSize: "24U",
+        drawing_scale: Constants.drawingScale
     }
+
+    slide = {
+        inputs: true,
+        outputs: false,
+        through_outputs: false,
+        addons: false
+    }
+
+    slide_keys = new Map([
+        [Constants.ElementType.INPUTS, 'inputs'],
+        [Constants.ElementType.OUTPUTS, 'outputs'],
+        [Constants.ElementType.THROUGH_OUTPUTS, 'through_outputs'],
+        [Constants.ElementType.ADDONS, 'addons'],
+    ])
     
-    // total dropped items overall including ones dropped in and dropped out of the grid
-    const [distributions, setDistributions] = useState([
-        { accepts: [ItemTypes.PILOT_LIGHTS, ItemTypes.MULTIMETER], lastDroppedItem: null, 
-            totalDroppedItems: cartesianDroppedItems, e_name: "cartesian" },
-        { accepts: plugsAndSockets, lastDroppedItem: null, 
-            totalDroppedItems: templatedDroppedItems, e_name: "templated" },
-    ]);
-    const [boxes, setBoxes] = useState([
-        { name: 'Plugs@1', type: ItemTypes.PLUGS_1, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-1.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '80px', height: '68px'}, distribution_name: "templated" },
-        { name: 'Plugs@2', type: ItemTypes.PLUGS_2, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-2.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '60px', height: '82px'}, distribution_name: "templated" },
-        { name: 'Plugs@3', type: ItemTypes.PLUGS_3, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-3.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '60px', height: '100px'}, distribution_name: "templated" },
-        { name: 'Plugs@4', type: ItemTypes.PLUGS_4, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-4.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '60px', height: '99px'}, distribution_name: "templated" },
-        { name: 'Plugs@5', type: ItemTypes.PLUGS_5, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-5.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '60px', height: '101px'}, distribution_name: "templated" },
-        { name: 'Sockets@1', type: ItemTypes.SOCKETS_1, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 1, image: 'images/dist_box/Output-Socket-1.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '60px', height: '69px'}, distribution_name: "templated" },
-        { name: 'Sockets@2', type: ItemTypes.SOCKETS_2, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 1, image: 'images/dist_box/Output-Socket-2.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '60px', height: '91px'}, distribution_name: "templated" },
-        { name: 'Sockets@3', type: ItemTypes.SOCKETS_3, uniqid: null, 
-        distribution: null, left: 0, top: 0,   index: 1, image: 'images/dist_box/Output-Socket-3.png', element_type: Constants.ElementType.OUTPUTS, 
-        size: {width: '60px', height: '102px'}, distribution_name: "templated" },
-        { name: 'Pilot-Lights', type: ItemTypes.PILOT_LIGHTS, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 2, image: 'images/dist_box/pilot-lights.gif', element_type: Constants.ElementType.FRONTS, 
-        size: {width: '40px', height: '40px'}, distribution_name: "cartesian" },
-        { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 3, image: 'images/dist_box/multimeter.png', element_type: Constants.ElementType.FRONTS, 
-        size: {width: '40px', height: '40px'}, distribution_name: "cartesian" },
-        { name: 'Live-Pins-Input', type: ItemTypes.LIVE_PINS_INPUT, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 4, image: 'images/dist_box/Live-Pins-Inputs.png', element_type: Constants.ElementType.ADDONS, 
-        size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '47px'}, distribution_name: "templated" },
-        { name: 'Loop-Through', type: ItemTypes.LIVE_PINS_OUTPUT, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 5, image: 'images/dist_box/Live-Pins-Outputs.png', element_type: Constants.ElementType.ADDONS, 
-        size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '47px'}, distribution_name: "templated" },
-        { name: 'Pins-Input@1', type: ItemTypes.PINS_INPUT_1, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 4, image: 'images/dist_box/Inputs-Pin-1.png', element_type: Constants.ElementType.INPUTS, 
-        size: {width: '40px', height: '70px'}, distribution_name: "templated" },
-        { name: 'Pins-Input@2', type: ItemTypes.PINS_INPUT_2, uniqid: null, 
-        distribution: null, left: 0, top: 0,  index: 5, image: 'images/dist_box/Inputs-Pin-2.png', element_type: Constants.ElementType.INPUTS, 
-        size: {width: '40px', height: '60px'}, distribution_name: "templated" },
-    ]);
-    const [droppedBoxNames, setDroppedBoxNames] = useState([]);
-    function isDropped(boxName) {
-        return droppedBoxNames.indexOf(boxName) > -1;
+    constructor(props) {
+        super(props)
+        this.controller = this.props.controller;
+        Singleton.__singletonRef.controller.container = this;
+        let cartesianDroppedItems = null, templatedDroppedItems = null;
+        if(useLocalStorage) {
+            cartesianDroppedItems = localStorage.getItem("cartesian" + ": items");
+            templatedDroppedItems = localStorage.getItem("templated" + ": items");
+            if(!cartesianDroppedItems) {
+                cartesianDroppedItems = [];
+            } else {
+                cartesianDroppedItems = JSON.parse(cartesianDroppedItems);
+            }
+            if(!templatedDroppedItems) {
+                templatedDroppedItems = [];
+            } else {
+                templatedDroppedItems = JSON.parse(templatedDroppedItems);
+            }
+        }
+        this.handleDrop = this.handleDrop.bind(this);
+        const boxes = [
+            { name: 'Plugs--1', type: ItemTypes.PLUGS_1, uniqid: null, 
+            distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-1.png', element_type: Constants.ElementType.OUTPUTS, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '63A CEE 400V 5P', breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
+            { name: 'Plugs--2', type: ItemTypes.PLUGS_2, uniqid: null, 
+            distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-2.png', element_type: Constants.ElementType.OUTPUTS, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: {  } },
+            { name: 'Plugs--3', type: ItemTypes.PLUGS_3, uniqid: null, 
+            distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-3.png', element_type: Constants.ElementType.OUTPUTS, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '63A 400V CEE 5P', breaker: {  } },
+            { name: 'Plugs--4', type: ItemTypes.PLUGS_4, uniqid: null, 
+            distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-4.png', element_type: Constants.ElementType.OUTPUTS, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: {  } },
+            { name: 'Plugs--5', type: ItemTypes.PLUGS_5, uniqid: null, 
+            distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-5.png', element_type: Constants.ElementType.OUTPUTS, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '63A 400V CEE 5P', breaker: {  } },
+            { name: 'Sockets--1', type: ItemTypes.SOCKETS_1, uniqid: null, 
+            distribution: null, left: 0, top: 0,  index: 1, image: 'images/dist_box/Output-Socket-1.png', element_type: Constants.ElementType.OUTPUTS, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '125A CEE 400V 5P', breaker: { default: 'images/dist_box/breaker-output-socket-1.png' } },
+            { name: 'Sockets--2', type: ItemTypes.SOCKETS_2, uniqid: null, 
+            distribution: null, left: 0, top: 0,  index: 1, image: 'images/dist_box/Output-Socket-2.png', element_type: Constants.ElementType.OUTPUTS, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '19pin Connector Socket', breaker: { default: 'images/dist_box/breaker-output-socket-2.png' } },
+            { name: 'Sockets--3', type: ItemTypes.SOCKETS_3, uniqid: null, 
+            distribution: null, left: 0, top: 0,   index: 1, image: 'images/dist_box/Output-Socket-3.png', element_type: Constants.ElementType.OUTPUTS, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: {  } },
+            { name: 'Pilot-Lights', type: ItemTypes.PILOT_LIGHTS, uniqid: null, 
+            distribution: null, left: 0, top: 0,  index: 2, image: 'images/dist_box/pilot-lights.gif', element_type: Constants.ElementType.ADDONS, 
+            size: {width: '55px', height: '45px'}, distribution_name: "cartesian", description: 'PILOT LIGHTS', breaker: {  } },
+            { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, 
+            distribution: null, left: 0, top: 0,  index: 3, image: 'images/dist_box/multimeter.png', element_type: Constants.ElementType.THROUGH_OUTPUTS, 
+            size: {width: '55px', height: '45px'}, distribution_name: "cartesian", description: 'MULTIMETER', breaker: {  } },
+            { name: 'Live-Pins-Input', type: ItemTypes.LIVE_PINS_INPUT, uniqid: null, 
+            distribution: null, left: 0, top: 0,  index: 4, image: 'images/dist_box/Live-Pins-Inputs.png', element_type: Constants.ElementType.INPUTS, 
+            size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '47px'}, distribution_name: "templated", description: <b>400A Power Lock Set <br/> (with 250A Protection)</b>, breaker: {  } },
+            { name: 'Loop-Through', type: ItemTypes.LIVE_PINS_OUTPUT, uniqid: null, 
+            distribution: null, left: 0, top: 0,  index: 5, image: 'images/dist_box/Live-Pins-Outputs.png', element_type: Constants.ElementType.INPUTS, 
+            size: {width: Constants.SVG_ELEMENTS.FULL_WIDTH, height: '47px'}, distribution_name: "templated", description: '400A Power Lock Set', breaker: {  } },
+            { name: 'Pins-Input--2', type: ItemTypes.PINS_INPUT_2, uniqid: null, 
+            distribution: null, left: 0, top: 0,  index: 5, image: 'images/dist_box/Inputs-Pin-2.png', element_type: Constants.ElementType.INPUTS, 
+            size: {width: '65px', height: '45px'}, distribution_name: "templated", description: '63A CEE 400V 5P', breaker: {  } },
+            { name: 'Pins-Input--1', type: ItemTypes.PINS_INPUT_1, uniqid: null, 
+            distribution: null, left: 0, top: 0,  index: 4, image: 'images/dist_box/Inputs-Pin-1.png', element_type: Constants.ElementType.INPUTS, 
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '125A CEE 400V 5P', breaker: {  } },
+        ];
+        const distributions = [
+            { accepts: plugsAndSockets, lastDroppedItem: null, 
+                totalDroppedItems: templatedDroppedItems, e_name: "templated" },
+            { accepts: [ItemTypes.PILOT_LIGHTS, ItemTypes.MULTIMETER], lastDroppedItem: null, 
+                totalDroppedItems: cartesianDroppedItems, e_name: "cartesian" },
+        ];
+        this.setDistributionSize = this.setDistributionSize.bind(this);
+        this.setDistributions = this.setDistributions.bind(this);
+        this.setDroppedBoxNames = this.setDroppedBoxNames.bind(this);
+        this.handleDrop = this.handleDrop.bind(this);
+        this.state['boxes'] = boxes;
+        this.state['distributions'] = distributions;
+        this.setTotalDroppedItems = this.setTotalDroppedItems.bind(this);
+        this.getTotalDroppedItems = this.getTotalDroppedItems.bind(this);
+        this.saveTotalDroppedItems = this.saveTotalDroppedItems.bind(this);
+        this.slideDown = this.slideDown.bind(this);
     }
-    const handleDrop = useCallback((index, item) => {
+
+    setDistributions(distributions) {
+        this.setState({distributions: distributions});
+    }
+
+    setDroppedBoxNames(droppedBoxNames) {
+        this.setState({droppedBoxNames: droppedBoxNames});
+    }
+
+    getTotalDroppedItems(index) {
+        return this.state['distributions'][index].totalDroppedItems;
+    }
+
+    setTotalDroppedItems(items, index, e_name) {
+        update(this.state['distributions'], {
+            [index]: {
+                totalDroppedItems: {
+                    $set: items
+                }
+            },
+        });
+        this.saveTotalDroppedItems(items, e_name, index);
+    }
+
+    saveTotalDroppedItems(items, e_name, index) {
+        if(items) {
+            localStorage.setItem(e_name + ": items", JSON.stringify(this.state['distributions'][index].totalDroppedItems));
+        }
+    }
+
+    handleDrop(index, item) {
         const { name } = item;
         item.uniqid = Uniqid(item.name);
         item.distribution = index;
-        setDroppedBoxNames(update(droppedBoxNames, name ? { $push: [name] } : { $push: [] }));
-        setDistributions(update(distributions, {
+        this.setDroppedBoxNames(update(this.state['droppedBoxNames'], name ? { $push: [name] } : { $push: [] }));
+        this.setDistributions(update(this.state['distributions'], {
             [index]: {
                 lastDroppedItem: {
                     $set: item,
@@ -128,178 +189,191 @@ export const Container = ({ snapToGrid }) => {
                 }
             },
         }));
-    }, [droppedBoxNames, distributions]);
+        this.saveTotalDroppedItems(
+            this.state['distributions'][item.distribution].totalDroppedItems, 
+            item.distribution_name,
+            item.distribution
+        );
+    }
 
-    const [dustbins, setDustBin] = useState([
-        { accepts: allTypes },
-    ]);
+    setDistributionSize(distributionSize) {
+        this.setState({distributionSize: distributionSize});
+    }
     
-    const handleDustBinDrop = useCallback((num, item) => {
-        const distribution = item.distribution;
-        let droppedItems = distributions[distribution].totalDroppedItems;
+    componentWillMount() {
+        const size = localStorage.getItem("cartesian: size");
+        if (size) {
+            this.setDistributionSize(size);
+            $("#cartesian").attr('data-size',this.state['distributionSize']);
+            $("#templated").attr('data-size', this.state['distributionSize']);
+            $('#unit_size').val(this.state['distributionSize']);
+        }
+    }
+
+    slideDown(event) {
+        let id = $(event.target).attr('data-element');
+        let slide_keys = Object.fromEntries(this.slide_keys);
+        let text = slide_keys[$(event.target).text()];
+        if(this.slide[text.toLowerCase()]) {
+            $('#'+id).slideUp(300);
+            this.slide[text.toLowerCase()] = false;
+        } else {
+            $('#'+id).slideDown(300);
+            this.slide[text.toLowerCase()] = true;
+        }
+    }
+
+    render() {
+
+        // load from localStorage the distributions
+
+        const instance = this;
         
-        // search by uniqid
-        let newDroppedItems = [];
-        for(var i = 0; i < droppedItems.length; i++) {
-            if(item.uniqid === droppedItems[i].uniqid) {
-                //found = i;
-            } else {
-                newDroppedItems.push(droppedItems[i]);
+        function isDropped(boxName) {
+            return instance.state['droppedBoxNames'].indexOf(boxName) > -1;
+        }
+
+        // render the draggable box
+        function renderBox(item, index, style, className) {
+            return (<div className={"draggable-box-container" + className} key={index} style={style}>
+                <DraggableBox key={index} id={index}
+                name={item.name} type={item.type} 
+                uniqid={item.uniqid}
+                distribution={item.distribution}
+                image={item.image}
+                width={item.size.width}
+                height={item.size.height}
+                isDropped={isDropped(item.name)}
+                description={item.description}
+                distribution_name={item.distribution_name}
+                box_item={item}
+                {...item} />
+            </div>)
+        }
+
+        let element_outputs = [], element_through_outputs = [], element_addons = [], element_live_inputs = [], element_pins_inputs = [];
+        this.state['boxes'].map((item, index) => {
+            switch(item.element_type) {
+                case Constants.ElementType.INPUTS:
+                    if(item.type == ItemTypes.LIVE_PINS_OUTPUT || item.type == ItemTypes.LIVE_PINS_INPUT) {
+                        element_live_inputs.push([item, index]);
+                    } else if(item.type == ItemTypes.PINS_INPUT_1 || item.type == ItemTypes.PINS_INPUT_2) {
+                        element_pins_inputs.push([item, index]);
+                    }
+                    break;
+                case Constants.ElementType.OUTPUTS:
+                    element_outputs.push([item, index]);
+                    break;
+                case Constants.ElementType.THROUGH_OUTPUTS:
+                    element_through_outputs.push([item, index]);
+                    break;
+                case Constants.ElementType.ADDONS:
+                    element_addons.push([item, index]);
+                    break;
+                default:
+                    break;
             }
-        }
+        })
 
-        setDistributions(update(distributions, {
-            [distribution]: {
-                totalDroppedItems: {
-                    $set: newDroppedItems
-                }
-            },
-        }))
-    }, [distributions]);
+        let colors = [
+            {size: '24U', color: 'rgb(50, 55, 165)'},
+            {size: '20U', color: 'rgb(150, 55, 105)'},
+            {size: '16U', color: 'rgb(20, 155, 105)'},
+            {size: '12U', color: 'rgb(50, 155, 165)'},
+            {size: '8U', color: 'rgb(150, 55, 165)'},
+        ];
 
-    const [, drop] = useDrop({
-        accept: allTypes,
-        drop(item, monitor) {
-            const delta = monitor.getDifferenceFromInitialOffset();
-            // let left = Math.round(item.left + delta.x);
-            // let top = Math.round(item.top + delta.y);
-            // if (snapToGrid) {
-            //     ;
-            //     [left, top] = doSnapToGrid(left, top);
-            // }
-            return undefined;
-        },
-    });
+        let display_accordion_hide = {display: 'none'};
+        let display_accordion_show = {display: 'block'};
 
-    // render the draggable box
-    function renderBox(item, index) {
-        return (<div className="draggable-box-container">
-            <DraggableBox key={index} id={index}
-            name={item.name} type={item.type} 
-            uniqid={item.uniqid}
-            distribution={item.distribution}
-            image={item.image}
-            width={item.size.width}
-            height={item.size.height}
-            isDropped={isDropped(item.name)}
-            distribution_name={item.distribution_name}
-            {...item} />
-        </div>)
-    }
+        return (<div className="AppInnerContainer">
 
-    let element_outputs = [], element_fronts = [], element_addons = [], element_inputs = [];
-    boxes.map((item, index) => {
-        switch(item.element_type) {
-            case Constants.ElementType.OUTPUTS:
-                element_outputs.push([item, index]);
-                break;
-            case Constants.ElementType.FRONTS:
-                element_fronts.push([item, index]);
-                break;
-            case Constants.ElementType.ADDONS:
-                element_addons.push([item, index]);
-                break;
-            case Constants.ElementType.INPUTS:
-                element_inputs.push([item, index]);
-                break;
-            default:
-                break;
-        }
-    })
+    <div className="row">
+        <div className="col col-lg-3 col-md-3 col-sm-3" id="boxes_container_draggable_holder">
 
-    let colors = [
-        {size: '24U', color: 'rgb(50, 55, 165)'},
-        {size: '20U', color: 'rgb(150, 55, 105)'},
-        {size: '16U', color: 'rgb(20, 155, 105)'},
-        {size: '12U', color: 'rgb(50, 155, 165)'},
-        {size: '8U', color: 'rgb(150, 55, 165)'},
-    ];
+            <div className="boxes-container-draggable" id="boxes_container_draggable" key="1111" sliding-panel={this.controller.sliding ? 'on' : 'off'}>
 
-    function changeUniSize(event) {
-        let select = event.target;
-        $(document.getElementById("cartesian")).css('data-size', $(select).val());
-    }
-
-    return (<div className="AppInnerContainer">
-
-    <div className="boxes-container-draggable" id="boxes_container_draggable" key="1111" sliding-panel="on">
-
-        <div className="boxes-container-holder-left" key="1">
-            <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
-            position: 'relative' }} className="boxes-container">
-                <em key="0">{element_fronts[0][0].element_type}</em>
-                <div key="1" className="draggable-box-inputs">
-                {
-                    element_fronts.map((element, index) => (
-                        renderBox(element[0], element[1])
-                    ))
-                }
+                <div style={{ overflow: 'hidden', clear: 'both', marginTop: "0px",
+                position: 'relative' }} className="boxes-container" key="3">
+                    <em key="0" className="accordion-title" onClick={this.slideDown} data-element="inputs-set">{element_live_inputs.length > 0 ? element_live_inputs[0][0].element_type : ''}</em>
+                    <div key="1" id="inputs-set" className="clearfix" style={display_accordion_show}>
+                        <div key="1" className="draggable-box-inputs">
+                        {
+                            element_live_inputs.map((element, index) => (
+                                renderBox(element[0], element[1], {}, "")
+                            ))
+                        }
+                        </div>
+                        <div key="2" className="draggable-box-inputs" style={{display: 'flex'}}>
+                        {
+                            element_pins_inputs.map((element, index) => (
+                                renderBox(element[0], element[1], {flex: 'wrap'}, "")
+                            ))
+                        }
+                        </div>
+                    </div>
                 </div>
+
+                <div style={{ overflow: 'hidden', clear: 'both', marginTop: "0px",
+                position: 'relative' }} className="boxes-container" key="1">
+                    <em key="0" className="accordion-title" onClick={this.slideDown} data-element="outputs-set">{element_outputs.length > 0 ? element_outputs[0][0].element_type : ''}</em>
+                    <div key="1" className="draggable-box-inputs row" id="outputs-set" style={display_accordion_hide}>
+                    {
+                        element_outputs.map((element, index) => (
+                            renderBox(element[0], element[1], {}, "col-lg-6 col-md-6 col-sm-6")
+                        ))
+                    }
+                    </div>
+                </div>
+
+                <div style={{ overflow: 'hidden', clear: 'both', marginTop: "0px",
+                position: 'relative' }} className="boxes-container">
+                    <em key="0" className="accordion-title" onClick={this.slideDown} data-element="through-outputs-set">{element_through_outputs.length > 0 ? element_through_outputs[0][0].element_type : ''}</em>
+                    <div key="1" className="draggable-box-inputs" id="through-outputs-set" style={display_accordion_hide}>
+                    {
+                        element_through_outputs.map((element, index) => (
+                            renderBox(element[0], element[1], {}, "")
+                        ))
+                    }
+                    </div>
+                </div>
+
+                <div style={{ overflow: 'hidden', clear: 'both', marginTop: "0px",
+                position: 'relative' }} className="boxes-container" key="2">
+                    <em key="0" className="accordion-title" onClick={this.slideDown} data-element="addons-set">{element_addons.length > 0 ? element_addons[0][0].element_type : ''}</em>
+                    <div key="1" className="draggable-box-inputs" id="addons-set" style={display_accordion_hide}>
+                    {
+                        element_addons.map((element, index) => (
+                            renderBox(element[0], element[1], {}, "")
+                        ))
+                    }
+                    </div>
+                </div>
+                
             </div>
+
         </div>
 
-        <div className="boxes-container-holder-right" key="2">
-            <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
-            position: 'relative' }} className="boxes-container" key="1">
-                <em key="0">{element_outputs[0][0].element_type}</em>
-                <div key="1" className="draggable-box-inputs">
-                {
-                    element_outputs.map((element, index) => (
-                        renderBox(element[0], element[1])
-                    ))
-                }
+        <div className="col col-lg-9 col-md-9 col-sm-9" id="distros_designer" sliding-panel={this.controller.sliding ? 'on' : 'off'} style={{backgroundSize: (Singleton.__singletonRef.controller.state['value']-50+100)*0.35 + '%'}}>
+
+            <div style={{ overflow: 'hidden', clear: 'both' }} key="0000">
+                <div style={style} className="templated-distributions-container row" key="1">
+                    {this.state['distributions'].map(({ accepts, lastDroppedItem, totalDroppedItems, e_name }, index) => (
+                        <TableDist container={this} accept={accepts} 
+                        lastDroppedItem={lastDroppedItem} 
+                        totalDroppedItems={totalDroppedItems} 
+                        e_name={e_name}
+                        onDrop={(item) => this.handleDrop(index, item)} key={index}></TableDist>
+                    ))}
                 </div>
             </div>
 
-            <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
-            position: 'relative' }} className="boxes-container" key="2">
-                <em key="0">{element_addons[0][0].element_type}</em>
-                <div key="1" className="draggable-box-inputs">
-                {
-                    element_addons.map((element, index) => (
-                        renderBox(element[0], element[1])
-                    ))
-                }
-                </div>
-            </div>
-
-            <div style={{ overflow: 'hidden', clear: 'both', marginTop: "15px", width: "90%",
-            position: 'relative' }} className="boxes-container" key="3">
-                <em key="0">{element_inputs[0][0].element_type}</em>
-                <div key="1" className="draggable-box-inputs">
-                {
-                    element_inputs.map((element, index) => (
-                        renderBox(element[0], element[1])
-                    ))
-                }
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div style={{ overflow: 'hidden', clear: 'both' }} key="0000">
-        <div style={style} className="templated-distributions-container" key="1">
-            <select name="unit_size" id="unit_size" style={{fontSize: '48px', color: 'rgb(50, 55, 165)'}} onChange={changeUniSize}>
-                {colors.map(({ size, color }, index) => (
-                    <option key={size} style={{fontSize: '48px', color: color}} value={size}>
-                        {size}
-                    </option>
-                ))}
-            </select>
-            {distributions.map(({ accepts, lastDroppedItem, totalDroppedItems, e_name }, index) => (
-                <TableDist accept={accepts} 
-                lastDroppedItem={lastDroppedItem} 
-                totalDroppedItems={totalDroppedItems} 
-                e_name={e_name}
-                onDrop={(item) => handleDrop(index, item)} key={index}></TableDist>
-            ))}
         </div>
     </div>
 
-    {dustbins.map(({accepts}, num) => (
-        <DustBin key={num} accept={accepts} onDrop={(item) => handleDustBinDrop(num, item)}></DustBin>
-    ))}
-        
-    </div>);
+        </div>);
+    }
 };
+
+
+export default Container;
