@@ -73,31 +73,36 @@ body, html {
 .templated-distributions-container #cartesian[data-size="24U"], .templated-distributions-container #templated[data-size="24U"] {
   background: url('../images/power_box/canvas_wheel.png') 0px 0px transparent no-repeat;
   background-size: 100%;
-  height: 1455px;
+  height: 100%;
+  margin-top: 0px;
 }
 
 .templated-distributions-container #cartesian[data-size="20U"], .templated-distributions-container #templated[data-size="20U"] {
   background: url('../images/power_box/canvas_wheel-20u.png') 0px 0px transparent no-repeat;
   background-size: 100%;
-  height: 1254px;
+  height: 100%;
+  margin-top: 100px;
 }
 
 .templated-distributions-container #cartesian[data-size="16U"], .templated-distributions-container #templated[data-size="16U"] {
   background: url('../images/power_box/canvas_wheel-16u.png') 0px 0px transparent no-repeat;
   background-size: 100%;
-  height: 1060px;
+  height: 100%;
+  margin-top: 185px;
 }
 
 .templated-distributions-container #cartesian[data-size="12U"], .templated-distributions-container #templated[data-size="12U"] {
   background: url('../images/power_box/canvas_wheel-12u.png') 0px 0px transparent no-repeat;
   background-size: 100%;
-  height: 865px;
+  height: 100%;
+  margin-top: 275px;
 }
 
 .templated-distributions-container #cartesian[data-size="8U"], .templated-distributions-container #templated[data-size="8U"] {
   background: url('../images/power_box/canvas_wheel-8u.png') 0px 0px transparent no-repeat;
   background-size: 100%;
-  height: 670px;
+  height: 100%;
+  margin-top: 370px;
 }
 
 .templated-distributions-container #cartesian[data-size="24U"] .distribution_container, 
@@ -162,6 +167,10 @@ body, html {
 
 .cartesian .grid-box, .templated .grid-box {
   position: absolute;
+}
+
+#grid-box-item-RCD-Plugs--1 .distribution-box-menu, #grid-box-item-RCD-Sockets--1 .distribution-box-menu, #grid-box-item-RCD-Sockets--2 .distribution-box-menu {
+  display: none;
 }
 
 #boxes_container_draggable em {
@@ -233,7 +242,7 @@ h2.header-tagline {
 }
 
 .highlight-component {
-  border: 1px dashed black;
+  /* border: 0px dashed black; */
 }
 
 .accordion-title {

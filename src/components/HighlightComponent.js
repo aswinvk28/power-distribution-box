@@ -13,11 +13,11 @@ export const HighlightComponent = ({ item, currentOffset, clientOffset }) => {
     return (
         <div className="highlight-component" id={id} style={{
             position: 'absolute',
-            opacity: 0.8,
+            // opacity: 0.8,
             display: 'block',
             zIndex: 1,
-            backgroundColor: 'pink',
-            backgroundImage: 'url("images/power_box/canvas_grid-8u.png")',
+            backgroundColor: 'transparent',
+            // backgroundImage: 'url("images/power_box/canvas_grid-8u.png")',
             backgroundSize: '25%',
             width: (width).toString() + 'px',
             height: (height).toString() + 'px',

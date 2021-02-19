@@ -37,6 +37,7 @@ const style = {
     fontSize: '1rem',
     lineHeight: 'normal',
     float: 'left',
+    height: '100%'
 };
 
 class Container extends React.Component {
@@ -46,14 +47,16 @@ class Container extends React.Component {
         boxes: [],
         droppedBoxNames: [],
         distributionSize: "24U",
-        drawing_scale: Constants.drawingScale
+        drawing_scale: Constants.drawingScale,
+        breakers: []
     }
 
     slide = {
         inputs: true,
         outputs: false,
         through_outputs: false,
-        addons: false
+        addons: false,
+        boxes: true
     }
 
     slide_keys = new Map([
@@ -61,6 +64,7 @@ class Container extends React.Component {
         [Constants.ElementType.OUTPUTS, 'outputs'],
         [Constants.ElementType.THROUGH_OUTPUTS, 'through_outputs'],
         [Constants.ElementType.ADDONS, 'addons'],
+        [Constants.ElementType.BOXES, 'boxes'],
     ])
     
     constructor(props) {
@@ -83,10 +87,21 @@ class Container extends React.Component {
             }
         }
         this.handleDrop = this.handleDrop.bind(this);
+        const breakers = [
+            { name: 'RCD-Plugs--1', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, index: 0, 
+            image: 'images/dist_box/breaker-output-plug-1.png', element_type: Constants.ElementType.INPUTS, 
+            size: { width: '55px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  } },
+            { name: 'RCD-Sockets--1', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, index: 0, 
+            image: 'images/dist_box/breaker-output-socket-1.png', element_type: Constants.ElementType.INPUTS, 
+            size: { width: '55px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  } },
+            { name: 'RCD-Sockets--2', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, index: 0, 
+            image: 'images/dist_box/breaker-output-socket-2.png', element_type: Constants.ElementType.INPUTS, 
+            size: { width: '55px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  } },
+        ];
         const boxes = [
             { name: 'Plugs--1', type: ItemTypes.PLUGS_1, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-1.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '63A CEE 400V 5P', breaker: { default: 'images/dist_box/breaker-output-plug-1.png' } },
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '63A CEE 400V 5P', breaker: { default: { index: 0, image: 'images/dist_box/breaker-output-plug-1.png' } } },
             { name: 'Plugs--2', type: ItemTypes.PLUGS_2, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-2.png', element_type: Constants.ElementType.OUTPUTS, 
             size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: {  } },
@@ -101,10 +116,10 @@ class Container extends React.Component {
             size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '63A 400V CEE 5P', breaker: {  } },
             { name: 'Sockets--1', type: ItemTypes.SOCKETS_1, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 1, image: 'images/dist_box/Output-Socket-1.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '125A CEE 400V 5P', breaker: { default: 'images/dist_box/breaker-output-socket-1.png' } },
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '125A CEE 400V 5P', breaker: { default: { index: 1, image: 'images/dist_box/breaker-output-socket-1.png' } } },
             { name: 'Sockets--2', type: ItemTypes.SOCKETS_2, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 1, image: 'images/dist_box/Output-Socket-2.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '19pin Connector Socket', breaker: { default: 'images/dist_box/breaker-output-socket-2.png' } },
+            size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '19pin Connector Socket', breaker: { default: { index: 2, image: 'images/dist_box/breaker-output-socket-2.png' } } },
             { name: 'Sockets--3', type: ItemTypes.SOCKETS_3, uniqid: null, 
             distribution: null, left: 0, top: 0,   index: 1, image: 'images/dist_box/Output-Socket-3.png', element_type: Constants.ElementType.OUTPUTS, 
             size: {width: '55px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: {  } },
@@ -139,6 +154,7 @@ class Container extends React.Component {
         this.handleDrop = this.handleDrop.bind(this);
         this.state['boxes'] = boxes;
         this.state['distributions'] = distributions;
+        this.state['breakers'] = breakers;
         this.setTotalDroppedItems = this.setTotalDroppedItems.bind(this);
         this.getTotalDroppedItems = this.getTotalDroppedItems.bind(this);
         this.saveTotalDroppedItems = this.saveTotalDroppedItems.bind(this);
@@ -178,6 +194,29 @@ class Container extends React.Component {
         const { name } = item;
         item.uniqid = Uniqid(item.name);
         item.distribution = index;
+        if('default' in item.breaker) {
+            // cartesian
+            let breaker_item = this.state['breakers'][item.breaker.default.index];
+            breaker_item.uniqid = Uniqid(breaker_item.name);
+            breaker_item.left = item.left;
+            breaker_item.top = item.top;
+            breaker_item.width = breaker_item.size.width;
+            breaker_item.height = breaker_item.size.height;
+
+            this.setDistributions(update(this.state['distributions'], {
+                [1]: {
+                    lastDroppedItem: {
+                        $set: breaker_item,
+                    },
+                    totalDroppedItems: {
+                        $push: [breaker_item]
+                    }
+                },
+            }));
+            item.breaker_item = breaker_item;
+        } else {
+            item.breaker_item = null;
+        }
         this.setDroppedBoxNames(update(this.state['droppedBoxNames'], name ? { $push: [name] } : { $push: [] }));
         this.setDistributions(update(this.state['distributions'], {
             [index]: {
@@ -293,6 +332,19 @@ class Container extends React.Component {
 
             <div className="boxes-container-draggable" id="boxes_container_draggable" key="1111" sliding-panel={this.controller.sliding ? 'on' : 'off'}>
 
+                <div style={{ overflow: 'hidden', clear: 'both', marginTop: '0px', position: 'relative'}} className="boxes-container" key="0">
+                    <em key="0" className="accordion-title" onClick={this.slideDown} data-element="boxes-set">{Constants.ElementType.BOXES}</em>
+                    <div className="clearfix" id="boxes-set" style={display_accordion_show}>
+                        <select ref={(ref) => {this.selectRef = ref}} defaultValue={localStorage.getItem("cartesian: size")} name="unit_size" id="unit_size" style={{fontSize: '48px', color: 'rgb(50, 55, 165)'}} onChange={this.controller.changeUnitSize}>
+                            {this.controller.colors.map(({ size, color }, index) => (
+                                <option key={size} style={{fontSize: '48px', color: color}} value={size}>
+                                    {size}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+                
                 <div style={{ overflow: 'hidden', clear: 'both', marginTop: "0px",
                 position: 'relative' }} className="boxes-container" key="3">
                     <em key="0" className="accordion-title" onClick={this.slideDown} data-element="inputs-set">{element_live_inputs.length > 0 ? element_live_inputs[0][0].element_type : ''}</em>
@@ -356,7 +408,7 @@ class Container extends React.Component {
 
         <div className="col col-lg-9 col-md-9 col-sm-9" id="distros_designer" sliding-panel={this.controller.sliding ? 'on' : 'off'} style={{backgroundSize: (Singleton.__singletonRef.controller.state['value']-50+100)*0.35 + '%'}}>
 
-            <div style={{ overflow: 'hidden', clear: 'both' }} key="0000">
+            <div style={{ overflow: 'hidden', clear: 'both', height: '100%' }} key="0000">
                 <div style={style} className="templated-distributions-container row" key="1">
                     {this.state['distributions'].map(({ accepts, lastDroppedItem, totalDroppedItems, e_name }, index) => (
                         <TableDist container={this} accept={accepts} 
