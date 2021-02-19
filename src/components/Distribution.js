@@ -118,6 +118,42 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
                 item.left = ((left-offset['left']-40)).toString() + "px"; // !important
                 item.top = ((top-offset['top']-40)).toString() + "px"; // !important
             }
+
+            let offset;
+
+            if(item.distribution_name == "cartesian") {
+                offset = $('#cartesian_distribution_container').offset();
+            } else if(item.distribution_name == "templated") {
+                offset = $('#templated_distribution_container').offset();
+            }
+
+            // disable select option on moving out of the window for each boxes
+            if(item && (top-offset['top']-40) >= 461.9) {
+                $(container.selectRef.options[1]).attr('disabled', 'disabled');
+                $(container.selectRef.options[2]).attr('disabled', 'disabled');
+                $(container.selectRef.options[3]).attr('disabled', 'disabled');
+                $(container.selectRef.options[4]).attr('disabled', 'disabled');
+            } else if(item && (top-offset['top']-40) >= 368.0) {
+                $(container.selectRef.options[2]).attr('disabled', 'disabled');
+                $(container.selectRef.options[3]).attr('disabled', 'disabled');
+                $(container.selectRef.options[4]).attr('disabled', 'disabled');
+                $(container.selectRef.options[1]).removeAttr("disabled");
+            } else if(item && (top-offset['top']-40) >= 274.0) {
+                $(container.selectRef.options[3]).attr('disabled', 'disabled');
+                $(container.selectRef.options[4]).attr('disabled', 'disabled');
+                $(container.selectRef.options[2]).removeAttr("disabled");
+                $(container.selectRef.options[1]).removeAttr("disabled");
+            } else if(item && (top-offset['top']-40) >= 189.4) {
+                $(container.selectRef.options[4]).attr('disabled', 'disabled');
+                $(container.selectRef.options[3]).removeAttr("disabled");
+                $(container.selectRef.options[2]).removeAttr("disabled");
+                $(container.selectRef.options[1]).removeAttr("disabled");
+            } else {
+                $(container.selectRef.options[4]).removeAttr("disabled");
+                $(container.selectRef.options[3]).removeAttr("disabled");
+                $(container.selectRef.options[2]).removeAttr("disabled");
+                $(container.selectRef.options[1]).removeAttr("disabled");
+            }
         }
 
         return { mouseX: x, mouseY: y }
@@ -138,7 +174,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             ]);
 
             heights = Object.fromEntries(heights);
-            $(document.getElementById(e_name)).css('height', ($(document).width() * 0.40 / 681 * 1455).toString() + "px");
+            // $(document.getElementById(e_name)).css('height', ($(document).width() * 0.40 / 681 * 1455).toString() + "px");
             document.getElementById(e_name + "_distribution_container").style.height = 
             (heights[distributionSize] * $(document.getElementById(e_name)).outerWidth() / 681).toString() + "px"; // outerWidth
         }
@@ -160,10 +196,10 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
     let padding = (66 * Constants.drawingScale).toString() + 'px';
 
     return (<div className="col-lg-6 col-md-6 col-sm-6">
-        <div style={{ ...style, padding, width: distribution_width, height: distribution_height }} className={e_name} id={e_name} data-size={container.state['distributionSize']}>
+        <div style={{ ...style, padding, width: distribution_width }} className={e_name} id={e_name} data-size={container.state['distributionSize']}>
 
 
-            <div ref={drop} style={{ width: grid_width, height: grid_height, backgroundColor, backgroundSize: Singleton.__singletonRef.controller.state['value']-50+100 + '%' }} className="distribution_container" id={e_name + "_distribution_container"}>
+            <div ref={drop} style={{ width: grid_width, height: grid_height, backgroundColor, backgroundSize: (Singleton.__singletonRef.controller.state['value']-50+100)*0.35 + '%' }} className="distribution_container" id={e_name + "_distribution_container"}>
             {$elem}
                 {
                     totalDroppedItems.map((item, index) =>  {
@@ -173,6 +209,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
                             top={item.top} left={item.left} width={item.width} height={item.height}
                             distribution_name={item.distribution_name} description={item.description} 
                             breaker={item.breaker} 
+                            breaker_item={item.breaker_item}
                             isDropped={true} />
                         )
                     })

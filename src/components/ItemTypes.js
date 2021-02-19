@@ -24,5 +24,6 @@ export const ItemTypes = {
     GRID_20U: 'Grid-20U',
     GRID_16U: 'Grid-16U',
     GRID_12U: 'Grid-12U',
-    GRID_8U: 'Grid-8U'
+    GRID_8U: 'Grid-8U',
+    BREAKERS: 'Breaker'
 }

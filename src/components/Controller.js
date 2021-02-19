@@ -35,6 +35,14 @@ export default class Controller extends React.Component {
         ['8U', 403],
     ]);
 
+    margin_top = new Map([
+        ['24U', 0],
+        ['20U', 100],
+        ['16U', 185],
+        ['12U', 275],
+        ['8U', 370],
+    ]);
+
     state = {
         svg_monitoring: false,
         svg_power: false,
@@ -142,16 +150,18 @@ export default class Controller extends React.Component {
 
     changeUnitSize(event) {
         let select = event.target;
+        let margin_top = Object.fromEntries(this.margin_top);
         $(document.getElementById("cartesian")).attr('data-size', $(select).val());
         $(document.getElementById("templated")).attr('data-size', $(select).val());
         localStorage.setItem("cartesian: size", $(select).val());
         localStorage.setItem("templated: size", $(select).val());
         let grid_heights = Object.fromEntries(this.grid_heights);
-        $("#templated, #cartesian").css('height', ($(document).width() * 0.40 / 681 * 1455).toString() + "px");
+        $("#templated, #cartesian").css('marginTop', margin_top[$(select).val()] + "px");
         $("#templated" + "_distribution_container").css('height', 
         (grid_heights[$(select).val()] * $(document.getElementById("templated")).outerWidth() / 681).toString() + "px");
         $("#cartesian_distribution_container").css('height', 
         (grid_heights[$(select).val()] * $(document.getElementById("cartesian")).outerWidth() / 681).toString() + "px"); // outerWidth
+        this.containerRef.setDistributionSize($(select).val());
     }
 
     monitoringShow(event) {
@@ -184,17 +194,11 @@ export default class Controller extends React.Component {
         let designer = null, 
         buttons = <div className="buttons">
             <div className="header-logo row">
-                <div className="col col-lg-4 col-md-4 col-sm-4">
+                <div className="col col-lg-3 col-md-3 col-sm-3">
                     <h2 className="header-tagline" style={{color: '#b00110'}}>Customize your Distro</h2>
                 </div>
-                <div className="col col-lg-4 col-md-4 col-sm-4" id="header_controls">
-                    <select defaultValue={localStorage.getItem("cartesian: size")} name="unit_size" id="unit_size" style={{fontSize: '48px', color: 'rgb(50, 55, 165)'}} onChange={this.changeUnitSize}>
-                        {this.colors.map(({ size, color }, index) => (
-                            <option key={size} style={{fontSize: '48px', color: color}} value={size}>
-                                {size}
-                            </option>
-                        ))}
-                    </select>
+                <div className="col col-lg-5 col-md-5 col-sm-5" id="header_controls">
+                    
                 </div>
                 <div className="col col-lg-4 col-md-4 col-sm-4">
                     <div className="header-logo-image-container">
@@ -204,7 +208,7 @@ export default class Controller extends React.Component {
             </div>
             <div className="header-tag-full" style={{padding: '3px 20px', width: '100%', backgroundColor: '#4a0d12', color: 'white', fontSize: '24px', textAlign: 'left'}}>
                 <nav className="menu-navigation col-lg-12 col-md-12 col-sm-12" style={{clear: 'both'}}>
-                    <i className="fas fa-anchor" style={{color: 'red', cursor: 'alias'}} onClick={this.showPanel}></i>
+                    <i className="fas fa-anchor" style={{color: 'red', cursor: 'alias'}}></i>
                     <ul className="menu_navigation" id="menu_navigation">
                         <li className="menu-item" onClick={this.home}>HOME</li>
                         <li className="menu-item">NEW</li>
@@ -213,24 +217,24 @@ export default class Controller extends React.Component {
                         <li className="menu-item">PRINT</li>
                     </ul>
                     <div className="field-controls" style={{marginRight: '30px', float: 'right', display: 'inline-block'}}>
-                        <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} />
+                        {/* <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} /> */}
                     </div>
                     <div className="clearfix" style={{clear: 'both'}}></div>
                 </nav>
                 <div className="row" id="header-separation">
                     <div className="col-lg-3 col-md-3 col-sm-3">
-                        <label for="power_show">
+                        {/* <label for="power_show">
                             <input type="checkbox" name="power_show" id="power_show" value="1" onChange={this.powerShow} />
-                            <span>Power</span>
+                            <span>Plugs / Sockets</span>
                         </label>
                         <label for="monitoring_show">
                             <input type="checkbox" name="monitoring_show" id="monitoring_show" value="1" onChange={this.monitoringShow} />
-                            <span>Monitoring</span>
-                        </label>
+                            <span>Breakers</span>
+                        </label> */}
                     </div>
                     <div className="col-lg-9 col-md-9 col-sm-9">
-                        <h5 className="power-header" onClick={this.changeToPower} style={{margin: '10px 0px', cursor: 'pointer'}}>POWER</h5>
-                        <h5 className="monitoring-header" onClick={this.changeToMonitoring} style={{margin: '10px 0px', cursor: 'pointer'}}>MONITORING</h5>
+                        <h5 className="power-header" onClick={this.changeToPower} style={{margin: '10px 0px', cursor: 'pointer'}}>PLUGS / SOCKETS</h5>
+                        <h5 className="monitoring-header" onClick={this.changeToMonitoring} style={{margin: '10px 0px', cursor: 'pointer'}}>BREAKERS</h5>
                     </div>
                 </div>
             </div>

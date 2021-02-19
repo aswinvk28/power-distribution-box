@@ -5,6 +5,7 @@ const ElementType = {
     OUTPUTS: 'Outputs',
     THROUGH_OUTPUTS: 'Through Output',
     ADDONS: 'Add-ons',
+    BOXES: 'Boxes'
 };
 
 const COLORS = {

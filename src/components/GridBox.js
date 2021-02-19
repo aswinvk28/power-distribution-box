@@ -20,12 +20,13 @@ const style = {
     float: 'left',
     zIndex: 1000,
 };
-export const GridBox = ({ name, type, uniqid, distribution, image, top, left, width, height, distribution_name, description, container, breaker, e_name, isDropped }) => {
+export const GridBox = ({ name, type, uniqid, distribution, image, top, left, width, 
+    height, distribution_name, description, container, breaker, breaker_item, e_name, isDropped }) => {
     // specify an id for styling purposes
     let {className, id} = Singleton.getGridBoxId({name, uniqid});
 
     // useDrag denotes draggable
-    const [{ opacity, initialOffset, currentOffset, clientOffset, item, isDragging }, drag] = useDrag({
+    const [{ opacity, initialOffset, currentOffset, clientOffset, item, isDragging, canDrag }, drag] = useDrag({
         // add attributes here
         item: { name, type, uniqid, distribution, image, width, height, distribution_name, description },
         collect: (monitor) => ({
@@ -38,6 +39,8 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             isDragging: monitor.isDragging()
         })
     });
+
+    let grid_heights = Object.fromEntries(container.controller.grid_heights);
 
     let position = useMousePosition();
 
@@ -66,6 +69,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             // (After the first render)
         }, [])
 
+        // moving
         if(isDragging && x && y) {
             let [left, top] = doSnapToGrid(x, y);
             let offset = {left: 0, top: 0};
@@ -74,11 +78,47 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             } else if(distribution_name == "templated") {
                 offset = $('#templated_distribution_container').offset();
             }
-            const item = getItem(uniqid);
-            if(item) {
+            let item = getItem(uniqid);
+            let breaker_item = item.breaker_item;
+            // save item
+            if(item && (left-offset['left']-40) >= 0 && (left-offset['left']-40) <= (Constants.drawingScale * 450)
+            && (top-offset['top']-40) >= 0 && (top-offset['top']-40) <= (Constants.drawingScale * (grid_heights[container.state['distributionSize']]-50))) {
                 item.left = (left-offset['left']-40)+'px';
                 item.top = (top-offset['top']-40)+'px';
                 saveItem(item);
+                // breaker_item attribute is null for others
+                if(breaker_item) {
+                    breaker_item.left = item.left;
+                    breaker_item.top = item.top;
+                    saveItem(breaker_item);
+                }
+            }
+            // disable select option on moving out of the window for each boxes
+            if(item && (top-offset['top']-40) >= 461.9) {
+                $(container.selectRef.options[1]).attr('disabled', 'disabled');
+                $(container.selectRef.options[2]).attr('disabled', 'disabled');
+                $(container.selectRef.options[3]).attr('disabled', 'disabled');
+                $(container.selectRef.options[4]).attr('disabled', 'disabled');
+            } else if(item && (top-offset['top']-40) >= 368.0) {
+                $(container.selectRef.options[2]).attr('disabled', 'disabled');
+                $(container.selectRef.options[3]).attr('disabled', 'disabled');
+                $(container.selectRef.options[4]).attr('disabled', 'disabled');
+                $(container.selectRef.options[1]).removeAttr("disabled");
+            } else if(item && (top-offset['top']-40) >= 274.0) {
+                $(container.selectRef.options[3]).attr('disabled', 'disabled');
+                $(container.selectRef.options[4]).attr('disabled', 'disabled');
+                $(container.selectRef.options[2]).removeAttr("disabled");
+                $(container.selectRef.options[1]).removeAttr("disabled");
+            } else if(item && (top-offset['top']-40) >= 189.4) {
+                $(container.selectRef.options[4]).attr('disabled', 'disabled');
+                $(container.selectRef.options[3]).removeAttr("disabled");
+                $(container.selectRef.options[2]).removeAttr("disabled");
+                $(container.selectRef.options[1]).removeAttr("disabled");
+            } else {
+                $(container.selectRef.options[4]).removeAttr("disabled");
+                $(container.selectRef.options[3]).removeAttr("disabled");
+                $(container.selectRef.options[2]).removeAttr("disabled");
+                $(container.selectRef.options[1]).removeAttr("disabled");
             }
         }
 
@@ -106,7 +146,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
     function default_breaker() {
         if('default' in breaker) {
             return (
-                <img key="0" className="breaker-default" src={breaker.default} width="30px" height="auto" style={{marginLeft: "15px"}} />
+                <img key="0" className="breaker-default" src={breaker.default.image} width="30px" height="auto" style={{marginLeft: "15px"}} />
             )
         }
         return null;
@@ -117,6 +157,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
     return (<div ref={drag} style={{...style, opacity, top, left}} className={className} id={id}>
             {default_breaker()}
             <DistributionMenu key="1" image={image} name={name} width={width} height="auto" name={name} type={type} 
-            uniqid={uniqid} distribution_name={distribution_name} distribution={distribution} />
+            uniqid={uniqid} distribution_name={distribution_name} distribution={distribution}
+            breaker_item={breaker_item} />
 		</div>);
 };

@@ -14,7 +14,8 @@ function getStyles(left, top, isDragging) {
         transform: transform,
         WebkitTransform: transform,
         left: left,
-        top: top
+        top: top,
+        marginBottom: '1.5rem'
     };
 }
 export const DraggableBox = (props) => {
@@ -28,7 +29,7 @@ export const DraggableBox = (props) => {
     function breaker() {
         if('breaker' in box_item && 'default' in box_item.breaker) {
             return (
-                <img className="breaker-default" src={box_item.breaker.default} width="30px" height="auto" style={{marginLeft: "15px"}} />
+                <img className="breaker-default" src={box_item.breaker.default.image} width="30px" height="auto" style={{marginLeft: "15px"}} />
             )
         } else if(box_item.element_type == Constants.ElementType.OUTPUTS) {
             return (
@@ -45,5 +46,6 @@ export const DraggableBox = (props) => {
             <Box name={name} type={type} uniqid={uniqid} distribution={distribution} image={image}
             width={width} height={height} distribution_name={distribution_name} description={description} box_item={box_item}
             isDropped={isDropped} />
+            <abbr style={{width: '100%', display: 'inline', marginRight: '1.5rem'}}><React.Fragment><b>{description}</b></React.Fragment></abbr>
 		</div>);
 };
