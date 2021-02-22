@@ -49,7 +49,7 @@ export default class Controller extends React.Component {
         snapToGridAfterDrop: true,
         snapToGridWhileDragging: true,
         viewBox: '',
-        value: 0,
+        value: 10,
         change: false,
         monitoring_show: 1,
         power_show: 1
