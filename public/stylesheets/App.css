@@ -506,3 +506,39 @@ label[for="power_show"] span {
 #distribution_front_side {
   border: 1px dashed red;
 }
+
+.btn {
+  padding: 10px 20px;
+  background-color:rgb(28, 1, 148);
+  color: white;
+  border: 0px none;
+  outline: 1px dashed yellow;
+  box-sizing: unset;
+  box-shadow: none;
+}
+
+.btn:hover {
+  cursor: pointer;
+  background-color:rgb(73, 42, 214);
+}
+
+.menu-tree {
+  position: absolute;
+  left: 0px;
+  top: 30px;
+  text-align: left;
+  outline: 1px dashed yellow;
+  z-index: 10000;
+  background-color: blue;
+}
+
+.menu-item {
+  position: relative;
+  padding: 5px;
+}
+
+.menu-tree-item {
+  list-style-type: none;
+  padding: 5px 0px;
+  margin: 0px;
+}

@@ -81,9 +81,9 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             let item = getItem(uniqid);
             let breaker_item = item.breaker_item;
             // save item
-            if(item && (left-offset['left']-40) >= 0 && (left-offset['left']-40) <= (Constants.drawingScale * 450)
+            if(item && (left-offset['left']) >= 0 && (left-offset['left']) <= (Constants.drawingScale * 450)
             && (top-offset['top']-40) >= 0 && (top-offset['top']-40) <= (Constants.drawingScale * (grid_heights[container.state['distributionSize']]-50))) {
-                item.left = (left-offset['left']-40)+'px';
+                item.left = (left-offset['left'])+'px';
                 item.top = (top-offset['top']-40)+'px';
                 saveItem(item);
                 // breaker_item attribute is null for others
@@ -152,7 +152,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
         return null;
     }
 
-    width = (parseFloat(width.replace('px', '')) * Constants.drawingScale).toString() + 'px';
+    // width = (parseFloat(width.replace('px', ''))).toString() + 'px';
 
     return (<div ref={drag} style={{...style, opacity, top, left}} className={className} id={id}>
             {default_breaker()}

@@ -11,6 +11,10 @@ import Constants from './Constants';
 
 export default class Controller extends React.Component {
     
+    hoverState = {
+        file: false
+    }
+    
     colors = [
         {size: '24U', color: 'rgb(50, 55, 165)'},
         {size: '20U', color: 'rgb(150, 55, 105)'},
@@ -68,6 +72,8 @@ export default class Controller extends React.Component {
         this.toggleSliging = this.toggleSliging.bind(this);
         this.changeUnitSize = this.changeUnitSize.bind(this);
         this.home = this.home.bind(this);
+        this.resetCanvas = this.resetCanvas.bind(this);
+        this.showMenuTree = this.showMenuTree.bind(this);
     }
 
     changeToMonitoring() {
@@ -189,6 +195,24 @@ export default class Controller extends React.Component {
         })
     }
 
+    resetCanvas(event) {
+        for (var i in this.containerRef.selectRef.options) {
+            $(this.containerRef.selectRef.options[i]).removeAttr("disabled");
+        }
+    }
+
+    showMenuTree(event) {
+        let id = $(event.target).attr('data-element');
+        let menu = $(event.target).attr('menu-element');
+        $('#'+id).show();
+    }
+
+    hideMenuTree(event) {
+        let id = $(event.target).attr('data-element');
+        let menu = $(event.target).attr('menu-element');
+        $('#'+id).hide();
+    }
+
     render() {
         let elem = null;
         let designer = null, 
@@ -211,10 +235,15 @@ export default class Controller extends React.Component {
                     <i className="fas fa-anchor" style={{color: 'red', cursor: 'alias'}}></i>
                     <ul className="menu_navigation" id="menu_navigation">
                         <li className="menu-item" onClick={this.home}>HOME</li>
-                        <li className="menu-item">NEW</li>
-                        <li className="menu-item">OPEN</li>
-                        <li className="menu-item">SAVE</li>
-                        <li className="menu-item">PRINT</li>
+                        <li className="menu-item" data-element="menu-tree-file" menu-element="file" onMouseOut={this.hideMenuTree}>
+                            <span onMouseOver={this.showMenuTree} data-element="menu-tree-file" menu-element="file">FILE</span>
+                            <ul className="menu-tree" style={{display: 'none'}} id="menu-tree-file">
+                                <li className="menu-tree-item">NEW</li>
+                                <li className="menu-tree-item">OPEN</li>
+                                <li className="menu-tree-item">SAVE</li>
+                                <li className="menu-tree-item">PRINT</li>
+                            </ul>
+                        </li>
                     </ul>
                     <div className="field-controls" style={{marginRight: '30px', float: 'right', display: 'inline-block'}}>
                         {/* <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} /> */}
@@ -231,6 +260,7 @@ export default class Controller extends React.Component {
                             <input type="checkbox" name="monitoring_show" id="monitoring_show" value="1" onChange={this.monitoringShow} />
                             <span>Breakers</span>
                         </label> */}
+                        <button onClick={this.resetCanvas} className="btn">Reset Elements</button>
                     </div>
                     <div className="col-lg-9 col-md-9 col-sm-9">
                         <h5 className="power-header" onClick={this.changeToPower} style={{margin: '10px 0px', cursor: 'pointer'}}>PLUGS / SOCKETS</h5>

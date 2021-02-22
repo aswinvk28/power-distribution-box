@@ -87,39 +87,17 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
             // (After the first render)
         }, [])
 
-        if(canDrop && item && document.getElementById(item.highlightComponent)) {
-            // left and top are saved on refresh
-            let [left, top] = doSnapToGrid(x, y);
-            if(item.distribution_name == "cartesian") {
-                let offset = $('#cartesian_distribution_container').offset();
-                let width = $('#boxes_container_draggable_holder').width();
-                let width2 = $('#templated').parent().width();
-                let width3 = ($('#cartesian').parent().width() - 500*Constants.drawingScale) / 2;
-                let offset2 = $('#cartesian').offset();
-                document.getElementById(item.highlightComponent).style.width = (parseFloat((item.width).replace('px', '')) * Constants.drawingScale).toString() + 'px';
-                document.getElementById(item.highlightComponent).style.height = (parseFloat((item.height).replace('px', '')) * Constants.drawingScale).toString() + 'px';
-                document.getElementById(item.highlightComponent).style.left = ((left-offset2['left']-width+width2+width3+185)).toString() + "px";
-                document.getElementById(item.highlightComponent).style.top = ((top-offset['top']-40)).toString() + "px";
-                document.getElementById(item.dragElementId).style.left = ((left-offset['left'])).toString() + "px";
-                document.getElementById(item.dragElementId).style.top = ((top-offset['top'])).toString() + "px";
-                item.left = ((left-offset['left']-40)).toString() + "px";
-                item.top = ((top-offset['top']-40)).toString() + "px";
-            } else if(item.distribution_name == "templated") {
-                let offset = $('#templated_distribution_container').offset();
-                let width = $('#boxes_container_draggable_holder').width();
-                let width2 = ($('#templated').parent().width() - 500*Constants.drawingScale) / 2;
-                let offset2 = $('#templated').offset();
-                document.getElementById(item.highlightComponent).style.width = (parseFloat((item.width).replace('px', '')) * Constants.drawingScale).toString() + 'px';
-                document.getElementById(item.highlightComponent).style.height = (parseFloat((item.height).replace('px', '')) * Constants.drawingScale).toString() + 'px';
-                document.getElementById(item.highlightComponent).style.left = ((left-offset['left']-40)).toString() + "px";
-                document.getElementById(item.highlightComponent).style.top = ((top-offset['top']-40)).toString() + "px";
-                document.getElementById(item.dragElementId).style.left = ((left-offset['left'])).toString() + "px";
-                document.getElementById(item.dragElementId).style.top = ((top-offset['top'])).toString() + "px";
-                item.left = ((left-offset['left']-40)).toString() + "px"; // !important
-                item.top = ((top-offset['top']-40)).toString() + "px"; // !important
-            }
+        let offset = null;
+        let dragElement = null;
+        let w = null, h = null;
 
-            let offset;
+        // left and top are saved on refresh
+        let [left, top] = doSnapToGrid(x, y);
+
+        if(item) {
+            dragElement = $('#'+item.dragElementId).find('img')/*, highlightComponent = $('#'+item.highlightComponent)*/;
+            w = dragElement.width();
+            h = dragElement.height();
 
             if(item.distribution_name == "cartesian") {
                 offset = $('#cartesian_distribution_container').offset();
@@ -127,23 +105,53 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
                 offset = $('#templated_distribution_container').offset();
             }
 
+            if(canDrop) {
+                if(item.distribution_name == "cartesian") {
+                    item.left = ((left-offset['left']-w/2)).toString() + "px"; // !important
+                    item.top = ((top-offset['top']-h/2)).toString() + "px"; // !important
+                    
+                    // code to reinstate highlight component if required
+                    /*let width = $('#boxes_container_draggable_holder').width();
+                    let width2 = $('#templated').parent().width();
+                    let width3 = ($('#cartesian').parent().width() - 500*Constants.drawingScale) / 2;
+                    let offset2 = $('#cartesian').offset();*/
+                    // highlightComponent.css('width', (parseFloat((item.width).replace('px', '')) * Constants.drawingScale).toString() + 'px');
+                    // highlightComponent.css('height', (parseFloat((item.height).replace('px', '')) * Constants.drawingScale).toString() + 'px');
+                    // highlightComponent.css('left', ((left-offset2['left']-width+width2+width3+185)).toString() + "px");
+                    // highlightComponent.css('top', ((top-offset['top'])).toString() + "px");
+                } else if(item.distribution_name == "templated") {
+                    item.left = ((left-offset['left']-w/2)).toString() + "px"; // !important
+                    item.top = ((top-offset['top']-h/2)).toString() + "px"; // !important
+                    
+                    // code to reinstate highlight component if required
+                    /*let width = $('#boxes_container_draggable_holder').width();
+                    let width2 = ($('#templated').parent().width() - 500*Constants.drawingScale) / 2;
+                    let offset2 = $('#templated').offset();*/
+                    // highlightComponent.css('width', (parseFloat((item.width).replace('px', '')) * Constants.drawingScale).toString() + 'px');
+                    // highlightComponent.css('height', (parseFloat((item.height).replace('px', '')) * Constants.drawingScale).toString() + 'px');
+                    // highlightComponent.css('left', ((left-offset['left'])).toString() + "px");
+                    // highlightComponent.css('top', ((top-offset['top'])).toString() + "px");
+                }
+            }
+
             // disable select option on moving out of the window for each boxes
-            if(item && (top-offset['top']-40) >= 461.9) {
+            // collectively exhaustive events on coinciding with marginal line
+            if((top-offset['top']) >= 461.9) {
                 $(container.selectRef.options[1]).attr('disabled', 'disabled');
                 $(container.selectRef.options[2]).attr('disabled', 'disabled');
                 $(container.selectRef.options[3]).attr('disabled', 'disabled');
                 $(container.selectRef.options[4]).attr('disabled', 'disabled');
-            } else if(item && (top-offset['top']-40) >= 368.0) {
+            } else if((top-offset['top']) >= 368.0) {
                 $(container.selectRef.options[2]).attr('disabled', 'disabled');
                 $(container.selectRef.options[3]).attr('disabled', 'disabled');
                 $(container.selectRef.options[4]).attr('disabled', 'disabled');
                 $(container.selectRef.options[1]).removeAttr("disabled");
-            } else if(item && (top-offset['top']-40) >= 274.0) {
+            } else if((top-offset['top']) >= 274.0) {
                 $(container.selectRef.options[3]).attr('disabled', 'disabled');
                 $(container.selectRef.options[4]).attr('disabled', 'disabled');
                 $(container.selectRef.options[2]).removeAttr("disabled");
                 $(container.selectRef.options[1]).removeAttr("disabled");
-            } else if(item && (top-offset['top']-40) >= 189.4) {
+            } else if((top-offset['top']) >= 189.4) {
                 $(container.selectRef.options[4]).attr('disabled', 'disabled');
                 $(container.selectRef.options[3]).removeAttr("disabled");
                 $(container.selectRef.options[2]).removeAttr("disabled");
@@ -165,16 +173,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         if (size) {
             setDistributionSize(size);
             // predetermined heights
-            let heights = new Map([
-                ['24U', 1183],
-                ['20U', 983],
-                ['16U', 783],
-                ['12U', 583],
-                ['8U', 403],
-            ]);
-
-            heights = Object.fromEntries(heights);
-            // $(document.getElementById(e_name)).css('height', ($(document).width() * 0.40 / 681 * 1455).toString() + "px");
+            heights = Object.fromEntries(container.controller.grid_heights);
             document.getElementById(e_name + "_distribution_container").style.height = 
             (heights[distributionSize] * $(document.getElementById(e_name)).outerWidth() / 681).toString() + "px"; // outerWidth
         }
@@ -183,15 +182,12 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
     if(!totalDroppedItems) {
         totalDroppedItems = [];
     }
-    // if(totalDroppedItems) {
-    //     localStorage.setItem(e_name + ": items", JSON.stringify(totalDroppedItems));
-    // }
 
     let distribution_width = (Constants.drawingScale * 681).toString() + 'px';
     let grid_width = (Constants.drawingScale * 500).toString() + 'px';
     let heights = Object.fromEntries(Singleton.__singletonRef.controller.heights);
     let grid_heights = Object.fromEntries(Singleton.__singletonRef.controller.grid_heights);
-    let distribution_height = (Constants.drawingScale * heights[container.state['distributionSize']]).toString() + 'px';
+    // let distribution_height = (Constants.drawingScale * heights[container.state['distributionSize']]).toString() + 'px';
     let grid_height = (Constants.drawingScale * grid_heights[container.state['distributionSize']]).toString() + 'px';
     let padding = (66 * Constants.drawingScale).toString() + 'px';
 
