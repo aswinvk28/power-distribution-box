@@ -136,10 +136,11 @@ body, html {
   margin-right: auto;
   height: 100%;
   color: #ababab;
+  overflow: hidden;
 }
 
 .distribution_container::before {
-  background-image: url('../images/power_box/canvas_grid-2.png');
+  background-image: url('../images/power_box/canvas_grid-20u.png');
   background-repeat: repeat;
   position: absolute;
   height: 100%;
@@ -161,8 +162,82 @@ body, html {
 
 #templated_distribution_container, #cartesian_distribution_container {
   position: relative;
-  border: 1px solid #c3c3c3;
+  /* border: 1px solid #c3c3c3; */
   border-radius: 3px;
+}
+
+.sizing-variations {
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.size-8U {
+  background: url("../images/power_box/canvas_grid-20u.png") 0px 0px repeat;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0.2;
+  background-size: 120%;
+  font-size: 40px;
+  color: black;
+}
+
+.size-12U {
+  background: url("../images/power_box/canvas_grid-20u.png") 0px 0px repeat;
+  position: absolute;
+  left: 0;
+  top: 189.01px;
+  height: 100%;
+  width: 100%;
+  opacity: 0.5;
+  background-size: 120%;
+  font-size: 40px;
+  color: white;
+}
+
+.size-16U {
+  background: url("../images/power_box/canvas_grid-20u.png") 0px 0px repeat;
+  position: absolute;
+  left: 0;
+  top: 274.01px;
+  height: 100%;
+  width: 100%;
+  opacity: 0.4;
+  background-size: 120%;
+  font-size: 40px;
+  color: black;
+}
+
+.size-20U {
+  background: url("../images/power_box/canvas_grid-20u.png") 0px 0px repeat;
+  position: absolute;
+  left: 0;
+  top: 368.01px;
+  height: 100%;
+  width: 100%;
+  opacity: 0.3;
+  background-size: 120%;
+  font-size: 40px;
+  color: black;
+}
+
+.size-24U {
+  background: url("../images/power_box/canvas_grid-20u.png") 0px 0px repeat;
+  position: absolute;
+  left: 0;
+  top: 462.01px;
+  height: 100%;
+  width: 100%;
+  opacity: 0.3;
+  background-size: 120%;
+  font-size: 40px;
+  color: white;
 }
 
 .cartesian .grid-box, .templated .grid-box {
@@ -271,13 +346,13 @@ em.accordion-title:hover {
 .box-item-Sockets--1 img, .box-item-Sockets--2 img,
 .box-item-Sockets--3 img, .box-item-Plugs--5 img,
 .box-item-Pilot-Lights img, .box-item-Multimeter img {
-  padding: 6px;
+  padding: 3px 1.5px;
   border: 1.5px solid red;
   border-radius: 3px;
   background-image: url('../images/power_box/canvas_grid-8u.png');
   background-repeat: no-repeat;
-  background-position: -50px -50px;
-  background-size: 150px;
+  background-position: -51px -50px;
+  background-size: 154px;
   background-color: #f3f3f3;
 }
 
@@ -433,8 +508,8 @@ label[for="power_show"] span {
 
 #distros_designer::before {
   opacity: 0.09;
-  background-image: url('../images/power_box/canvas_grid-2.png');
-  background-repeat: repeat;
+  /* background-image: url('../images/power_box/canvas_grid-2.png');
+  background-repeat: repeat; */
   position: absolute;
   width: 100%;
   content: "";

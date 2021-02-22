@@ -3,7 +3,7 @@ import { useDrag } from 'react-dnd';
 import { ItemTypes } from './ItemTypes';
 const style = {
     border: '0px none',
-    backgroundColor: 'white',
+    backgroundColor: 'transparent',
     padding: '0px',
     marginRight: '1.5rem',
     marginBottom: '0.25rem',

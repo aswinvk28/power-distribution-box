@@ -234,16 +234,13 @@ export default class Controller extends React.Component {
                 <nav className="menu-navigation col-lg-12 col-md-12 col-sm-12" style={{clear: 'both'}}>
                     <i className="fas fa-anchor" style={{color: 'red', cursor: 'alias'}}></i>
                     <ul className="menu_navigation" id="menu_navigation">
-                        <li className="menu-item" onClick={this.home}>HOME</li>
-                        <li className="menu-item" data-element="menu-tree-file" menu-element="file" onMouseOut={this.hideMenuTree}>
-                            <span onMouseOver={this.showMenuTree} data-element="menu-tree-file" menu-element="file">FILE</span>
-                            <ul className="menu-tree" style={{display: 'none'}} id="menu-tree-file">
-                                <li className="menu-tree-item">NEW</li>
-                                <li className="menu-tree-item">OPEN</li>
-                                <li className="menu-tree-item">SAVE</li>
-                                <li className="menu-tree-item">PRINT</li>
-                            </ul>
-                        </li>
+                        <li className="menu-item">HOME</li>
+                        {/* <li className="menu-item" data-element="menu-tree-file" menu-element="file"> */}
+                            <li className="menu-item">NEW</li>
+                            <li className="menu-item">OPEN</li>
+                            <li className="menu-item">SAVE</li>
+                            <li className="menu-item">PRINT</li>
+                        {/* </li> */}
                     </ul>
                     <div className="field-controls" style={{marginRight: '30px', float: 'right', display: 'inline-block'}}>
                         {/* <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} /> */}
@@ -260,7 +257,7 @@ export default class Controller extends React.Component {
                             <input type="checkbox" name="monitoring_show" id="monitoring_show" value="1" onChange={this.monitoringShow} />
                             <span>Breakers</span>
                         </label> */}
-                        <button onClick={this.resetCanvas} className="btn">Reset Elements</button>
+                        <button onClick={this.resetCanvas} className="btn">Reset</button>
                     </div>
                     <div className="col-lg-9 col-md-9 col-sm-9">
                         <h5 className="power-header" onClick={this.changeToPower} style={{margin: '10px 0px', cursor: 'pointer'}}>PLUGS / SOCKETS</h5>

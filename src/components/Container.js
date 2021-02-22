@@ -70,6 +70,7 @@ class Container extends React.Component {
     constructor(props) {
         super(props)
         this.controller = this.props.controller;
+        this.drag_drop = false;
         Singleton.__singletonRef.controller.container = this;
         let cartesianDroppedItems = null, templatedDroppedItems = null;
         if(useLocalStorage) {
@@ -101,7 +102,8 @@ class Container extends React.Component {
         const boxes = [
             { name: 'Plugs--1', type: ItemTypes.PLUGS_1, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-1.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '42px', height: '45px'}, distribution_name: "templated", description: '63A CEE 400V 5P', breaker: { default: { index: 0, image: 'images/dist_box/breaker-output-plug-1.png' } } },
+            size: {width: '42px', height: '45px'}, distribution_name: "templated", description: '63A CEE 400V 5P', 
+            breaker: { default: { index: 0, image: 'images/dist_box/breaker-output-plug-1.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-plug-1-mcb.png'} } },
             { name: 'Plugs--2', type: ItemTypes.PLUGS_2, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 0, image: 'images/dist_box/Output-Plug-2.png', element_type: Constants.ElementType.OUTPUTS, 
             size: {width: '42px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: {  } },
@@ -116,10 +118,12 @@ class Container extends React.Component {
             size: {width: '42px', height: '45px'}, distribution_name: "templated", description: '63A 400V CEE 5P', breaker: {  } },
             { name: 'Sockets--1', type: ItemTypes.SOCKETS_1, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 1, image: 'images/dist_box/Output-Socket-1.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '42px', height: '45px'}, distribution_name: "templated", description: '125A CEE 400V 5P', breaker: { default: { index: 1, image: 'images/dist_box/breaker-output-socket-1.png' } } },
+            size: {width: '42px', height: '45px'}, distribution_name: "templated", description: '125A CEE 400V 5P', 
+            breaker: { default: { index: 1, image: 'images/dist_box/breaker-output-socket-1.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-socket-1-mcb.png'} } },
             { name: 'Sockets--2', type: ItemTypes.SOCKETS_2, uniqid: null, 
             distribution: null, left: 0, top: 0,  index: 1, image: 'images/dist_box/Output-Socket-2.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '42px', height: '45px'}, distribution_name: "templated", description: '19pin Connector Socket', breaker: { default: { index: 2, image: 'images/dist_box/breaker-output-socket-2.png' } } },
+            size: {width: '42px', height: '45px'}, distribution_name: "templated", description: '19pin Connector Socket', 
+            breaker: { default: { index: 2, image: 'images/dist_box/breaker-output-socket-2.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-socket-2-mcb.png'} } },
             { name: 'Sockets--3', type: ItemTypes.SOCKETS_3, uniqid: null, 
             distribution: null, left: 0, top: 0,   index: 1, image: 'images/dist_box/Output-Socket-3.png', element_type: Constants.ElementType.OUTPUTS, 
             size: {width: '42px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: {  } },
@@ -159,6 +163,10 @@ class Container extends React.Component {
         this.getTotalDroppedItems = this.getTotalDroppedItems.bind(this);
         this.saveTotalDroppedItems = this.saveTotalDroppedItems.bind(this);
         this.slideDown = this.slideDown.bind(this);
+    }
+
+    setDragDrop(value) {
+        this.drag_drop = value;
     }
 
     setDistributions(distributions) {
@@ -328,12 +336,12 @@ class Container extends React.Component {
         return (<div className="AppInnerContainer">
 
     <div className="row">
-        <div className="col col-lg-3 col-md-3 col-sm-3" id="boxes_container_draggable_holder">
+        <div className="col col-lg-3 col-md-3 col-sm-3" id="boxes_container_draggable_holder" key="col-left">
 
             <div className="boxes-container-draggable" id="boxes_container_draggable" key="1111" sliding-panel={this.controller.sliding ? 'on' : 'off'}>
 
-                <div style={{ overflow: 'hidden', clear: 'both', marginTop: '0px', position: 'relative'}} className="boxes-container" key="0">
-                    <em key="0" className="accordion-title" onClick={this.slideDown} data-element="boxes-set">{Constants.ElementType.BOXES}</em>
+                <div style={{ overflow: 'hidden', clear: 'both', marginTop: '0px', position: 'relative'}} className="boxes-container" key="boxes-set">
+                    <em key="em-boxes-set" className="accordion-title" onClick={this.slideDown} data-element="boxes-set">{Constants.ElementType.BOXES}</em>
                     <div className="clearfix" id="boxes-set" style={display_accordion_show}>
                         <select ref={(ref) => {this.selectRef = ref}} defaultValue={localStorage.getItem("cartesian: size")} name="unit_size" id="unit_size" style={{fontSize: '48px', color: 'rgb(50, 55, 165)'}} onChange={this.controller.changeUnitSize}>
                             {this.controller.colors.map(({ size, color }, index) => (
@@ -346,17 +354,17 @@ class Container extends React.Component {
                 </div>
                 
                 <div style={{ overflow: 'hidden', clear: 'both', marginTop: "0px",
-                position: 'relative' }} className="boxes-container" key="3">
-                    <em key="0" className="accordion-title" onClick={this.slideDown} data-element="inputs-set">{element_live_inputs.length > 0 ? element_live_inputs[0][0].element_type : ''}</em>
-                    <div key="1" id="inputs-set" className="clearfix" style={display_accordion_show}>
-                        <div key="1" className="draggable-box-inputs">
+                position: 'relative' }} className="boxes-container" key="inputs-set">
+                    <em key="em-inputs-set" className="accordion-title" onClick={this.slideDown} data-element="inputs-set">{element_live_inputs.length > 0 ? element_live_inputs[0][0].element_type : ''}</em>
+                    <div key="div-inputs-set" id="inputs-set" className="clearfix" style={display_accordion_show}>
+                        <div key="elements-live-inputs" className="draggable-box-inputs">
                         {
                             element_live_inputs.map((element, index) => (
                                 renderBox(element[0], element[1], {}, "")
                             ))
                         }
                         </div>
-                        <div key="2" className="draggable-box-inputs" style={{display: 'flex'}}>
+                        <div key="elements-pins-inputs" className="draggable-box-inputs" style={{display: 'flex'}}>
                         {
                             element_pins_inputs.map((element, index) => (
                                 renderBox(element[0], element[1], {flex: 'wrap'}, "")
@@ -367,9 +375,9 @@ class Container extends React.Component {
                 </div>
 
                 <div style={{ overflow: 'hidden', clear: 'both', marginTop: "0px",
-                position: 'relative' }} className="boxes-container" key="1">
-                    <em key="0" className="accordion-title" onClick={this.slideDown} data-element="outputs-set">{element_outputs.length > 0 ? element_outputs[0][0].element_type : ''}</em>
-                    <div key="1" className="draggable-box-inputs row" id="outputs-set" style={display_accordion_hide}>
+                position: 'relative' }} className="boxes-container" key="outputs-set">
+                    <em key="em-outputs-set" className="accordion-title" onClick={this.slideDown} data-element="outputs-set">{element_outputs.length > 0 ? element_outputs[0][0].element_type : ''}</em>
+                    <div key="div-outputs-set" className="draggable-box-inputs row" id="outputs-set" style={display_accordion_hide}>
                     {
                         element_outputs.map((element, index) => (
                             renderBox(element[0], element[1], {}, "col-lg-6 col-md-6 col-sm-6")
@@ -379,9 +387,9 @@ class Container extends React.Component {
                 </div>
 
                 <div style={{ overflow: 'hidden', clear: 'both', marginTop: "0px",
-                position: 'relative' }} className="boxes-container">
-                    <em key="0" className="accordion-title" onClick={this.slideDown} data-element="through-outputs-set">{element_through_outputs.length > 0 ? element_through_outputs[0][0].element_type : ''}</em>
-                    <div key="1" className="draggable-box-inputs" id="through-outputs-set" style={display_accordion_hide}>
+                position: 'relative' }} className="boxes-container" key="through-outputs-set">
+                    <em key="em-through-outputs-set" className="accordion-title" onClick={this.slideDown} data-element="through-outputs-set">{element_through_outputs.length > 0 ? element_through_outputs[0][0].element_type : ''}</em>
+                    <div key="div-through-outputs-set" className="draggable-box-inputs" id="through-outputs-set" style={display_accordion_hide}>
                     {
                         element_through_outputs.map((element, index) => (
                             renderBox(element[0], element[1], {}, "")
@@ -391,9 +399,9 @@ class Container extends React.Component {
                 </div>
 
                 <div style={{ overflow: 'hidden', clear: 'both', marginTop: "0px",
-                position: 'relative' }} className="boxes-container" key="2">
-                    <em key="0" className="accordion-title" onClick={this.slideDown} data-element="addons-set">{element_addons.length > 0 ? element_addons[0][0].element_type : ''}</em>
-                    <div key="1" className="draggable-box-inputs" id="addons-set" style={display_accordion_hide}>
+                position: 'relative' }} className="boxes-container" key="addons-set">
+                    <em key="em-addons-set" className="accordion-title" onClick={this.slideDown} data-element="addons-set">{element_addons.length > 0 ? element_addons[0][0].element_type : ''}</em>
+                    <div key="div-addons-set" className="draggable-box-inputs" id="addons-set" style={display_accordion_hide}>
                     {
                         element_addons.map((element, index) => (
                             renderBox(element[0], element[1], {}, "")
@@ -406,16 +414,14 @@ class Container extends React.Component {
 
         </div>
 
-        <div className="col col-lg-9 col-md-9 col-sm-9" id="distros_designer" sliding-panel={this.controller.sliding ? 'on' : 'off'} style={{backgroundSize: (Singleton.__singletonRef.controller.state['value']-50+100)*0.35 + '%'}}>
+        <div key="col-right" className="col col-lg-9 col-md-9 col-sm-9" id="distros_designer" sliding-panel={this.controller.sliding ? 'on' : 'off'} style={{backgroundSize: (Singleton.__singletonRef.controller.state['value']-50+100)*0.35 + '%'}}>
 
             <div style={{ overflow: 'hidden', clear: 'both', height: '100%' }} key="0000">
-                <div style={style} className="templated-distributions-container row" key="1">
+                <div style={style} className="templated-distributions-container row">
                     {this.state['distributions'].map(({ accepts, lastDroppedItem, totalDroppedItems, e_name }, index) => (
                         <TableDist container={this} accept={accepts} 
-                        lastDroppedItem={lastDroppedItem} 
-                        totalDroppedItems={totalDroppedItems} 
-                        e_name={e_name}
-                        onDrop={(item) => this.handleDrop(index, item)} key={index}></TableDist>
+                        lastDroppedItem={lastDroppedItem} totalDroppedItems={totalDroppedItems} e_name={e_name}
+                        onDrop={(item) => this.handleDrop(index, item)} key={"TableDist-" + index}></TableDist>
                     ))}
                 </div>
             </div>

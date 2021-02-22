@@ -9,7 +9,7 @@ export default class TableDist extends React.Component {
     }
 
     render() {
-        const {accept, lastDroppedItem, totalDroppedItems, e_name, onDrop, index} = this.props;
+        const {accept, lastDroppedItem, totalDroppedItems, e_name, onDrop, index, drag_drop} = this.props;
         this.e_name = e_name;
         return (<Distribution container={this.props.container} accept={accept} 
             lastDroppedItem={lastDroppedItem} 

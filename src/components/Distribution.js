@@ -49,7 +49,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
     const isActive = isOver && canDrop;
     let backgroundColor = 'transparent';
     if (isActive) {
-        backgroundColor = 'darkgreen';
+        backgroundColor = '#AAA';
     }
     else if (canDrop) {
         backgroundColor = 'darkkhaki';
@@ -58,6 +58,13 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
     if(item && clientOffset && currentOffset && document.getElementById(item.dragElementId)) {
         $elem = <HighlightComponent item={item} currentOffset={currentOffset}
         clientOffset={clientOffset} />
+    }
+
+    let drag_drop = false;
+    if(canDrop || container.drag_drop) {
+        drag_drop = true;
+    } else {
+        drag_drop = false;
     }
 
     let position = useMousePosition();
@@ -136,32 +143,32 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
 
             // disable select option on moving out of the window for each boxes
             // collectively exhaustive events on coinciding with marginal line
-            if((top-offset['top']) >= 461.9) {
-                $(container.selectRef.options[1]).attr('disabled', 'disabled');
-                $(container.selectRef.options[2]).attr('disabled', 'disabled');
-                $(container.selectRef.options[3]).attr('disabled', 'disabled');
-                $(container.selectRef.options[4]).attr('disabled', 'disabled');
-            } else if((top-offset['top']) >= 368.0) {
-                $(container.selectRef.options[2]).attr('disabled', 'disabled');
-                $(container.selectRef.options[3]).attr('disabled', 'disabled');
-                $(container.selectRef.options[4]).attr('disabled', 'disabled');
-                $(container.selectRef.options[1]).removeAttr("disabled");
-            } else if((top-offset['top']) >= 274.0) {
-                $(container.selectRef.options[3]).attr('disabled', 'disabled');
-                $(container.selectRef.options[4]).attr('disabled', 'disabled');
-                $(container.selectRef.options[2]).removeAttr("disabled");
-                $(container.selectRef.options[1]).removeAttr("disabled");
-            } else if((top-offset['top']) >= 189.4) {
-                $(container.selectRef.options[4]).attr('disabled', 'disabled');
-                $(container.selectRef.options[3]).removeAttr("disabled");
-                $(container.selectRef.options[2]).removeAttr("disabled");
-                $(container.selectRef.options[1]).removeAttr("disabled");
-            } else {
-                $(container.selectRef.options[4]).removeAttr("disabled");
-                $(container.selectRef.options[3]).removeAttr("disabled");
-                $(container.selectRef.options[2]).removeAttr("disabled");
-                $(container.selectRef.options[1]).removeAttr("disabled");
-            }
+            // if((top-offset['top']) >= 461.9) {
+            //     $(container.selectRef.options[1]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[2]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[3]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
+            // } else if((top-offset['top']) >= 368.0) {
+            //     $(container.selectRef.options[2]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[3]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[1]).removeAttr("disabled");
+            // } else if((top-offset['top']) >= 274.0) {
+            //     $(container.selectRef.options[3]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[2]).removeAttr("disabled");
+            //     $(container.selectRef.options[1]).removeAttr("disabled");
+            // } else if((top-offset['top']) >= 189.4) {
+            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[3]).removeAttr("disabled");
+            //     $(container.selectRef.options[2]).removeAttr("disabled");
+            //     $(container.selectRef.options[1]).removeAttr("disabled");
+            // } else {
+            //     $(container.selectRef.options[4]).removeAttr("disabled");
+            //     $(container.selectRef.options[3]).removeAttr("disabled");
+            //     $(container.selectRef.options[2]).removeAttr("disabled");
+            //     $(container.selectRef.options[1]).removeAttr("disabled");
+            // }
         }
 
         return { mouseX: x, mouseY: y }
@@ -183,6 +190,88 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         totalDroppedItems = [];
     }
 
+    // markers or alerts for placing elements over multiple sizes
+    
+    let $elements = null;
+    switch(distributionSize) {
+        case "24U":
+            $elements = (
+                <div className="sizing-variations">
+                    <div className="size-8U" data-drop-size="8U">
+                        8U
+                    </div>
+                    <div className="size-12U" data-drop-size="12U">
+                        12U
+                    </div>
+                    <div className="size-16U" data-drop-size="16U">
+                        16U
+                    </div>
+                    <div className="size-20U" data-drop-size="20U">
+                        20U
+                    </div>
+                    <div className="size-24U" data-drop-size="24U">
+                        24U
+                    </div>
+                </div>
+            )
+            break;
+
+        case "20U":
+            $elements = (
+                <div className="sizing-variations">
+                    <div className="size-8U" data-drop-size="8U">
+                        8U
+                    </div>
+                    <div className="size-12U" data-drop-size="12U">
+                        12U
+                    </div>
+                    <div className="size-16U" data-drop-size="16U">
+                        16U
+                    </div>
+                    <div className="size-20U" data-drop-size="20U">
+                        20U
+                    </div>
+                </div>
+            )
+            break;
+
+        case "16U":
+            $elements = (
+                <div className="sizing-variations">
+                    <div className="size-8U" data-drop-size="8U">
+                        8U
+                    </div>
+                    <div className="size-12U" data-drop-size="12U">
+                        12U
+                    </div>
+                    <div className="size-16U" data-drop-size="16U">
+                        16U
+                    </div>
+                </div>
+            )
+            break;
+
+        case "12U":
+            $elements = (
+                <div className="sizing-variations">
+                    <div className="size-8U" data-drop-size="8U">
+                        8U
+                    </div>
+                    <div className="size-12U" data-drop-size="12U">
+                        12U
+                    </div>
+                </div>
+            )
+            break;
+
+        case "8U":
+
+            break;
+
+        default:
+            break;
+    }
+
     let distribution_width = (Constants.drawingScale * 681).toString() + 'px';
     let grid_width = (Constants.drawingScale * 500).toString() + 'px';
     let heights = Object.fromEntries(Singleton.__singletonRef.controller.heights);
@@ -197,10 +286,11 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
 
             <div ref={drop} style={{ width: grid_width, height: grid_height, backgroundColor, backgroundSize: (container.controller.state['value']-50+100)*2.0 + '%' }} className="distribution_container" id={e_name + "_distribution_container"}>
             {$elem}
+            {drag_drop == true ? $elements : null}
                 {
                     totalDroppedItems.map((item, index) =>  {
                         return (
-                            <GridBox container={container} name={item.name} type={item.type} uniqid={item.uniqid} key={index}
+                            <GridBox container={container} name={item.name} type={item.type} uniqid={item.uniqid} key={"gridbox-" + index}
                             distribution={item.distribution} image={item.image} e_name={e_name}
                             top={item.top} left={item.left} width={item.width} height={item.height}
                             distribution_name={item.distribution_name} description={item.description} 

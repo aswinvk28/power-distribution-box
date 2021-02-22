@@ -26,23 +26,22 @@ export const DraggableBox = (props) => {
             isDragging: monitor.isDragging(),
         }),
     });
-    function breaker() {
-        if('breaker' in box_item && 'default' in box_item.breaker) {
-            return (
-                <img className="breaker-default" src={box_item.breaker.default.image} width="30px" height="auto" style={{marginLeft: "15px"}} />
-            )
-        } else if(box_item.element_type == Constants.ElementType.OUTPUTS) {
-            return (
-                <img className="breaker-default" src="" width="30px" height="auto" style={{marginLeft: "15px"}} />
-            )
-        }
-        return null;
-    }
+    // function breaker() {
+    //     if('breaker' in box_item && 'default' in box_item.breaker) {
+    //         return (
+    //             <img className="breaker-default" src={box_item.breaker.default.image} width="30px" height="auto" style={{marginLeft: "15px"}} />
+    //         )
+    //     } else if(box_item.element_type == Constants.ElementType.OUTPUTS) {
+    //         return (
+    //             <img className="breaker-default" src="" width="30px" height="auto" style={{marginLeft: "15px"}} />
+    //         )
+    //     }
+    //     return null;
+    // }
     useEffect(() => {
         preview(getEmptyImage(), { captureDraggingState: true });
     }, []);
     return (<div style={getStyles(left, top, isDragging)} className="draggable-box" key={id}>
-            {breaker()}
             <Box name={name} type={type} uniqid={uniqid} distribution={distribution} image={image}
             width={width} height={height} distribution_name={distribution_name} description={description} box_item={box_item}
             isDropped={isDropped} />

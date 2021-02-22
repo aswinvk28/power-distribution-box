@@ -71,6 +71,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
 
         // moving
         if(isDragging && x && y) {
+            container.setDragDrop(true);
             let [left, top] = doSnapToGrid(x, y);
             let offset = {left: 0, top: 0};
             if(distribution_name == "cartesian") {
@@ -94,32 +95,34 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
                 }
             }
             // disable select option on moving out of the window for each boxes
-            if(item && (top-offset['top']-40) >= 461.9) {
-                $(container.selectRef.options[1]).attr('disabled', 'disabled');
-                $(container.selectRef.options[2]).attr('disabled', 'disabled');
-                $(container.selectRef.options[3]).attr('disabled', 'disabled');
-                $(container.selectRef.options[4]).attr('disabled', 'disabled');
-            } else if(item && (top-offset['top']-40) >= 368.0) {
-                $(container.selectRef.options[2]).attr('disabled', 'disabled');
-                $(container.selectRef.options[3]).attr('disabled', 'disabled');
-                $(container.selectRef.options[4]).attr('disabled', 'disabled');
-                $(container.selectRef.options[1]).removeAttr("disabled");
-            } else if(item && (top-offset['top']-40) >= 274.0) {
-                $(container.selectRef.options[3]).attr('disabled', 'disabled');
-                $(container.selectRef.options[4]).attr('disabled', 'disabled');
-                $(container.selectRef.options[2]).removeAttr("disabled");
-                $(container.selectRef.options[1]).removeAttr("disabled");
-            } else if(item && (top-offset['top']-40) >= 189.4) {
-                $(container.selectRef.options[4]).attr('disabled', 'disabled');
-                $(container.selectRef.options[3]).removeAttr("disabled");
-                $(container.selectRef.options[2]).removeAttr("disabled");
-                $(container.selectRef.options[1]).removeAttr("disabled");
-            } else {
-                $(container.selectRef.options[4]).removeAttr("disabled");
-                $(container.selectRef.options[3]).removeAttr("disabled");
-                $(container.selectRef.options[2]).removeAttr("disabled");
-                $(container.selectRef.options[1]).removeAttr("disabled");
-            }
+            // if(item && (top-offset['top']-40) >= 461.9) {
+            //     $(container.selectRef.options[1]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[2]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[3]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
+            // } else if(item && (top-offset['top']-40) >= 368.0) {
+            //     $(container.selectRef.options[2]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[3]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[1]).removeAttr("disabled");
+            // } else if(item && (top-offset['top']-40) >= 274.0) {
+            //     $(container.selectRef.options[3]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[2]).removeAttr("disabled");
+            //     $(container.selectRef.options[1]).removeAttr("disabled");
+            // } else if(item && (top-offset['top']-40) >= 189.4) {
+            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
+            //     $(container.selectRef.options[3]).removeAttr("disabled");
+            //     $(container.selectRef.options[2]).removeAttr("disabled");
+            //     $(container.selectRef.options[1]).removeAttr("disabled");
+            // } else {
+            //     $(container.selectRef.options[4]).removeAttr("disabled");
+            //     $(container.selectRef.options[3]).removeAttr("disabled");
+            //     $(container.selectRef.options[2]).removeAttr("disabled");
+            //     $(container.selectRef.options[1]).removeAttr("disabled");
+            // }
+        } else {
+            container.setDragDrop(false);
         }
 
         return { mouseX: x, mouseY: y }
@@ -143,20 +146,19 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
         }
         container.setTotalDroppedItems(items, item.distribution, item.distribution_name);
     }
-    function default_breaker() {
-        if('default' in breaker) {
-            return (
-                <img key="0" className="breaker-default" src={breaker.default.image} width="30px" height="auto" style={{marginLeft: "15px"}} />
-            )
-        }
-        return null;
-    }
+    // function default_breaker() {
+    //     if('default' in breaker) {
+    //         return (
+    //             <img key="0" className="breaker-default" src={breaker.default.image} width="30px" height="auto" style={{marginLeft: "15px"}} />
+    //         )
+    //     }
+    //     return null;
+    // }
 
     // width = (parseFloat(width.replace('px', ''))).toString() + 'px';
 
     return (<div ref={drag} style={{...style, opacity, top, left}} className={className} id={id}>
-            {default_breaker()}
-            <DistributionMenu key="1" image={image} name={name} width={width} height="auto" name={name} type={type} 
+            <DistributionMenu key={id} image={image} name={name} width={width} height="auto" name={name} type={type} 
             uniqid={uniqid} distribution_name={distribution_name} distribution={distribution}
             breaker_item={breaker_item} />
 		</div>);

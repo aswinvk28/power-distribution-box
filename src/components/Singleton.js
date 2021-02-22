@@ -13,7 +13,7 @@ class Singleton {
         let totalDroppedItems = distributions[item.distribution].totalDroppedItems;
         let items = [];
         for(var i in totalDroppedItems) {
-            if(!(totalDroppedItems[i].uniqid == item.uniqid)) {
+            if(totalDroppedItems[i].uniqid !== item.uniqid) {
                 items.push(totalDroppedItems[i]);
             }
         }
