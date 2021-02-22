@@ -80,12 +80,15 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
                 offset = $('#templated_distribution_container').offset();
             }
             let item = getItem(uniqid);
+            let dragElement = $('#'+item.dragElementId).find('img');
+            let w = dragElement.width();
+            let h = dragElement.height();
             let breaker_item = item.breaker_item;
             // save item
             if(item && (left-offset['left']) >= 0 && (left-offset['left']) <= (Constants.drawingScale * 450)
-            && (top-offset['top']-40) >= 0 && (top-offset['top']-40) <= (Constants.drawingScale * (grid_heights[container.state['distributionSize']]-50))) {
-                item.left = (left-offset['left'])+'px';
-                item.top = (top-offset['top']-40)+'px';
+            && (top-offset['top']) >= 0 && (top-offset['top']) <= (Constants.drawingScale * (grid_heights[container.state['distributionSize']]-50))) {
+                item.left = (left-offset['left']-w/2)+'px';
+                item.top = (top-offset['top']-h/2)+'px';
                 saveItem(item);
                 // breaker_item attribute is null for others
                 if(breaker_item) {

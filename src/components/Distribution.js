@@ -174,7 +174,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         return { mouseX: x, mouseY: y }
     }
 
-    const [distributionSize, setDistributionSize] = useState(0);
+    const [distributionSize, setDistributionSize] = useState('24U');
     useLayoutEffect(() => {
         const size = localStorage.getItem("cartesian: size");
         if (size) {
