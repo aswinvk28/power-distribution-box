@@ -20,15 +20,43 @@ const style = {
     float: 'left',
     zIndex: 1000,
 };
+
+function getBBox(item) {
+    let bbox = [parseFloat(item.left.replace('px', '')), parseFloat(item.top.replace('px', '')), 
+                parseFloat(item.left.replace('px', '')) + parseFloat(item.width.replace('px', '')), 
+                parseFloat(item.top.replace('px', '')) + parseFloat(item.height.replace('px', ''))]
+    return bbox;
+}
+
+function elementsOnTop(item, totalDroppedItems) {
+    let least_distance1 = 0, least_distance2 = 0, least_distance3 = 0, least_distance4 = 0, isOnTop = false, distance = null;
+    const [xmin, ymin, xmax, ymax] = item.bbox;
+    let distances = {};
+    for(var i in totalDroppedItems) {
+        const canvasItem = totalDroppedItems[i];
+        if(canvasItem.uniqid == item.uniqid) {
+            continue;
+        }
+        const [x2, y2, x3, y3] = canvasItem.bbox;
+        least_distance1 = Math.sqrt((x2-xmin)**2 + (y2-ymin)**2);
+        least_distance2 = Math.sqrt((x3-xmax)**2 + (y3-ymax)**2);
+        least_distance3 = Math.sqrt((x2-xmax)**2 + (y2-ymax)**2);
+        least_distance4 = Math.sqrt((x3-xmin)**2 + (y3-ymin)**2);
+        distances[canvasItem.uniqid] = Math.min(least_distance1, least_distance2, least_distance3, least_distance4);
+    }
+    return distances;
+}
+
 export const GridBox = ({ name, type, uniqid, distribution, image, top, left, width, 
-    height, distribution_name, description, container, breaker, breaker_item, e_name, isDropped }) => {
+    height, distribution_name, description, container, breaker, breaker_item, box_item, e_name, isDropped }) => {
     // specify an id for styling purposes
     let {className, id} = Singleton.getGridBoxId({name, uniqid});
 
     // useDrag denotes draggable
-    const [{ opacity, initialOffset, currentOffset, clientOffset, item, isDragging, canDrag }, drag] = useDrag({
+    const [{ opacity, initialOffset, currentOffset, clientOffset, isDragging, canDrag }, drag] = useDrag({
         // add attributes here
-        item: { name, type, uniqid, distribution, image, width, height, distribution_name, description },
+        item: { name, type, uniqid, distribution, image, width, height, distribution_name, description, 
+            left: box_item.left, top: box_item.top, bbox: box_item.bbox },
         collect: (monitor) => ({
             item: monitor.getItem(),
             opacity: monitor.isDragging() ? 0.4 : 1,
@@ -72,6 +100,9 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
         // moving
         if(isDragging && x && y) {
             container.setDragDrop(true);
+            let item = getItem(uniqid);
+            item.bbox = getBBox(item);
+            let isOnTop = elementsOnTop(item, container.getTotalDroppedItems(item.distribution));
             let [left, top] = doSnapToGrid(x, y);
             let offset = {left: 0, top: 0};
             if(distribution_name == "cartesian") {
@@ -79,13 +110,12 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             } else if(distribution_name == "templated") {
                 offset = $('#templated_distribution_container').offset();
             }
-            let item = getItem(uniqid);
             let dragElement = $('#'+item.dragElementId).find('img');
             let w = dragElement.width();
             let h = dragElement.height();
             let breaker_item = item.breaker_item;
             // save item
-            if(item && (left-offset['left']) >= 0 && (left-offset['left']) <= (Constants.drawingScale * 450)
+            if(item && (Math.min(...Object.values(isOnTop)) >= 23) && (left-offset['left']) >= 0 && (left-offset['left']) <= (Constants.drawingScale * 450)
             && (top-offset['top']) >= 0 && (top-offset['top']) <= (Constants.drawingScale * (grid_heights[container.state['distributionSize']]-50))) {
                 if(item.type == ItemTypes.LIVE_PINS_INPUT || item.type == ItemTypes.LIVE_PINS_OUTPUT) {
                     item.left = '10px';
@@ -100,34 +130,21 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
                     breaker_item.top = item.top;
                     saveItem(breaker_item);
                 }
+            } else if((Math.min(...Object.values(isOnTop)) >= 23) < 23) {
+                if(item.type == ItemTypes.LIVE_PINS_INPUT || item.type == ItemTypes.LIVE_PINS_OUTPUT) {
+                    item.left = '10px';
+                } else {
+                    item.left = (left-offset['left']-w/2)+50+'px'; // allocate some space for it
+                }
+                item.top = (top-offset['top']-h/2)+50+'px'; // allocate some space for it
+                saveItem(item);
+                // breaker_item attribute is null for others
+                if(breaker_item) {
+                    breaker_item.left = item.left;
+                    breaker_item.top = item.top;
+                    saveItem(breaker_item);
+                }
             }
-            // disable select option on moving out of the window for each boxes
-            // if(item && (top-offset['top']-40) >= 461.9) {
-            //     $(container.selectRef.options[1]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[2]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[3]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
-            // } else if(item && (top-offset['top']-40) >= 368.0) {
-            //     $(container.selectRef.options[2]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[3]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[1]).removeAttr("disabled");
-            // } else if(item && (top-offset['top']-40) >= 274.0) {
-            //     $(container.selectRef.options[3]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[2]).removeAttr("disabled");
-            //     $(container.selectRef.options[1]).removeAttr("disabled");
-            // } else if(item && (top-offset['top']-40) >= 189.4) {
-            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[3]).removeAttr("disabled");
-            //     $(container.selectRef.options[2]).removeAttr("disabled");
-            //     $(container.selectRef.options[1]).removeAttr("disabled");
-            // } else {
-            //     $(container.selectRef.options[4]).removeAttr("disabled");
-            //     $(container.selectRef.options[3]).removeAttr("disabled");
-            //     $(container.selectRef.options[2]).removeAttr("disabled");
-            //     $(container.selectRef.options[1]).removeAttr("disabled");
-            // }
         } else {
             container.setDragDrop(false);
         }
@@ -135,7 +152,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
         return { mouseX: x, mouseY: y }
     }
     function getItem(uniqid) {
-        let items = container.getTotalDroppedItems(item.distribution);
+        let items = container.getTotalDroppedItems(distribution);
         for(var i in items) {
             if(uniqid == items[i].uniqid) {
                 return items[i];
@@ -144,25 +161,15 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
         return null;
     }
     function saveItem(item) {
-        let items = container.getTotalDroppedItems(item.distribution);
+        let items = container.getTotalDroppedItems(distribution);
         for(var i in items) {
             if(items[i].uniqid == item.uniqid) {
                 items[i] = item;
                 break;
             }
         }
-        container.setTotalDroppedItems(items, item.distribution, item.distribution_name);
+        container.setTotalDroppedItems(items, distribution, distribution_name);
     }
-    // function default_breaker() {
-    //     if('default' in breaker) {
-    //         return (
-    //             <img key="0" className="breaker-default" src={breaker.default.image} width="30px" height="auto" style={{marginLeft: "15px"}} />
-    //         )
-    //     }
-    //     return null;
-    // }
-
-    // width = (parseFloat(width.replace('px', ''))).toString() + 'px';
 
     return (<div ref={drag} style={{...style, opacity, top, left}} className={className} id={id}>
             <DistributionMenu key={id} image={image} name={name} width={width} height="auto" name={name} type={type} 

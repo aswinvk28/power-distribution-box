@@ -137,6 +137,7 @@ body, html {
   height: 100%;
   color: #ababab;
   overflow: hidden;
+  z-index: 50;
 }
 
 .distribution_container::before {
@@ -150,6 +151,7 @@ body, html {
   background-size: inherit;
   top: 0;
   left: 0;
+  z-index: 50;
 }
 
 .templated-distributions-container .templated {

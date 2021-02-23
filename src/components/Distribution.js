@@ -18,11 +18,18 @@ let style = {
     lineHeight: 'normal'
 };
 
+function getBBox(item) {
+    let bbox = [parseFloat(item.left.replace('px', '')), parseFloat(item.top.replace('px', '')), 
+                parseFloat(item.left.replace('px', '')) + parseFloat(item.width.replace('px', '')), 
+                parseFloat(item.top.replace('px', '')) + parseFloat(item.height.replace('px', ''))]
+    return bbox;
+}
+
 export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_name, container, onDrop, }) => {
     let currentItem = null;
 
     // useDrop denotes droppable
-    const [{ isOver, canDrop, initialOffset, currentOffset, clientOffset, diffOffset, item }, drop] = useDrop({
+    let [{ isOver, canDrop, initialOffset, currentOffset, clientOffset, diffOffset, item }, drop] = useDrop({
         accept,
         drop: onDrop,
         collect: (monitor) => ({
@@ -96,12 +103,14 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
 
         let offset = null;
         let dragElement = null;
-        let w = null, h = null;
+        let w = null, h = null, bbox = null;
 
         // left and top are saved on refresh
         let [left, top] = doSnapToGrid(x, y);
 
         if(item) {
+            bbox = getBBox(item);
+            item.bbox = bbox;
             dragElement = $('#'+item.dragElementId).find('img')/*, highlightComponent = $('#'+item.highlightComponent)*/;
             w = dragElement.width();
             h = dragElement.height();
@@ -116,59 +125,12 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
                 if(item.distribution_name == "cartesian") {
                     item.left = ((left-offset['left']-w/2)).toString() + "px"; // !important
                     item.top = ((top-offset['top']-h/2)).toString() + "px"; // !important
-                    
-                    // code to reinstate highlight component if required
-                    /*let width = $('#boxes_container_draggable_holder').width();
-                    let width2 = $('#templated').parent().width();
-                    let width3 = ($('#cartesian').parent().width() - 500*Constants.drawingScale) / 2;
-                    let offset2 = $('#cartesian').offset();*/
-                    // highlightComponent.css('width', (parseFloat((item.width).replace('px', '')) * Constants.drawingScale).toString() + 'px');
-                    // highlightComponent.css('height', (parseFloat((item.height).replace('px', '')) * Constants.drawingScale).toString() + 'px');
-                    // highlightComponent.css('left', ((left-offset2['left']-width+width2+width3+185)).toString() + "px");
-                    // highlightComponent.css('top', ((top-offset['top'])).toString() + "px");
                 } else if(item.distribution_name == "templated") {
                     item.left = ((left-offset['left']-w/2)).toString() + "px"; // !important
                     item.top = ((top-offset['top']-h/2)).toString() + "px"; // !important
-                    
-                    // code to reinstate highlight component if required
-                    /*let width = $('#boxes_container_draggable_holder').width();
-                    let width2 = ($('#templated').parent().width() - 500*Constants.drawingScale) / 2;
-                    let offset2 = $('#templated').offset();*/
-                    // highlightComponent.css('width', (parseFloat((item.width).replace('px', '')) * Constants.drawingScale).toString() + 'px');
-                    // highlightComponent.css('height', (parseFloat((item.height).replace('px', '')) * Constants.drawingScale).toString() + 'px');
-                    // highlightComponent.css('left', ((left-offset['left'])).toString() + "px");
-                    // highlightComponent.css('top', ((top-offset['top'])).toString() + "px");
                 }
             }
 
-            // disable select option on moving out of the window for each boxes
-            // collectively exhaustive events on coinciding with marginal line
-            // if((top-offset['top']) >= 461.9) {
-            //     $(container.selectRef.options[1]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[2]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[3]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
-            // } else if((top-offset['top']) >= 368.0) {
-            //     $(container.selectRef.options[2]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[3]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[1]).removeAttr("disabled");
-            // } else if((top-offset['top']) >= 274.0) {
-            //     $(container.selectRef.options[3]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[2]).removeAttr("disabled");
-            //     $(container.selectRef.options[1]).removeAttr("disabled");
-            // } else if((top-offset['top']) >= 189.4) {
-            //     $(container.selectRef.options[4]).attr('disabled', 'disabled');
-            //     $(container.selectRef.options[3]).removeAttr("disabled");
-            //     $(container.selectRef.options[2]).removeAttr("disabled");
-            //     $(container.selectRef.options[1]).removeAttr("disabled");
-            // } else {
-            //     $(container.selectRef.options[4]).removeAttr("disabled");
-            //     $(container.selectRef.options[3]).removeAttr("disabled");
-            //     $(container.selectRef.options[2]).removeAttr("disabled");
-            //     $(container.selectRef.options[1]).removeAttr("disabled");
-            // }
         }
 
         return { mouseX: x, mouseY: y }
@@ -294,8 +256,8 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
                             distribution={item.distribution} image={item.image} e_name={e_name}
                             top={item.top} left={item.left} width={item.width} height={item.height}
                             distribution_name={item.distribution_name} description={item.description} 
-                            breaker={item.breaker} 
-                            breaker_item={item.breaker_item}
+                            breaker={item.breaker} breaker_item={item.breaker_item}
+                            bbox={item.bbox} box_item={item}
                             isDropped={true} />
                         )
                     })
