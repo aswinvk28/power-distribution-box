@@ -90,15 +90,24 @@ class Container extends React.Component {
         }
         this.handleDrop = this.handleDrop.bind(this);
         const breakers = [
-            { name: 'RCD-Plugs--1', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, index: 0, 
-            image: 'images/dist_box/breaker-output-plug-1.png', element_type: Constants.ElementType.INPUTS, 
-            size: { width: '42px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  } },
-            { name: 'RCD-Sockets--1', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, index: 0, 
-            image: 'images/dist_box/breaker-output-socket-1.png', element_type: Constants.ElementType.INPUTS, 
-            size: { width: '42px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  } },
-            { name: 'RCD-Sockets--2', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, index: 0, 
-            image: 'images/dist_box/breaker-output-socket-2.png', element_type: Constants.ElementType.INPUTS, 
-            size: { width: '42px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  } },
+            { name: 'RCD-Plugs--1', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, order: 0, 
+            image: 'images/dist_box/breaker-output-plug-1.png', element_type: Constants.ElementType.INPUTS, breaker_type: Constants.ElementType.RCD,
+            size: { width: '42px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  }, bbox: [0,0,0,0] },
+            { name: 'MCB-Plugs--1', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, order: 1, 
+            image: 'images/dist_box/breaker-output-plug-1-mcb.png', element_type: Constants.ElementType.INPUTS, breaker_type: Constants.ElementType.MCB,
+            size: { width: '42px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  }, bbox: [0,0,0,0] },
+            { name: 'RCD-Sockets--1', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, order: 2, 
+            image: 'images/dist_box/breaker-output-socket-1.png', element_type: Constants.ElementType.INPUTS, breaker_type: Constants.ElementType.RCD,
+            size: { width: '42px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  }, bbox: [0,0,0,0] },
+            { name: 'MCB-Sockets--1', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, order: 3, 
+            image: 'images/dist_box/breaker-output-socket-1-mcb.png', element_type: Constants.ElementType.INPUTS, breaker_type: Constants.ElementType.MCB,
+            size: { width: '42px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  }, bbox: [0,0,0,0] },
+            { name: 'RCD-Sockets--2', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, order: 4, 
+            image: 'images/dist_box/breaker-output-socket-2.png', element_type: Constants.ElementType.INPUTS, breaker_type: Constants.ElementType.RCD,
+            size: { width: '42px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  }, bbox: [0,0,0,0] },
+            { name: 'MCB-Sockets--2', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, order: 5, 
+            image: 'images/dist_box/breaker-output-socket-2-mcb.png', element_type: Constants.ElementType.INPUTS, breaker_type: Constants.ElementType.MCB,
+            size: { width: '42px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  }, bbox: [0,0,0,0] },
         ];
         const boxes = [
             { name: 'Plugs--1', type: ItemTypes.PLUGS_1, uniqid: null, 
@@ -197,7 +206,7 @@ class Container extends React.Component {
     }
 
     setTotalDroppedItems(items, index, e_name) {
-        update(this.state['distributions'], {
+        let dist = update(this.state['distributions'], {
             [index]: {
                 totalDroppedItems: {
                     $set: items
@@ -205,6 +214,7 @@ class Container extends React.Component {
             },
         });
         this.saveTotalDroppedItems(items, e_name, index);
+        return dist;
     }
 
     saveTotalDroppedItems(items, e_name, index) {
@@ -219,7 +229,7 @@ class Container extends React.Component {
         item.distribution = index;
         if('default' in item.breaker) {
             // cartesian
-            let breaker_item = this.state['breakers'][item.breaker.default.index];
+            let breaker_item = Object.assign({}, this.state['breakers'][item.breaker.default.index]);
             breaker_item.uniqid = Uniqid(breaker_item.name);
             breaker_item.left = item.left;
             breaker_item.top = item.top;
@@ -237,6 +247,12 @@ class Container extends React.Component {
                 },
             }));
             item.breaker_item = breaker_item;
+            // save to totalDroppedItems
+            this.saveTotalDroppedItems(
+                this.state['distributions'][1].totalDroppedItems, 
+                breaker_item.distribution_name,
+                breaker_item.distribution
+            );
         } else {
             item.breaker_item = null;
         }
@@ -251,6 +267,7 @@ class Container extends React.Component {
                 }
             },
         }));
+        // save to totalDroppedItems
         this.saveTotalDroppedItems(
             this.state['distributions'][item.distribution].totalDroppedItems, 
             item.distribution_name,

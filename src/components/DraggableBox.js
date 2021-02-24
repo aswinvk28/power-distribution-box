@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDrag } from 'react-dnd';
 import { ItemTypes } from './ItemTypes';
-import { getEmptyImage } from 'react-dnd-html5-backend';
 import { Box } from './Box';
 import Constants from './Constants';
 function getStyles(left, top, isDragging) {
@@ -38,9 +37,6 @@ export const DraggableBox = (props) => {
     //     }
     //     return null;
     // }
-    useEffect(() => {
-        preview(getEmptyImage(), { captureDraggingState: true });
-    }, []);
     return (<div style={getStyles(left, top, isDragging)} className="draggable-box" key={id}>
             <Box name={name} type={type} uniqid={uniqid} distribution={distribution} image={image}
             width={width} height={height} distribution_name={distribution_name} description={description} box_item={box_item}

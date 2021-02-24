@@ -234,7 +234,6 @@ export default class Controller extends React.Component {
                 <nav className="menu-navigation col-lg-12 col-md-12 col-sm-12" style={{clear: 'both'}}>
                     <i className="fas fa-anchor" style={{color: 'red', cursor: 'alias'}}></i>
                     <ul className="menu_navigation" id="menu_navigation">
-                        <li className="menu-item">HOME</li>
                         {/* <li className="menu-item" data-element="menu-tree-file" menu-element="file"> */}
                             <li className="menu-item">NEW</li>
                             <li className="menu-item">OPEN</li>

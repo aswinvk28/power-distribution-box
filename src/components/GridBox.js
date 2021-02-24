@@ -10,6 +10,7 @@ import DistributionMenu from './DistributionMenu';
 import $ from 'jquery';
 import Singleton from './Singleton';
 import Constants from './Constants';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 const style = {
     border: '1px dashed gray',
     backgroundColor: 'transparent',
@@ -53,10 +54,10 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
     let {className, id} = Singleton.getGridBoxId({name, uniqid});
 
     // useDrag denotes draggable
-    const [{ opacity, initialOffset, currentOffset, clientOffset, isDragging, canDrag }, drag] = useDrag({
+    const [{ opacity, initialOffset, currentOffset, clientOffset, isDragging, item, canDrag }, drag, preview] = useDrag({
         // add attributes here
         item: { name, type, uniqid, distribution, image, width, height, distribution_name, description, 
-            left: box_item.left, top: box_item.top, bbox: box_item.bbox },
+            left: box_item.left, top: box_item.top, bbox: box_item.bbox, breaker_item: {} },
         collect: (monitor) => ({
             item: monitor.getItem(),
             opacity: monitor.isDragging() ? 0.4 : 1,
@@ -65,8 +66,26 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             clientOffset: monitor.getClientOffset(),
             canDrag: monitor.canDrag(),
             isDragging: monitor.isDragging()
-        })
+        }),
     });
+
+    let [mcb, setMCB] = useState(false);
+    let [rcd, setRCD] = useState(false);
+    
+    // preview Image empty
+    useEffect(() => {
+        preview(getEmptyImage(), { captureDraggingState: true });
+    }, []);
+
+    useLayoutEffect(() => {
+        if(breaker_item && breaker_item.breaker_type == Constants.ElementType.RCD) {
+            setMCB(false);
+            setRCD(true);
+        } else if(breaker_item && breaker_item.breaker_type == Constants.ElementType.MCB) {
+            setMCB(true);
+            setRCD(false);
+        }
+    }, []);
 
     let grid_heights = Object.fromEntries(container.controller.grid_heights);
 
@@ -113,7 +132,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             let dragElement = $('#'+item.dragElementId).find('img');
             let w = dragElement.width();
             let h = dragElement.height();
-            let breaker_item = item.breaker_item;
+            // let breaker_item = item.breaker_item;
             // save item
             if(item && (Math.min(...Object.values(isOnTop)) >= 23) && (left-offset['left']) >= 0 && (left-offset['left']) <= (Constants.drawingScale * 450)
             && (top-offset['top']) >= 0 && (top-offset['top']) <= (Constants.drawingScale * (grid_heights[container.state['distributionSize']]-50))) {
@@ -124,12 +143,12 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
                 }
                 item.top = (top-offset['top']-h/2)+'px';
                 saveItem(item);
-                // breaker_item attribute is null for others
-                if(breaker_item) {
-                    breaker_item.left = item.left;
-                    breaker_item.top = item.top;
-                    saveItem(breaker_item);
-                }
+                // breaker_item attribute is null for others, no need to save the breaker item while moving parent input/output
+                // if(breaker_item) {
+                //     breaker_item.left = item.left;
+                //     breaker_item.top = item.top;
+                //     saveItem(breaker_item);
+                // }
             } else if((Math.min(...Object.values(isOnTop)) >= 23) < 23) {
                 if(item.type == ItemTypes.LIVE_PINS_INPUT || item.type == ItemTypes.LIVE_PINS_OUTPUT) {
                     item.left = '10px';
@@ -139,11 +158,11 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
                 item.top = (top-offset['top']-h/2)+50+'px'; // allocate some space for it
                 saveItem(item);
                 // breaker_item attribute is null for others
-                if(breaker_item) {
-                    breaker_item.left = item.left;
-                    breaker_item.top = item.top;
-                    saveItem(breaker_item);
-                }
+                // if(breaker_item) {
+                //     breaker_item.left = item.left;
+                //     breaker_item.top = item.top;
+                //     saveItem(breaker_item);
+                // }
             }
         } else {
             container.setDragDrop(false);
@@ -172,8 +191,9 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
     }
 
     return (<div ref={drag} style={{...style, opacity, top, left}} className={className} id={id}>
-            <DistributionMenu key={id} image={image} name={name} width={width} height="auto" name={name} type={type} 
+            <DistributionMenu container={container} key={id} image={image} name={name} width={width} height="auto" name={name} type={type} 
             uniqid={uniqid} distribution_name={distribution_name} distribution={distribution}
-            breaker_item={breaker_item} />
+            breaker_item={breaker_item} box_item={box_item}
+            mcb={mcb} rcd={rcd} />
 		</div>);
 };

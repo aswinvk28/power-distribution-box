@@ -342,6 +342,14 @@ em.accordion-title:hover {
   margin-right: auto;
 }
 
+.mcb-item .mcb-option {
+  color: rgb(0, 255, 255);
+}
+
+.rcd-item .rcd-option {
+  color: rgb(0, 255, 255);
+}
+
 .box-item-Pins-Input--2 img, .box-item-Pins-Input--1 img,
 .box-item-Plugs--1 img, .box-item-Plugs--2 img,
 .box-item-Plugs--3 img, .box-item-Plugs--4 img,
@@ -449,7 +457,7 @@ em.accordion-title:hover {
 }
 
 .menu-item {
-  margin-left: 45px;
+  margin-left: 25px;
   font-size: 18px;
 }
 
