@@ -4,6 +4,7 @@ import { ContextMenuTrigger, ContextMenu, ContextMenuItem, Submenu } from 'rctx-
 import Singleton from './Singleton';
 import { ItemTypes } from './ItemTypes';
 import Constants from './Constants';
+import Uniqid from './Uniqid';
 import $ from 'jquery';
 
 class DistributionMenu extends React.Component {
@@ -30,38 +31,37 @@ class DistributionMenu extends React.Component {
         const e_name = breaker_item.distribution_name;
         const index = breaker_item.distribution;
         let items = this.container.getTotalDroppedItems(index);
-        let it = [...items];
         let new_breaker_item = null;
 
-        for(var i in items) {
-            const item = items[i];
+        let new_items = [];
+        items.map((item, index) => {
             if(item.uniqid == breaker_item.uniqid) {
-                new_breaker_item = {...this.container.state['breakers'][breaker_item.order - 1]};
-                // new_breaker_item.left = breaker_item.left;
-                // new_breaker_item.top = breaker_item.top;
-                // new_breaker_item.width = breaker_item.size.width;
-                // new_breaker_item.height = breaker_item.size.height;
-                items[i] = new_breaker_item;
-                break;
+                new_breaker_item = {...this.container.state['breakers'][breaker_item.order + 1]};
+                new_breaker_item.uniqid = Uniqid(new_breaker_item.name);
+                new_breaker_item.left = breaker_item.left;
+                new_breaker_item.top = breaker_item.top;
+                new_breaker_item.width = breaker_item.size.width;
+                new_breaker_item.height = breaker_item.size.height;
+                new_items.push(new_breaker_item);
+            } else {
+                new_items.push(item);
             }
-        }
-        let it2 = [...items];
+        });
 
-        console.log(it);
-        console.log(it2);
-
-        // let dist = this.container.setTotalDroppedItems(items, index, e_name);
-        // this.container.setDistributions(dist);
+        let dist1 = this.container.setTotalDroppedItems(new_items, index, e_name);
         // save input/output element
         items = this.container.getTotalDroppedItems(box_item.distribution);
-        for(var i in items) {
-            const item = items[i];
+        new_items = [];
+        items.map((item, index) => {
             if(item.uniqid == box_item.uniqid) {
-                items[i] = box_item;
+                box_item.breaker_item = new_breaker_item;
+                new_items.push(box_item);
+            } else {
+                new_items.push(item);
             }
-        }
-        // dist = this.container.setTotalDroppedItems(items, box_item.distribution, box_item.distribution_name);
-        // this.container.setDistributions(dist);
+        });
+        let dist2 = this.container.setTotalDroppedItems(new_items, box_item.distribution, box_item.distribution_name);
+        this.container.setDistributions([dist2[0], dist1[1]]);
     }
 
     changeToRCD(event) {
@@ -75,31 +75,34 @@ class DistributionMenu extends React.Component {
         // save breaker
         let items = this.container.getTotalDroppedItems(index);
         let new_breaker_item = null;
-        for(var i in items) {
-            const item = items[i];
+        let new_items = [];
+        items.map((item, index) => {
             if(item.uniqid == breaker_item.uniqid) {
-                new_breaker_item = this.container.state['breakers'][breaker_item.order - 1]
+                new_breaker_item = {...this.container.state['breakers'][breaker_item.order + 1]};
+                new_breaker_item.uniqid = Uniqid(new_breaker_item.name);
                 new_breaker_item.left = breaker_item.left;
                 new_breaker_item.top = breaker_item.top;
-                new_breaker_item.width = breaker_item.width;
-                new_breaker_item.height = breaker_item.height;
-                items[i] = new_breaker_item;
-                break;
+                new_breaker_item.width = breaker_item.size.width;
+                new_breaker_item.height = breaker_item.size.height;
+                new_items.push(new_breaker_item);
+            } else {
+                new_items.push(item);
             }
-        }
-        let dist = this.container.setTotalDroppedItems(items, index, e_name);
-        this.container.setDistributions(dist);
+        });
+        let dist1 = this.container.setTotalDroppedItems(new_items, index, e_name);
         // save input/output element
         items = this.container.getTotalDroppedItems(box_item.distribution);
-        for(var i in items) {
-            const item = items[i];
+        new_items = [];
+        items.map((item, index) => {
             if(item.uniqid == box_item.uniqid) {
                 box_item.breaker_item = new_breaker_item;
-                items[i] = box_item;
+                new_items.push(box_item);
+            } else {
+                new_items.push(item);
             }
-        }
-        dist = this.container.setTotalDroppedItems(items, box_item.distribution, box_item.distribution_name);
-        this.container.setDistributions(dist);
+        });
+        let dist2 = this.container.setTotalDroppedItems(new_items, box_item.distribution, box_item.distribution_name);
+        this.container.setDistributions([dist2[0], dist1[1]]);
     }
 
     render() {

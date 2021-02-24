@@ -54,7 +54,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
     let {className, id} = Singleton.getGridBoxId({name, uniqid});
 
     // useDrag denotes draggable
-    const [{ opacity, initialOffset, currentOffset, clientOffset, isDragging, item, canDrag }, drag, preview] = useDrag({
+    const [{ opacity, initialOffset, currentOffset, clientOffset, isDragging, canDrag }, drag, preview] = useDrag({
         // add attributes here
         item: { name, type, uniqid, distribution, image, width, height, distribution_name, description, 
             left: box_item.left, top: box_item.top, bbox: box_item.bbox, breaker_item: {} },
