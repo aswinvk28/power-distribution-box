@@ -246,7 +246,7 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         <div style={{ ...style, padding, width: distribution_width }} className={e_name} id={e_name} data-size={container.state['distributionSize']}>
 
 
-            <div ref={drop} style={{ width: grid_width, height: grid_height, backgroundColor, backgroundSize: (container.controller.state['value']-50+100)*2.0 + '%' }} className="distribution_container" id={e_name + "_distribution_container"}>
+            <div ref={drop} style={{ width: grid_width, height: grid_height, backgroundColor, backgroundSize: (container.controller.state['value']-50+100)*1.76 + '%' }} className="distribution_container" id={e_name + "_distribution_container"}>
             {$elem}
             {drag_drop == true ? $elements : null}
                 {

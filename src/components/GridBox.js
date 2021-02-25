@@ -12,7 +12,7 @@ import Singleton from './Singleton';
 import Constants from './Constants';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 const style = {
-    border: '1px dashed gray',
+    border: '0.5px dashed white',
     backgroundColor: 'transparent',
     padding: '0.1px',
     marginRight: '1.5rem',
@@ -137,7 +137,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             if(item && (Math.min(...Object.values(isOnTop)) >= 23) && (left-offset['left']) >= 0 && (left-offset['left']) <= (Constants.drawingScale * 450)
             && (top-offset['top']) >= 0 && (top-offset['top']) <= (Constants.drawingScale * (grid_heights[container.state['distributionSize']]-50))) {
                 if(item.type == ItemTypes.LIVE_PINS_INPUT || item.type == ItemTypes.LIVE_PINS_OUTPUT) {
-                    item.left = '10px';
+                    item.left = '25px';
                 } else {
                     item.left = (left-offset['left']-w/2)+'px';
                 }
@@ -151,7 +151,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
                 // }
             } else if((Math.min(...Object.values(isOnTop)) >= 23) < 23) {
                 if(item.type == ItemTypes.LIVE_PINS_INPUT || item.type == ItemTypes.LIVE_PINS_OUTPUT) {
-                    item.left = '10px';
+                    item.left = '25px';
                 } else {
                     item.left = (left-offset['left']-w/2)+50+'px'; // allocate some space for it
                 }

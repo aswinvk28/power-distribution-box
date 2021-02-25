@@ -8,6 +8,7 @@ import RearSide from './RearSide';
 import Singleton from './Singleton';
 import $ from 'jquery';
 import Constants from './Constants';
+import { Confirm } from 'react-st-modal';
 
 export default class Controller extends React.Component {
     
@@ -56,7 +57,11 @@ export default class Controller extends React.Component {
         value: 10,
         change: false,
         monitoring_show: 1,
-        power_show: 1
+        power_show: 1,
+        alert_text: '',
+        alert_title: '',
+        alert_box: -1,
+        drawing_name: 'MD400-010MCB'
     }
     
     constructor(props) {
@@ -74,6 +79,18 @@ export default class Controller extends React.Component {
         this.home = this.home.bind(this);
         this.resetCanvas = this.resetCanvas.bind(this);
         this.showMenuTree = this.showMenuTree.bind(this);
+        this.alertUserOnUnitSizeChange = this.alertUserOnUnitSizeChange.bind(this);
+        this.showAlert = this.showAlert.bind(this);
+
+        let grid_heights = Object.fromEntries(this.grid_heights);
+        let scaled_grid_heights = Object.values(grid_heights).map((height, index) => {
+            return Constants.drawingScale * height;
+        });
+        let sizes_keys = Object.keys(grid_heights);
+        scaled_grid_heights = new Map(scaled_grid_heights.map((height, index) => {
+            return [sizes_keys[index], height];
+        }))
+        this.scaled_grid_heights = Object.fromEntries(scaled_grid_heights);
     }
 
     changeToMonitoring() {
@@ -119,6 +136,29 @@ export default class Controller extends React.Component {
         }
     }
 
+    async showAlert() {
+        if(this.state['alert_title'] !== '' && this.state['alert_text'] !== '') {
+            if(this.state['alert_box'] == 0) {
+                $('#templated_distribution_container').css('backgroundColor', 'rgb(80,10,30)').css('opacity', 0.4);
+            } else if(this.state['alert_box'] == 1) {
+                $('#cartesian_distribution_container').css('backgroundColor', 'rgb(80,10,30)').css('opacity', 0.4);
+            }
+            let result = await Confirm( this.state['alert_text'], this.state['alert_title']);
+            if(result) {
+                $('#templated_distribution_container').css('backgroundColor', 'transparent').css('opacity', 1.0);
+                $('#cartesian_distribution_container').css('backgroundColor', 'transparent').css('opacity', 1.0);
+            } else {
+                $('#cartesian_distribution_container').css('backgroundColor', 'transparent').css('opacity', 1.0);
+                $('#templated_distribution_container').css('backgroundColor', 'transparent').css('opacity', 1.0);
+            }
+            this.setState({ alert_title: '', alert_text: '', alert_box: -1 });
+        }
+    }
+
+    componentDidUpdate() {
+        this.showAlert();
+    }
+
     // #cartesian_distribution_container.height()
     // #templated_distribution_container.height()
 
@@ -154,14 +194,37 @@ export default class Controller extends React.Component {
         $('#boxes_container_draggable').css('width', '100%');       
     }
 
+    alertUserOnUnitSizeChange(index, distributionSize) {
+        let totalDroppedItems = this.containerRef.getTotalDroppedItems(index);
+        for(var i in totalDroppedItems) {
+            const item = totalDroppedItems[i];
+            if(parseFloat(item.top.replace('px', '')) > this.scaled_grid_heights[distributionSize]) {
+                throw new Error("It is not possible to resize the box. Move the Elements and try again");
+            }
+        }
+
+        return true;
+    }
+    
     changeUnitSize(event) {
         let select = event.target;
+        let distributionSize = $(select).val();
+        let grid_heights = Object.fromEntries(this.grid_heights);
+        try {
+            this.current_box = 0;
+            let answer = this.alertUserOnUnitSizeChange(0, distributionSize);
+            this.current_box = 1;
+            answer = this.alertUserOnUnitSizeChange(1, distributionSize);
+        } catch(e) {
+            this.setState({ alert_text: e.message, alert_title: 'Change Unit Size to ' + distributionSize, alert_box: this.current_box });
+            event.preventDefault();
+            return false;
+        }
         let margin_top = Object.fromEntries(this.margin_top);
         $(document.getElementById("cartesian")).attr('data-size', $(select).val());
         $(document.getElementById("templated")).attr('data-size', $(select).val());
         localStorage.setItem("cartesian: size", $(select).val());
         localStorage.setItem("templated: size", $(select).val());
-        let grid_heights = Object.fromEntries(this.grid_heights);
         $("#templated, #cartesian").css('marginTop', margin_top[$(select).val()] + "px");
         $("#templated" + "_distribution_container").css('height', 
         (grid_heights[$(select).val()] * $(document.getElementById("templated")).outerWidth() / 681).toString() + "px");
@@ -215,7 +278,7 @@ export default class Controller extends React.Component {
 
     render() {
         let elem = null;
-        let designer = null, 
+        let designer = null, alert = null, 
         buttons = <div className="buttons">
             <div className="header-logo row">
                 <div className="col col-lg-3 col-md-3 col-sm-3">
@@ -234,16 +297,17 @@ export default class Controller extends React.Component {
                 <nav className="menu-navigation col-lg-12 col-md-12 col-sm-12" style={{clear: 'both'}}>
                     <i className="fas fa-anchor" style={{color: 'red', cursor: 'alias'}}></i>
                     <ul className="menu_navigation" id="menu_navigation">
-                        {/* <li className="menu-item" data-element="menu-tree-file" menu-element="file"> */}
-                            <li className="menu-item">NEW</li>
-                            <li className="menu-item">OPEN</li>
-                            <li className="menu-item">SAVE</li>
-                            <li className="menu-item">PRINT</li>
-                        {/* </li> */}
+                        <li className="menu-item">NEW</li>
+                        <li className="menu-item">OPEN</li>
+                        <li className="menu-item">SAVE</li>
+                        <li className="menu-item">PRINT</li>
                     </ul>
-                    <div className="field-controls" style={{marginRight: '30px', float: 'right', display: 'inline-block'}}>
-                        {/* <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} /> */}
+                    <div className="drawing-title col-lg-8 col-md-8 col-sm-8" style={{textAlign: 'center', marginLeft: 'auto', marginRight: 'auto', display: 'inline-block'}}>
+                        <em style={{fontSize: '24px'}}>{this.state['drawing_name']}</em>
                     </div>
+                    {/* <div className="field-controls" style={{marginRight: '30px', float: 'right', display: 'inline-block'}}>
+                        <input type="range" name="zoom" id="zoom" min="0" max="100" step="1" value={this.state['value']} onChange={this.changeGridSizes} />
+                    </div> */}
                     <div className="clearfix" style={{clear: 'both'}}></div>
                 </nav>
                 <div className="row" id="header-separation">
