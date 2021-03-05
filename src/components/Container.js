@@ -11,6 +11,7 @@ import { useDrop } from 'react-dnd';
 import TableDist from './TableDist';
 import $ from 'jquery';
 import Singleton from './Singleton';
+import { Confirm } from 'react-st-modal';
 const useLocalStorage = Constants.useLocalStorage;
 
 const buckets = {
@@ -91,23 +92,14 @@ class Container extends React.Component {
         this.handleDrop = this.handleDrop.bind(this);
         const breakers = [
             { name: 'RCD-Plugs--1', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, order: 0, 
-            image: 'images/dist_box/breaker-output-plug-1.png', element_type: Constants.ElementType.INPUTS, breaker_type: Constants.ElementType.RCD,
-            size: { width: '42px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  }, bbox: [0,0,0,0] },
+            image: 'images/dist_box/rcd-breaker.png', element_type: Constants.ElementType.INPUTS, breaker_type: Constants.ElementType.RCD,
+            size: { width: '80px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  }, bbox: [0,0,0,0] },
             { name: 'MCB-Plugs--1', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, order: 1, 
-            image: 'images/dist_box/breaker-output-plug-1-mcb.png', element_type: Constants.ElementType.INPUTS, breaker_type: Constants.ElementType.MCB,
-            size: { width: '42px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  }, bbox: [0,0,0,0] },
-            { name: 'RCD-Sockets--1', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, order: 2, 
-            image: 'images/dist_box/breaker-output-socket-1.png', element_type: Constants.ElementType.INPUTS, breaker_type: Constants.ElementType.RCD,
-            size: { width: '42px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  }, bbox: [0,0,0,0] },
-            { name: 'MCB-Sockets--1', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, order: 3, 
-            image: 'images/dist_box/breaker-output-socket-1-mcb.png', element_type: Constants.ElementType.INPUTS, breaker_type: Constants.ElementType.MCB,
-            size: { width: '42px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  }, bbox: [0,0,0,0] },
-            { name: 'RCD-Sockets--2', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, order: 4, 
-            image: 'images/dist_box/breaker-output-socket-2.png', element_type: Constants.ElementType.INPUTS, breaker_type: Constants.ElementType.RCD,
-            size: { width: '42px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  }, bbox: [0,0,0,0] },
-            { name: 'MCB-Sockets--2', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, order: 5, 
-            image: 'images/dist_box/breaker-output-socket-2-mcb.png', element_type: Constants.ElementType.INPUTS, breaker_type: Constants.ElementType.MCB,
-            size: { width: '42px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  }, bbox: [0,0,0,0] },
+            image: 'images/dist_box/mcb-breaker.png', element_type: Constants.ElementType.INPUTS, breaker_type: Constants.ElementType.MCB,
+            size: { width: '50px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  }, bbox: [0,0,0,0] },
+            { name: 'RCBO-Plugs--1', type: ItemTypes.BREAKERS, uniqid: null, distribution: 1, left: 0, top: 0, order: 2, 
+            image: 'images/dist_box/rcbo-breaker.png', element_type: Constants.ElementType.INPUTS, breaker_type: Constants.ElementType.RCBO,
+            size: { width: '51px', height: '45px' }, distribution_name: "cartesian", description: '', breaker: {  }, bbox: [0,0,0,0] },
         ];
         const boxes = [
             { name: 'Plugs--1', type: ItemTypes.PLUGS_1, uniqid: null, 
@@ -117,57 +109,68 @@ class Container extends React.Component {
             bbox: [0,0,0,0] },
             { name: 'Plugs--2', type: ItemTypes.PLUGS_2, uniqid: null, 
             distribution: null, left: '0px', top: '0px',  index: 0, image: 'images/dist_box/Output-Plug-2.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '29px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: {  },
+            size: {width: '29px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', 
+            breaker: { default: { index: 0, image: 'images/dist_box/breaker-output-plug-1.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-plug-1-mcb.png'} },
             bbox: [0,0,0,0] },
             { name: 'Plugs--3', type: ItemTypes.PLUGS_3, uniqid: null, 
             distribution: null, left: '0px', top: '0px',  index: 0, image: 'images/dist_box/Output-Plug-3.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '29px', height: '45px'}, distribution_name: "templated", description: '63A 400V CEE 5P', breaker: {  },
+            size: {width: '29px', height: '45px'}, distribution_name: "templated", description: '63A 400V CEE 5P', 
+            breaker: { default: { index: 0, image: 'images/dist_box/breaker-output-plug-1.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-plug-1-mcb.png'} },
             bbox: [0,0,0,0] },
             { name: 'Plugs--4', type: ItemTypes.PLUGS_4, uniqid: null, 
             distribution: null, left: '0px', top: '0px',  index: 0, image: 'images/dist_box/Output-Plug-4.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '29px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: {  },
+            size: {width: '29px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', 
+            breaker: { default: { index: 0, image: 'images/dist_box/breaker-output-plug-1.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-plug-1-mcb.png'} },
             bbox: [0,0,0,0] },
             { name: 'Plugs--5', type: ItemTypes.PLUGS_5, uniqid: null, 
             distribution: null, left: '0px', top: '0px',  index: 0, image: 'images/dist_box/Output-Plug-5.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '29px', height: '45px'}, distribution_name: "templated", description: '63A 400V CEE 5P', breaker: {  },
+            size: {width: '29px', height: '45px'}, distribution_name: "templated", description: '63A 400V CEE 5P', 
+            breaker: { default: { index: 0, image: 'images/dist_box/breaker-output-plug-1.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-plug-1-mcb.png'} },
             bbox: [0,0,0,0] },
             { name: 'Sockets--1', type: ItemTypes.SOCKETS_1, uniqid: null, 
             distribution: null, left: '0px', top: '0px',  index: 1, image: 'images/dist_box/Output-Socket-1.png', element_type: Constants.ElementType.OUTPUTS, 
             size: {width: '50px', height: '45px'}, distribution_name: "templated", description: '125A CEE 400V 5P', 
-            breaker: { default: { index: 1, image: 'images/dist_box/breaker-output-socket-1.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-socket-1-mcb.png'} },
+            breaker: { default: { index: 0, image: 'images/dist_box/breaker-output-plug-1.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-plug-1-mcb.png'} },
             bbox: [0,0,0,0] },
             { name: 'Sockets--2', type: ItemTypes.SOCKETS_2, uniqid: null, 
             distribution: null, left: '0px', top: '0px',  index: 1, image: 'images/dist_box/Output-Socket-2.png', element_type: Constants.ElementType.OUTPUTS, 
             size: {width: '24px', height: '45px'}, distribution_name: "templated", description: '19pin Connector Socket', 
-            breaker: { default: { index: 2, image: 'images/dist_box/breaker-output-socket-2.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-socket-2-mcb.png'} },
+            breaker: { default: { index: 0, image: 'images/dist_box/breaker-output-plug-1.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-plug-1-mcb.png'} },
             bbox: [0,0,0,0] },
             { name: 'Sockets--3', type: ItemTypes.SOCKETS_3, uniqid: null, 
             distribution: null, left: '0px', top: '0px',   index: 1, image: 'images/dist_box/Output-Socket-3.png', element_type: Constants.ElementType.OUTPUTS, 
-            size: {width: '28px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', breaker: {  },
+            size: {width: '28px', height: '45px'}, distribution_name: "templated", description: '125A 400V CEE 5P', 
+            breaker: { default: { index: 0, image: 'images/dist_box/breaker-output-plug-1.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-plug-1-mcb.png'} },
             bbox: [0,0,0,0] },
             { name: 'Pilot-Lights', type: ItemTypes.PILOT_LIGHTS, uniqid: null, 
             distribution: null, left: '0px', top: '0px',  index: 2, image: 'images/dist_box/pilot-lights.gif', element_type: Constants.ElementType.ADDONS, 
-            size: {width: '20px', height: '45px'}, distribution_name: "cartesian", description: 'PILOT LIGHTS', breaker: {  },
+            size: {width: '20px', height: '45px'}, distribution_name: "cartesian", description: 'PILOT LIGHTS', 
+            breaker: { },
             bbox: [0,0,0,0] },
             { name: 'Multimeter', type: ItemTypes.MULTIMETER, uniqid: null, 
-            distribution: null, left: '0px', top: '0px',  index: 3, image: 'images/dist_box/multimeter.png', element_type: Constants.ElementType.THROUGH_OUTPUTS, 
-            size: {width: '42px', height: '45px'}, distribution_name: "cartesian", description: 'MULTIMETER', breaker: {  },
+            distribution: null, left: '0px', top: '0px',  index: 3, image: 'images/dist_box/multimeter.png', element_type: Constants.ElementType.ADDONS, 
+            size: {width: '42px', height: '45px'}, distribution_name: "cartesian", description: 'MULTIMETER', 
+            breaker: { },
             bbox: [0,0,0,0] },
             { name: 'Live-Pins-Input', type: ItemTypes.LIVE_PINS_INPUT, uniqid: null, 
             distribution: null, left: '0px', top: '0px',  index: 4, image: 'images/dist_box/Live-Pins-Inputs.png', element_type: Constants.ElementType.INPUTS, 
-            size: {width: Constants.SIZES[ItemTypes.LIVE_PINS_INPUT][0] + 'px', height: '47px'}, distribution_name: "templated", description: <b>400A Power Lock Set <br/> (with 250A Protection)</b>, breaker: {  },
+            size: {width: Constants.SIZES[ItemTypes.LIVE_PINS_INPUT][0] + 'px', height: '47px'}, distribution_name: "templated", description: <b style={{fontWeight: 400}}>400A Power Lock Set <br/> (with 250A Protection)</b>, 
+            breaker: { default: { index: 0, image: 'images/dist_box/breaker-output-plug-1.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-plug-1-mcb.png'} },
             bbox: [0,0,0,0] },
             { name: 'Loop-Through', type: ItemTypes.LIVE_PINS_OUTPUT, uniqid: null, 
             distribution: null, left: '0px', top: '0px',  index: 5, image: 'images/dist_box/Live-Pins-Outputs.png', element_type: Constants.ElementType.INPUTS, 
-            size: {width: Constants.SIZES[ItemTypes.LIVE_PINS_OUTPUT][0] + 'px', height: '47px'}, distribution_name: "templated", description: '400A Power Lock Set', breaker: {  },
+            size: {width: Constants.SIZES[ItemTypes.LIVE_PINS_OUTPUT][0] + 'px', height: '47px'}, distribution_name: "templated", description: '400A Power Lock Set', 
+            breaker: { default: { index: 0, image: 'images/dist_box/breaker-output-plug-1.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-plug-1-mcb.png'} },
             bbox: [0,0,0,0] },
             { name: 'Pins-Input--2', type: ItemTypes.PINS_INPUT_2, uniqid: null, 
             distribution: null, left: '0px', top: '0px',  index: 5, image: 'images/dist_box/Inputs-Pin-2.png', element_type: Constants.ElementType.INPUTS, 
-            size: {width: '42px', height: '45px'}, distribution_name: "templated", description: '63A CEE 400V 5P', breaker: {  },
+            size: {width: '42px', height: '45px'}, distribution_name: "templated", description: '63A CEE 400V 5P', 
+            breaker: { default: { index: 0, image: 'images/dist_box/breaker-output-plug-1.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-plug-1-mcb.png'} },
             bbox: [0,0,0,0] },
             { name: 'Pins-Input--1', type: ItemTypes.PINS_INPUT_1, uniqid: null, 
             distribution: null, left: '0px', top: '0px',  index: 4, image: 'images/dist_box/Inputs-Pin-1.png', element_type: Constants.ElementType.INPUTS, 
-            size: {width: '50px', height: '45px'}, distribution_name: "templated", description: '125A CEE 400V 5P', breaker: {  },
+            size: {width: '50px', height: '45px'}, distribution_name: "templated", description: '125A CEE 400V 5P', 
+            breaker: { default: { index: 0, image: 'images/dist_box/breaker-output-plug-1.png' }, mcb: {index: 1, image: 'images/dist_box/breaker-output-plug-1-mcb.png'} },
             bbox: [0,0,0,0] },
         ];
         const distributions = [
@@ -205,7 +208,7 @@ class Container extends React.Component {
         return this.state['distributions'][index].totalDroppedItems;
     }
 
-    setTotalDroppedItems(items, index, e_name) {
+    setTotalDroppedItems(items, index, e_name, force=false) {
         let dist = update(this.state['distributions'], {
             [index]: {
                 totalDroppedItems: {
@@ -213,13 +216,16 @@ class Container extends React.Component {
                 }
             },
         });
-        this.saveTotalDroppedItems(items, e_name, index);
+        this.saveTotalDroppedItems(items, e_name, index, force);
         return dist;
     }
 
-    saveTotalDroppedItems(items, e_name, index) {
+    saveTotalDroppedItems(items, e_name, index, force) {
         if(items) {
-            localStorage.setItem(e_name + ": items", JSON.stringify(this.state['distributions'][index].totalDroppedItems));
+            localStorage.setItem(e_name + ": items", JSON.stringify(items));
+        }
+        if(force) {
+            localStorage.setItem(e_name + ": items", JSON.stringify(items));
         }
     }
 
@@ -235,6 +241,9 @@ class Container extends React.Component {
             breaker_item.top = item.top;
             breaker_item.width = breaker_item.size.width;
             breaker_item.height = breaker_item.size.height;
+            // able to move breaker_item
+            let {className, id} = Singleton.getGridBoxId({name: breaker_item.name, uniqid: breaker_item.uniqid});
+            breaker_item.dragElementId = id;
 
             this.setDistributions(update(this.state['distributions'], {
                 [1]: {
@@ -375,7 +384,8 @@ class Container extends React.Component {
                 <div style={{ overflow: 'hidden', clear: 'both', marginTop: '0px', position: 'relative'}} className="boxes-container" key="boxes-set">
                     <em key="em-boxes-set" className="accordion-title" onClick={this.slideDown} data-element="boxes-set">{Constants.ElementType.BOXES}</em>
                     <div className="clearfix" id="boxes-set" style={display_accordion_show}>
-                        <select ref={(ref) => {this.selectRef = ref}} defaultValue={localStorage.getItem("cartesian: size")} name="unit_size" id="unit_size" style={{fontSize: '48px', color: 'rgb(50, 55, 165)'}} onChange={this.controller.changeUnitSize}>
+                        <select ref={(ref) => {this.selectRef = ref}} defaultValue={localStorage.getItem("cartesian: size")} name="unit_size" id="unit_size" style={{backgroundColor: '#f2f2f0', 
+                        fontSize: '48px', color: 'rgb(50, 55, 165)', border: '0 none'}} onChange={this.controller.changeUnitSize}>
                             {this.controller.colors.map(({ size, color }, index) => (
                                 <option key={size} style={{fontSize: '48px', color: color}} value={size}>
                                     {size}
@@ -420,7 +430,7 @@ class Container extends React.Component {
 
                 <div style={{ overflow: 'hidden', clear: 'both', marginTop: "0px",
                 position: 'relative' }} className="boxes-container" key="through-outputs-set">
-                    <em key="em-through-outputs-set" className="accordion-title" onClick={this.slideDown} data-element="through-outputs-set">{element_through_outputs.length > 0 ? element_through_outputs[0][0].element_type : ''}</em>
+                    <em key="em-through-outputs-set" className="accordion-title" onClick={this.slideDown} data-element="through-outputs-set">{Constants.ElementType.THROUGH_OUTPUTS}</em>
                     <div key="div-through-outputs-set" className="draggable-box-inputs" id="through-outputs-set" style={display_accordion_hide}>
                     {
                         element_through_outputs.map((element, index) => (

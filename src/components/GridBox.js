@@ -71,6 +71,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
 
     let [mcb, setMCB] = useState(false);
     let [rcd, setRCD] = useState(false);
+    let [rcbo, setRCBO] = useState(false);
     
     // preview Image empty
     useEffect(() => {
@@ -81,9 +82,15 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
         if(breaker_item && breaker_item.breaker_type == Constants.ElementType.RCD) {
             setMCB(false);
             setRCD(true);
+            setRCBO(false);
         } else if(breaker_item && breaker_item.breaker_type == Constants.ElementType.MCB) {
             setMCB(true);
             setRCD(false);
+            setRCBO(false);
+        } else if(breaker_item && breaker_item.breaker_type == Constants.ElementType.RCBO) {
+            setMCB(false);
+            setRCD(false);
+            setRCBO(true);
         }
     }, []);
 
@@ -134,35 +141,37 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             let h = dragElement.height();
             // let breaker_item = item.breaker_item;
             // save item
-            if(item && (Math.min(...Object.values(isOnTop)) >= 23) && (left-offset['left']) >= 0 && (left-offset['left']) <= (Constants.drawingScale * 450)
-            && (top-offset['top']) >= 0 && (top-offset['top']) <= (Constants.drawingScale * (grid_heights[container.state['distributionSize']]-50))) {
-                if(item.type == ItemTypes.LIVE_PINS_INPUT || item.type == ItemTypes.LIVE_PINS_OUTPUT) {
-                    item.left = '25px';
-                } else {
-                    item.left = (left-offset['left']-w/2)+'px';
+            if(item && (left-offset['left']-w/2) >= 0 && (left-offset['left']-w/2) <= (Constants.drawingScale * 405) // !important
+            && (top-offset['top']-h/2) >= 0 && (top-offset['top']-h/2 <= (Constants.drawingScale * (grid_heights[container.state['distributionSize']]-85)))) { // !important
+                if((Math.min(...Object.values(isOnTop)) >= 23)) {
+                    if(item.type == ItemTypes.LIVE_PINS_INPUT || item.type == ItemTypes.LIVE_PINS_OUTPUT) {
+                        item.left = '25px';
+                    } else {
+                        item.left = (left-offset['left']-w/2)+'px';
+                    }
+                    item.top = (top-offset['top']-h/2)+'px';
+                    saveItem(item);
+                    // breaker_item attribute is null for others, no need to save the breaker item while moving parent input/output
+                    // if(breaker_item) {
+                    //     breaker_item.left = item.left;
+                    //     breaker_item.top = item.top;
+                    //     saveItem(breaker_item);
+                    // }
+                } else if((Math.min(...Object.values(isOnTop)) >= 23) < 23) {
+                    if(item.type == ItemTypes.LIVE_PINS_INPUT || item.type == ItemTypes.LIVE_PINS_OUTPUT) {
+                        item.left = '25px';
+                    } else {
+                        item.left = (left-offset['left']-w/2)+50+'px'; // allocate some space for it
+                    }
+                    item.top = (top-offset['top']-h/2)+50+'px'; // allocate some space for it
+                    saveItem(item);
+                    // breaker_item attribute is null for others
+                    // if(breaker_item) {
+                    //     breaker_item.left = item.left;
+                    //     breaker_item.top = item.top;
+                    //     saveItem(breaker_item);
+                    // }
                 }
-                item.top = (top-offset['top']-h/2)+'px';
-                saveItem(item);
-                // breaker_item attribute is null for others, no need to save the breaker item while moving parent input/output
-                // if(breaker_item) {
-                //     breaker_item.left = item.left;
-                //     breaker_item.top = item.top;
-                //     saveItem(breaker_item);
-                // }
-            } else if((Math.min(...Object.values(isOnTop)) >= 23) < 23) {
-                if(item.type == ItemTypes.LIVE_PINS_INPUT || item.type == ItemTypes.LIVE_PINS_OUTPUT) {
-                    item.left = '25px';
-                } else {
-                    item.left = (left-offset['left']-w/2)+50+'px'; // allocate some space for it
-                }
-                item.top = (top-offset['top']-h/2)+50+'px'; // allocate some space for it
-                saveItem(item);
-                // breaker_item attribute is null for others
-                // if(breaker_item) {
-                //     breaker_item.left = item.left;
-                //     breaker_item.top = item.top;
-                //     saveItem(breaker_item);
-                // }
             }
         } else {
             container.setDragDrop(false);
@@ -194,6 +203,6 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             <DistributionMenu container={container} key={id} image={image} name={name} width={width} height="auto" name={name} type={type} 
             uniqid={uniqid} distribution_name={distribution_name} distribution={distribution}
             breaker_item={breaker_item} box_item={box_item}
-            mcb={mcb} rcd={rcd} />
+            mcb={mcb} rcd={rcd} rcbo={rcbo} />
 		</div>);
 };

@@ -41,6 +41,6 @@ export const DraggableBox = (props) => {
             <Box name={name} type={type} uniqid={uniqid} distribution={distribution} image={image}
             width={width} height={height} distribution_name={distribution_name} description={description} box_item={box_item}
             isDropped={isDropped} />
-            <abbr style={{width: '100%', display: 'inline', marginRight: '1.5rem'}}><React.Fragment><b>{description}</b></React.Fragment></abbr>
+            <abbr style={{width: '100%', display: 'inline'}}><React.Fragment><b style={{fontWeight: 400, fontSize: '18px'}}>{description}</b></React.Fragment></abbr>
 		</div>);
 };

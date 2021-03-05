@@ -7,7 +7,8 @@ const ElementType = {
     ADDONS: 'Add-ons',
     BOXES: 'Boxes',
     RCD: 'RCD',
-    MCB: 'MCB'
+    MCB: 'MCB',
+    RCBO: 'RCBO'
 };
 
 const COLORS = {

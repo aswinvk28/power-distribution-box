@@ -141,7 +141,7 @@ body, html {
 }
 
 .distribution_container::before {
-  background-image: url('../images/power_box/canvas_grid-20u.png');
+  background-image: url('../images/power_box/canvas_grid-sizefit.png');
   background-repeat: repeat;
   position: absolute;
   height: 100%;
@@ -178,7 +178,7 @@ body, html {
 }
 
 .size-8U {
-  background: url("../images/power_box/canvas_grid-20u.png") 0px 0px repeat;
+  /* background: url("../images/power_box/canvas_grid-20u.png") 0px 0px repeat; */
   position: absolute;
   left: 0;
   top: 0;
@@ -191,52 +191,52 @@ body, html {
 }
 
 .size-12U {
-  background: url("../images/power_box/canvas_grid-20u.png") 0px 0px repeat;
+  /* background: url("../images/power_box/canvas_grid-20u.png") 0px 0px repeat; */
   position: absolute;
   left: 0;
   top: 189.01px;
   height: 100%;
   width: 100%;
-  opacity: 0.5;
+  opacity: 0.2;
   background-size: 120%;
   font-size: 40px;
   color: white;
 }
 
 .size-16U {
-  background: url("../images/power_box/canvas_grid-20u.png") 0px 0px repeat;
+  /* background: url("../images/power_box/canvas_grid-20u.png") 0px 0px repeat; */
   position: absolute;
   left: 0;
   top: 274.01px;
   height: 100%;
   width: 100%;
-  opacity: 0.4;
+  opacity: 0.2;
   background-size: 120%;
   font-size: 40px;
   color: black;
 }
 
 .size-20U {
-  background: url("../images/power_box/canvas_grid-20u.png") 0px 0px repeat;
+  /* background: url("../images/power_box/canvas_grid-20u.png") 0px 0px repeat; */
   position: absolute;
   left: 0;
   top: 368.01px;
   height: 100%;
   width: 100%;
-  opacity: 0.3;
+  opacity: 0.2;
   background-size: 120%;
   font-size: 40px;
   color: black;
 }
 
 .size-24U {
-  background: url("../images/power_box/canvas_grid-20u.png") 0px 0px repeat;
+  /* background: url("../images/power_box/canvas_grid-20u.png") 0px 0px repeat; */
   position: absolute;
   left: 0;
   top: 462.01px;
   height: 100%;
   width: 100%;
-  opacity: 0.3;
+  opacity: 0.2;
   background-size: 120%;
   font-size: 40px;
   color: white;
@@ -360,14 +360,7 @@ em.accordion-title:hover {
 .box-item-Sockets--1 img, .box-item-Sockets--2 img,
 .box-item-Sockets--3 img, .box-item-Plugs--5 img,
 .box-item-Pilot-Lights img, .box-item-Multimeter img {
-  padding: 3px 1.5px;
-  border: 1.5px solid red;
-  border-radius: 3px;
-  background-image: url('../images/power_box/canvas_grid-8u.png');
-  background-repeat: no-repeat;
-  background-position: -51px -50px;
-  background-size: 154px;
-  background-color: #f3f3f3;
+  padding: 0px;
 }
 
 .box-item-border {
@@ -417,6 +410,7 @@ em.accordion-title:hover {
 #boxes_container_draggable {
   border: 2px dashed #4a0d12;
   border-radius: 4px;
+  background-color: #f2f2f0;
 }
 
 #boxes_container_draggable:hover {
@@ -567,6 +561,11 @@ label[for="power_show"] span {
   height: 700px;
 }
 
+/** hide scrollbar **/
+.boxes-container-draggable::-webkit-scrollbar {
+  display: none;
+}
+
 .boxes-container-draggable::before, .boxes-container-draggable::after {
   content: "";
   clear: both;
@@ -594,6 +593,10 @@ label[for="power_show"] span {
 
 #distribution_front_side {
   border: 1px dashed red;
+}
+
+#unit_size:focus {
+  border: 0 none;
 }
 
 .btn {

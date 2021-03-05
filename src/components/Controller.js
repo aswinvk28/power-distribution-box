@@ -8,7 +8,8 @@ import RearSide from './RearSide';
 import Singleton from './Singleton';
 import $ from 'jquery';
 import Constants from './Constants';
-import { Confirm } from 'react-st-modal';
+import axios from 'axios';
+import { Confirm, Alert } from 'react-st-modal';
 
 export default class Controller extends React.Component {
     
@@ -77,10 +78,11 @@ export default class Controller extends React.Component {
         this.toggleSliging = this.toggleSliging.bind(this);
         this.changeUnitSize = this.changeUnitSize.bind(this);
         this.home = this.home.bind(this);
-        this.resetCanvas = this.resetCanvas.bind(this);
         this.showMenuTree = this.showMenuTree.bind(this);
         this.alertUserOnUnitSizeChange = this.alertUserOnUnitSizeChange.bind(this);
         this.showAlert = this.showAlert.bind(this);
+        this.createNewDiagram = this.createNewDiagram.bind(this);
+        this.saveDiagram = this.saveDiagram.bind(this);
 
         let grid_heights = Object.fromEntries(this.grid_heights);
         let scaled_grid_heights = Object.values(grid_heights).map((height, index) => {
@@ -258,12 +260,6 @@ export default class Controller extends React.Component {
         })
     }
 
-    resetCanvas(event) {
-        for (var i in this.containerRef.selectRef.options) {
-            $(this.containerRef.selectRef.options[i]).removeAttr("disabled");
-        }
-    }
-
     showMenuTree(event) {
         let id = $(event.target).attr('data-element');
         let menu = $(event.target).attr('menu-element');
@@ -274,6 +270,29 @@ export default class Controller extends React.Component {
         let id = $(event.target).attr('data-element');
         let menu = $(event.target).attr('menu-element');
         $('#'+id).hide();
+    }
+
+    async createNewDiagram(event) {
+        let result = await Confirm("Creating a New Diagram will remove all existing Elements. Do you want to proceed?", "Create New Diagram", 
+        "Yes", "No");
+        if(result) {
+            let dist1 = this.containerRef.setTotalDroppedItems([], 0, "templated", true);
+            let dist2 = this.containerRef.setTotalDroppedItems([], 1, "cartesian", true);
+            this.containerRef.setDistributions([dist1[0], dist2[1]]);
+            this.setState({drawing_name: 'New Blank Project'});
+        }
+    }
+
+    saveDiagram(event) {
+        let cartesian = localStorage.getItem("cartesian: items");
+        let templated = localStorage.getItem("templated: items");
+        let cartesian_size = localStorage.getItem("cartesian: size");
+        let templated_size = localStorage.getItem("templated: size");
+
+        axios.post(window.HOSTNAME_URL + "/distros/save-diagram", { cartesian, templated, cartesian_size, templated_size })
+          .then(res => {
+            Alert("The diagram has been saved to the database.", "Save Diagram!", "OK");
+          });
     }
 
     render() {
@@ -297,9 +316,9 @@ export default class Controller extends React.Component {
                 <nav className="menu-navigation col-lg-12 col-md-12 col-sm-12" style={{clear: 'both'}}>
                     <i className="fas fa-anchor" style={{color: 'red', cursor: 'alias'}}></i>
                     <ul className="menu_navigation" id="menu_navigation">
-                        <li className="menu-item">NEW</li>
+                        <li className="menu-item" onClick={this.createNewDiagram}>NEW</li>
                         <li className="menu-item">OPEN</li>
-                        <li className="menu-item">SAVE</li>
+                        <li className="menu-item" onClick={this.saveDiagram}>SAVE</li>
                         <li className="menu-item">PRINT</li>
                     </ul>
                     <div className="drawing-title col-lg-8 col-md-8 col-sm-8" style={{textAlign: 'center', marginLeft: 'auto', marginRight: 'auto', display: 'inline-block'}}>
@@ -320,7 +339,6 @@ export default class Controller extends React.Component {
                             <input type="checkbox" name="monitoring_show" id="monitoring_show" value="1" onChange={this.monitoringShow} />
                             <span>Breakers</span>
                         </label> */}
-                        <button onClick={this.resetCanvas} className="btn">Reset</button>
                     </div>
                     <div className="col-lg-9 col-md-9 col-sm-9">
                         <h5 className="power-header" onClick={this.changeToPower} style={{margin: '10px 0px', cursor: 'pointer'}}>PLUGS / SOCKETS</h5>
