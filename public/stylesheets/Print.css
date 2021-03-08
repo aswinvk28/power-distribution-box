@@ -595,7 +595,7 @@ label[for="power_show"] span {
   height: 100%;
   width: 50%;
   float: left;
-  display: none;
+  display: block;
 }
 
 #distribution_front_side, #distribution_rear_side {
@@ -607,6 +607,23 @@ label[for="power_show"] span {
   border: 1px dashed red;
 }
 
+.svg-controls, #header-separation {
+  display: none;
+}
+
+#distribution_front_side {
+  display: block;
+  position: absolute;
+  top: 300;
+  left: 0;
+}
+
+#distribution_rear_side {
+  display: block;
+  position: absolute;
+  top: 300;
+  left: 200;
+}
 
 #unit_size:focus {
   border: 0 none;

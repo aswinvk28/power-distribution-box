@@ -54,7 +54,8 @@ export default class Controller extends React.Component {
         svg_power: false,
         snapToGridAfterDrop: true,
         snapToGridWhileDragging: true,
-        viewBox: '',
+        MonitoringViewBox: '',
+        PowerViewBox: '',
         value: 10,
         change: false,
         monitoring_show: 1,
@@ -69,8 +70,7 @@ export default class Controller extends React.Component {
         super(props)
         Singleton.__singletonRef = new Singleton();
         Singleton.__singletonRef.controller = this;
-        this.changeToMonitoring = this.changeToMonitoring.bind(this);
-        this.changeToPower = this.changeToPower.bind(this);
+        this.changeToSVGDrawing = this.changeToSVGDrawing.bind(this);
         this.changeToDefault = this.changeToDefault.bind(this);
         this.cartesianWidth = null; this.cartesianHeight = null; this.templateWidth = null; this.templateHeight = null;
         this.changeGridSizes = this.changeGridSizes.bind(this);
@@ -83,6 +83,7 @@ export default class Controller extends React.Component {
         this.showAlert = this.showAlert.bind(this);
         this.createNewDiagram = this.createNewDiagram.bind(this);
         this.saveDiagram = this.saveDiagram.bind(this);
+        this.print = this.print.bind(this);
 
         let grid_heights = Object.fromEntries(this.grid_heights);
         let scaled_grid_heights = Object.values(grid_heights).map((height, index) => {
@@ -95,26 +96,16 @@ export default class Controller extends React.Component {
         this.scaled_grid_heights = Object.fromEntries(scaled_grid_heights);
     }
 
-    changeToMonitoring() {
+    changeToSVGDrawing() {
         $('#distribution-front-side').show();
-        $('#distribution-rear-side').hide();
-        this.setState({svg_monitoring: true, svg_power: false, viewBox: '0 0 ' + (this.cartesianWidth * Constants.SCALE.FRONT_SIDE).toString() + " " + 
-        (this.cartesianHeight * Constants.SCALE.FRONT_SIDE).toString()})
-        $(document.body).css('overflow', 'hidden');
-        $(document.documentElement).css('overflow', 'hidden');
-    }
-
-    changeToPower() {
-        $('#distribution-front-side').hide();
         $('#distribution-rear-side').show();
-        this.setState({svg_monitoring: false, svg_power: true, viewBox: '0 0 ' + (this.templateWidth * Constants.SCALE.REAR_SIDE).toString() + " " + 
-            (this.cartesianHeight * Constants.SCALE.REAR_SIDE).toString()})
+        this.setState({svg_monitoring: true, svg_power: true, MonitoringViewBox: '300 0 2400 3600', PowerViewBox: '300 0 2400 3600'})
         $(document.body).css('overflow', 'hidden');
         $(document.documentElement).css('overflow', 'hidden');
     }
 
     changeToDefault() {
-        this.setState({svg_monitoring: false, svg_power: false, viewBox: ''})
+        this.setState({svg_monitoring: false, svg_power: false, MonitoringViewBox: '', PowerViewBox: ''})
         $(document.body).css('overflow', 'visible');
         $(document.documentElement).css('overflow', 'visible');
     }
@@ -295,6 +286,10 @@ export default class Controller extends React.Component {
           });
     }
 
+    print(event) {
+        window.print();
+    }
+
     render() {
         let elem = null;
         let designer = null, alert = null, 
@@ -319,7 +314,7 @@ export default class Controller extends React.Component {
                         <li className="menu-item" onClick={this.createNewDiagram}>NEW</li>
                         <li className="menu-item">OPEN</li>
                         <li className="menu-item" onClick={this.saveDiagram}>SAVE</li>
-                        <li className="menu-item">PRINT</li>
+                        <li className="menu-item" onClick={this.print}>PRINT</li>
                     </ul>
                     <div className="drawing-title col-lg-8 col-md-8 col-sm-8" style={{textAlign: 'center', marginLeft: 'auto', marginRight: 'auto', display: 'inline-block'}}>
                         <em style={{fontSize: '24px'}}>{this.state['drawing_name']}</em>
@@ -341,16 +336,16 @@ export default class Controller extends React.Component {
                         </label> */}
                     </div>
                     <div className="col-lg-9 col-md-9 col-sm-9">
-                        <h5 className="power-header" onClick={this.changeToPower} style={{margin: '10px 0px', cursor: 'pointer'}}>PLUGS / SOCKETS</h5>
-                        <h5 className="monitoring-header" onClick={this.changeToMonitoring} style={{margin: '10px 0px', cursor: 'pointer'}}>BREAKERS</h5>
+                        <h5 className="power-header" onClick={this.changeToSVGDrawing} style={{margin: '10px 0px', cursor: 'pointer'}}>PLUGS / SOCKETS</h5>
+                        <h5 className="monitoring-header" onClick={this.changeToSVGDrawing} style={{margin: '10px 0px', cursor: 'pointer'}}>BREAKERS</h5>
                     </div>
                 </div>
             </div>
         </div>
-        if(this.state['svg_monitoring'] == true) {
-            elem = <FrontSide viewBox={this.state['viewBox']} />;
-        } else if(this.state['svg_power'] == true) {
-            elem = <RearSide viewBox={this.state['viewBox']} />;
+        if(this.state['svg_power'] == true && this.state['svg_monitoring'] == true) {
+            window.setCache();
+            elem = <div className="svg-controls"><RearSide PowerViewBox={this.state['PowerViewBox']} />
+            <FrontSide MonitoringViewBox={this.state['MonitoringViewBox']} /></div>;
         } else {
             designer = <div className="bodyContainer">
             <div className="AppInnerContainerHolder">

@@ -25,21 +25,36 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
-    <link rel="stylesheet" type="text/css" href="stylesheets/App.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/App.css" />
+    <link rel="stylesheet" type="text/css" media="print" href="stylesheets/Print.css" />
     <script type="text/javascript" src="scripts/snapsvg.js"></script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
 
-    <div id="distribution-front-side" style="display:none">
-      <svg id="distribution_front_side" viewBox="0 0 3200 2400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.2">
+    <div id="distribution-front-side">
+      <select disabled="disabled" id="unit_size1" name="unit_size1">
+        <option value="24U">24U</option>
+        <option value="20U">20U</option>
+        <option value="16U">16U</option>
+        <option value="12U">12U</option>
+        <option value="8U">8U</option>
+      </select>
+      <svg id="distribution_front_side" viewBox="0 0 4200 3150" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.2">
 
       </svg>
     </div>
 
-    <div id="distribution-rear-side" style="display:none">
-      <svg id="distribution_rear_side" viewBox="0 0 3200 2400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.2">
+    <div id="distribution-rear-side">
+      <select disabled="disabled" id="unit_size2" name="unit_size2">
+        <option value="24U">24U</option>
+        <option value="20U">20U</option>
+        <option value="16U">16U</option>
+        <option value="12U">12U</option>
+        <option value="8U">8U</option>
+      </select>
+      <svg id="distribution_rear_side" viewBox="0 0 4200 3150" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.2">
         
       </svg>
     </div>

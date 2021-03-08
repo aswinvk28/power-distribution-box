@@ -22,16 +22,16 @@ const SCALE = {
 };
 
 const SIZES = new Map([
-    [ItemTypes.PLUGS_1, 50],
-    [ItemTypes.PLUGS_2, 29],
-    [ItemTypes.PLUGS_3, 29],
-    [ItemTypes.PLUGS_4, 29],
-    [ItemTypes.PLUGS_5, 29],
-    [ItemTypes.SOCKETS_1, 50],
-    [ItemTypes.SOCKETS_2, 24],
-    [ItemTypes.SOCKETS_3, 28],
-    [ItemTypes.PINS_INPUT_1, 42],
-    [ItemTypes.PINS_INPUT_2, 50],
+    [ItemTypes.PLUGS_1, [50,50.4]],
+    [ItemTypes.PLUGS_2, [29,34.3]],
+    [ItemTypes.PLUGS_3, [29,36.14]],
+    [ItemTypes.PLUGS_4, [29,36.1]],
+    [ItemTypes.PLUGS_5, [29,36.91]],
+    [ItemTypes.SOCKETS_1, [50,50]],
+    [ItemTypes.SOCKETS_2, [24,24]],
+    [ItemTypes.SOCKETS_3, [28,31.4]],
+    [ItemTypes.PINS_INPUT_1, [50,50.7]],
+    [ItemTypes.PINS_INPUT_2, [42,42]],
     [ItemTypes.LIVE_PINS_INPUT, [180,35]],
     [ItemTypes.LIVE_PINS_OUTPUT, [180,35]],
     [ItemTypes.MULTIMETER, [42,42]],
@@ -41,11 +41,11 @@ const SIZES = new Map([
     [ItemTypes.WHEEL_16U, [681,1060]],
     [ItemTypes.WHEEL_12U, [681,865]],
     [ItemTypes.WHEEL_8U, [681,670]],
-    [ItemTypes.GRID_24U, [484,1183]],
-    [ItemTypes.GRID_20U, [484,983]],
-    [ItemTypes.GRID_16U, [484,783]],
-    [ItemTypes.GRID_12U, [484,583]],
-    [ItemTypes.GRID_8U, [484,403]],
+    [ItemTypes.GRID_24U, [510,1183]],
+    [ItemTypes.GRID_20U, [510,983]],
+    [ItemTypes.GRID_16U, [510,783]],
+    [ItemTypes.GRID_12U, [510,583]],
+    [ItemTypes.GRID_8U, [510,403]],
 ]);
 
 const Constants = {

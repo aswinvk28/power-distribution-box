@@ -11,14 +11,14 @@ class FrontSide extends React.Component {
 
     state = {
         change: false,
-        value: 50,
+        value: 0,
         grid: 0,
         wheel: 0
     }
     
     constructor(props) {
         super(props)
-        this.viewBox = this.props.viewBox;
+        this.viewBox = this.props.MonitoringViewBox;
         this.paper = window.Snap('#'+this.id)
         this.g = this.paper.g();
         this.image = this.image.bind(this);
@@ -91,10 +91,19 @@ class FrontSide extends React.Component {
 
     type_mapping() {
         return new Map([
-            [ItemTypes.WHEEL, 'base_image'], 
-            [ItemTypes.PILOT_LIGHTS, 'image'], 
-            [ItemTypes.MULTIMETER, 'image']
-        ])
+            [ItemTypes.LIVE_PINS_INPUT, this.image],
+            [ItemTypes.LIVE_PINS_OUTPUT, this.image],
+            [ItemTypes.PINS_INPUT_1, this.image],
+            [ItemTypes.PINS_INPUT_2, this.image],
+            [ItemTypes.PLUGS_1, this.image],
+            [ItemTypes.PLUGS_2, this.image],
+            [ItemTypes.PLUGS_3, this.image],
+            [ItemTypes.PLUGS_4, this.image],
+            [ItemTypes.PLUGS_5, this.image],
+            [ItemTypes.SOCKETS_1, this.image],
+            [ItemTypes.SOCKETS_2, this.image],
+            [ItemTypes.SOCKETS_3, this.image]
+        ]);
     }
 
     objects() {
@@ -102,21 +111,21 @@ class FrontSide extends React.Component {
     }
 
     wheel() {
-        let val = $('#unit_size').val();
+        let val = $('#unit_size1').val();
         let image = this.wheel_svg[val];
-        let width = Constants.SIZES[ItemTypes['WHEEL_'+val.toString()]][0];
-        let height = Constants.SIZES[ItemTypes['WHEEL_'+val.toString()]][1];
+        let width = Constants.SIZES[ItemTypes['WHEEL_'+val.toString()]][0] * Constants.drawingScale;
+        let height = Constants.SIZES[ItemTypes['WHEEL_'+val.toString()]][1] * Constants.drawingScale;
         let element = this.paper.image(image, 0, 0, (width).toString() + 'px', (height).toString() + 'px');
         this.g.prepend(element);
         this.wheelEl = element;
     }
 
     grid() {
-        let val = $('#unit_size').val();
+        let val = $('#unit_size1').val();
         let image = this.grid_svg[val];
-        let width = Constants.SIZES[ItemTypes['GRID_'+val.toString()]][0];
-        let height = Constants.SIZES[ItemTypes['GRID_'+val.toString()]][1];
-        let element = this.paper.image(image, 100, 65, (width).toString() + 'px', (height).toString() + 'px');
+        let width = Constants.SIZES[ItemTypes['GRID_'+val.toString()]][0] * Constants.drawingScale;
+        let height = Constants.SIZES[ItemTypes['GRID_'+val.toString()]][1] * Constants.drawingScale;
+        let element = this.paper.image(image, 40, 30, (width).toString() + 'px', (height).toString() + 'px');
         this.g.prepend(element);
         this.gridEl = element;
     }
@@ -124,9 +133,11 @@ class FrontSide extends React.Component {
     image(objects) {
         for(var i = 0; i < objects.length; i++) {
             let image = objects[i].image;
+            let left = parseFloat(objects[i].left.replace('px', '')) + 45 + 'px';
+            let top = parseFloat(objects[i].top.replace('px', '')) + 45 + 'px';
             let width = parseFloat(objects[i].width.replace('px', ''));
             let height = parseFloat(objects[i].height.replace('px', ''));
-            let element = this.paper.image(image, objects[i].left, objects[i].top, (Constants.SIZES[objects[i].type][0]).toString() + 'px', 
+            let element = this.paper.image(image, left, top, (Constants.SIZES[objects[i].type][0]).toString() + 'px', 
             (Constants.SIZES[objects[i].type][1]).toString() + 'px');
             element.attr('style', 'z-index: ' + 100);
             this.g.add(element);
@@ -149,7 +160,7 @@ class FrontSide extends React.Component {
     }
 
     importCartesianObjectsByCache() {
-        let objects = window.localStorage.getItem("cartesian: items");
+        let objects = window.localStorage.getItem("templated: items");
         return JSON.parse(objects);
     }
 
@@ -160,13 +171,13 @@ class FrontSide extends React.Component {
     draw(objects) {
         var function_to_execute = [];
         for(var i in objects) {
-            if(objects[i].type in this.object_types && !(this.object_types[objects[i].type] in function_to_execute)) {
+            if(objects[i].type in this.object_types && (function_to_execute.indexOf(this.object_types[objects[i].type]) == -1)) {
                 function_to_execute.push(this.object_types[objects[i].type]);
             }
         }
         if(function_to_execute.length > 0) {
             for(var f in function_to_execute) {
-                this[function_to_execute[f]](objects) // call this.image function
+                function_to_execute[f](objects) // call this.image function
             }
         }
     }
@@ -177,12 +188,12 @@ class FrontSide extends React.Component {
     }
 
     changeSlider(event) {
-        let vb = this.obtainViewBox(this.props.viewBox);
+        let vb = this.obtainViewBox(this.props.MonitoringViewBox);
         let viewBox = this.obtainViewBox(this.viewBox);
         let value = event.target.value;
-        viewBox[2] = vb[2] - value * 20;
-        viewBox[3] = vb[3] - value * 20;
-        viewBox = viewBox.map(v => v.toString())
+        viewBox[2] = vb[2] - value/1.15 * 15;
+        viewBox[3] = vb[3] - value * 15;
+        viewBox = viewBox.map(v => v.toString());
         this.viewBox = viewBox.join(" ");
         // console.log(this.viewBox);
         this.setState({change: !this.state['change']})
@@ -218,7 +229,7 @@ class FrontSide extends React.Component {
     render() {
         $(document.getElementById(this.id)).attr('viewBox', this.viewBox);
         return <div className="distros_controls">
-            <input type="range" name="zoom" id="zoom" min="-100" max="0" step="1" value={this.state['value']} onChange={this.changeSlider} />
+            <input type="range" name="zoom" id="zoom" min="-100" max="180" step="1" value={this.state['value']} onChange={this.changeSlider} />
         <input title="Show Grid" type="checkbox" name="show_grid" id="show_grid" value={this.state['grid']} onChange={this.showGrid} />
         <input title="Display Wheel" type="checkbox" name="show_wheel" id="show_wheel" value={this.state['wheel']} onChange={this.showWheel} /></div>
     }
