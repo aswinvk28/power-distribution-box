@@ -64,7 +64,7 @@ export default class Controller extends React.Component {
         alert_text: '',
         alert_title: '',
         alert_box: -1,
-        drawing_name: 'MD400-010MCB'
+        drawing_name: ''
     }
     
     constructor(props) {
