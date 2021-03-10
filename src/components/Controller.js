@@ -9,6 +9,7 @@ import Singleton from './Singleton';
 import $ from 'jquery';
 import Constants from './Constants';
 import axios from 'axios';
+import qs from 'qs';
 import { Confirm, Alert } from 'react-st-modal';
 
 export default class Controller extends React.Component {
@@ -280,7 +281,11 @@ export default class Controller extends React.Component {
         let cartesian_size = localStorage.getItem("cartesian: size");
         let templated_size = localStorage.getItem("templated: size");
 
-        axios.post(window.HOSTNAME_URL + "/distros/save-diagram", { cartesian, templated, cartesian_size, templated_size })
+        axios.post(window.HOSTNAME_URL + "/distros/save-diagram", qs.stringify({ cartesian, templated, cartesian_size, templated_size }), {
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+            }
+        })
           .then(res => {
             Alert("The diagram has been saved to the database.", "Save Diagram!", "OK");
           });
