@@ -5,10 +5,16 @@ import Singleton from './Singleton';
 import { ItemTypes } from './ItemTypes';
 import Constants from './Constants';
 import Uniqid from './Uniqid';
-import $ from 'jquery';
+import $, { timers } from 'jquery';
 
 class DistributionMenu extends React.Component {
 
+    state = {
+        mcb: false,
+        rcd: true,
+        rcbo: false
+    }
+    
     constructor(props) {
         super(props)
         this.container = this.props.container;
@@ -43,6 +49,9 @@ class DistributionMenu extends React.Component {
                 new_breaker_item.top = breaker_item.top;
                 new_breaker_item.width = new_breaker_item.size.width;
                 new_breaker_item.height = new_breaker_item.size.height;
+                // able to move breaker_item
+                let {className, id} = Singleton.getGridBoxId({name: new_breaker_item.name, uniqid: new_breaker_item.uniqid});
+                new_breaker_item.dragElementId = id;
                 new_items.push(new_breaker_item);
             } else {
                 new_items.push(item);
@@ -63,6 +72,7 @@ class DistributionMenu extends React.Component {
         });
         let dist2 = this.container.setTotalDroppedItems(new_items, box_item.distribution, box_item.distribution_name);
         this.container.setDistributions([dist2[0], dist1[1]]);
+        this.setState({rcbo: false, rcd: false, mcb: true});
     }
 
     changeToRCD(event) {
@@ -85,6 +95,9 @@ class DistributionMenu extends React.Component {
                 new_breaker_item.top = breaker_item.top;
                 new_breaker_item.width = new_breaker_item.size.width;
                 new_breaker_item.height = new_breaker_item.size.height;
+                // able to move breaker_item
+                let {className, id} = Singleton.getGridBoxId({name: new_breaker_item.name, uniqid: new_breaker_item.uniqid});
+                new_breaker_item.dragElementId = id;
                 new_items.push(new_breaker_item);
             } else {
                 new_items.push(item);
@@ -104,6 +117,7 @@ class DistributionMenu extends React.Component {
         });
         let dist2 = this.container.setTotalDroppedItems(new_items, box_item.distribution, box_item.distribution_name);
         this.container.setDistributions([dist2[0], dist1[1]]);
+        this.setState({rcbo: false, rcd: true, mcb: false});
     }
 
     changeToRCBO(event) {
@@ -126,6 +140,9 @@ class DistributionMenu extends React.Component {
                 new_breaker_item.top = breaker_item.top;
                 new_breaker_item.width = new_breaker_item.size.width;
                 new_breaker_item.height = new_breaker_item.size.height;
+                // able to move breaker_item
+                let {className, id} = Singleton.getGridBoxId({name: new_breaker_item.name, uniqid: new_breaker_item.uniqid});
+                new_breaker_item.dragElementId = id;
                 new_items.push(new_breaker_item);
             } else {
                 new_items.push(item);
@@ -145,12 +162,13 @@ class DistributionMenu extends React.Component {
         });
         let dist2 = this.container.setTotalDroppedItems(new_items, box_item.distribution, box_item.distribution_name);
         this.container.setDistributions([dist2[0], dist1[1]]);
+        this.setState({rcbo: true, rcd: false, mcb: false});
     }
 
     render() {
         let { image, name, type, width, height, uniqid, distribution, distribution_name, breaker_item, mcb, rcd, rcbo } = this.props;
         this.item = {image, name, width, height};
-        let className = mcb ? "mcb-item" : rcd ? "rcd-item" : rcbo ? "rcbo-item" : "";
+        let className = this.state['mcb'] ? "mcb-item" : this.state['rcd'] ? "rcd-item" : this.state['rcbo'] ? "rcbo-item" : "";
         let menu = <ContextMenu id={"context-menu-"+uniqid}>
                         <ContextMenuItem onClick={this.handleClick}>Remove</ContextMenuItem>
                         <ContextMenuItem>
@@ -160,9 +178,13 @@ class DistributionMenu extends React.Component {
                                 <ContextMenuItem onClick={this.changeToRCBO}><i className="rcbo-option fas fa-toggle-on">-</i> RCBO</ContextMenuItem>
                             </Submenu>
                         </ContextMenuItem>
-                    </ContextMenu>
+                    </ContextMenu>;
         if(type === ItemTypes.BREAKERS) {
             menu = null;
+        } else if(type == ItemTypes.MULTIMETER || type == ItemTypes.PILOT_LIGHTS) {
+            menu = <ContextMenu id={"context-menu-"+uniqid}>
+                        <ContextMenuItem onClick={this.handleClick}>Remove</ContextMenuItem>
+                    </ContextMenu>;
         }
         return (
             <div className={"distribution-box-menu "+className} id={"distribution-box-menu-"+uniqid} key={"distribution-box-menu-"+uniqid}>

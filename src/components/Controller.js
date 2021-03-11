@@ -271,7 +271,13 @@ export default class Controller extends React.Component {
             let dist1 = this.containerRef.setTotalDroppedItems([], 0, "templated", true);
             let dist2 = this.containerRef.setTotalDroppedItems([], 1, "cartesian", true);
             this.containerRef.setDistributions([dist1[0], dist2[1]]);
-            this.setState({drawing_name: 'New Blank Project'});
+            if(this.state['drawing_name'].indexOf("New Blank Project") == -1) {
+                this.setState({drawing_name: 'New Blank Project'});
+            } else if(this.state['drawing_name'] == "New Blank Project") {
+                this.setState({drawing_name: 'New Blank Project 2'});
+            } else {
+                this.setState({drawing_name: 'New Blank Project ' + (parseInt(this.state['drawing_name'].replace("New Blank Project ", "")) + 1)});
+            }
         }
     }
 
@@ -341,8 +347,8 @@ export default class Controller extends React.Component {
                         </label> */}
                     </div>
                     <div className="col-lg-9 col-md-9 col-sm-9">
-                        <h5 className="power-header" onClick={this.changeToSVGDrawing} style={{margin: '10px 0px', cursor: 'pointer'}}>PLUGS / SOCKETS</h5>
-                        <h5 className="monitoring-header" onClick={this.changeToSVGDrawing} style={{margin: '10px 0px', cursor: 'pointer'}}>BREAKERS</h5>
+                        <h5 className="power-header" style={{margin: '10px 0px', cursor: 'pointer'}}>PLUGS / SOCKETS</h5>
+                        <h5 className="monitoring-header" style={{margin: '10px 0px', cursor: 'pointer'}}>BREAKERS</h5>
                     </div>
                 </div>
             </div>

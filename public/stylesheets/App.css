@@ -647,3 +647,19 @@ label[for="power_show"] span {
   padding: 5px 0px;
   margin: 0px;
 }
+
+/** blinking animation **/
+.blink {
+  animation: blink-animation 0.3s steps(5, start) infinite;
+  -webkit-animation: blink-animation 0.3s steps(5, start) infinite;
+}
+@keyframes blink-animation {
+  to {
+      visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+      visibility: hidden;
+  }
+}

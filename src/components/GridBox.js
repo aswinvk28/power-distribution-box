@@ -22,6 +22,8 @@ const style = {
     zIndex: 1000,
 };
 
+const DISTANCE = 23;
+
 function getBBox(item) {
     let bbox = [parseFloat(item.left.replace('px', '')), parseFloat(item.top.replace('px', '')), 
                 parseFloat(item.left.replace('px', '')) + parseFloat(item.width.replace('px', '')), 
@@ -143,7 +145,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             // save item
             if(item && (left-offset['left']-w/2) >= 0 && (left-offset['left']-w/2) <= (Constants.drawingScale * 405) // !important
             && (top-offset['top']-h/2) >= 0 && (top-offset['top']-h/2 <= (Constants.drawingScale * (grid_heights[container.state['distributionSize']]-85)))) { // !important
-                if((Math.min(...Object.values(isOnTop)) >= 23)) {
+                if((Math.min(...Object.values(isOnTop)) >= DISTANCE)) {
                     if(item.type == ItemTypes.LIVE_PINS_INPUT || item.type == ItemTypes.LIVE_PINS_OUTPUT) {
                         item.left = '25px';
                     } else {
@@ -157,14 +159,12 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
                     //     breaker_item.top = item.top;
                     //     saveItem(breaker_item);
                     // }
-                } else if((Math.min(...Object.values(isOnTop)) >= 23) < 23) {
-                    if(item.type == ItemTypes.LIVE_PINS_INPUT || item.type == ItemTypes.LIVE_PINS_OUTPUT) {
-                        item.left = '25px';
-                    } else {
-                        item.left = (left-offset['left']-w/2)+50+'px'; // allocate some space for it
-                    }
-                    item.top = (top-offset['top']-h/2)+50+'px'; // allocate some space for it
+                } else if((Math.min(...Object.values(isOnTop)) < DISTANCE)) {
+                    item.left = '10px';
+                    item.top = '10px'; // allocate some space for it
                     saveItem(item);
+                    let {_className, _id} = Singleton.getGridBoxId({name, uniqid});
+                    className = _className + " blink";
                     // breaker_item attribute is null for others
                     // if(breaker_item) {
                     //     breaker_item.left = item.left;
@@ -196,7 +196,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
                 break;
             }
         }
-        container.setTotalDroppedItems(items, distribution, distribution_name);
+        let dist = container.setTotalDroppedItems(items, distribution, distribution_name);
     }
 
     return (<div ref={drag} style={{...style, opacity, top, left}} className={className} id={id}>

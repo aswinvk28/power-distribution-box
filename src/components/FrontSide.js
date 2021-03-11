@@ -195,7 +195,6 @@ class FrontSide extends React.Component {
         viewBox[3] = vb[3] - value * 15;
         viewBox = viewBox.map(v => v.toString());
         this.viewBox = viewBox.join(" ");
-        // console.log(this.viewBox);
         this.setState({change: !this.state['change']})
         this.setState({'value': value});
     }
