@@ -22,7 +22,23 @@ const style = {
     zIndex: 1000,
 };
 
-const DISTANCE = 23;
+const distances = new Map([
+    [ItemTypes.PLUGS_1, 45],
+    [ItemTypes.PLUGS_2, 23],
+    [ItemTypes.PLUGS_3, 23],
+    [ItemTypes.PLUGS_4, 23],
+    [ItemTypes.PLUGS_5, 23],
+    [ItemTypes.SOCKETS_1, 60],
+    [ItemTypes.SOCKETS_2, 23],
+    [ItemTypes.SOCKETS_3, 23],
+    [ItemTypes.PINS_INPUT_1, 60],
+    [ItemTypes.PINS_INPUT_2, 50],
+    [ItemTypes.LIVE_PINS_INPUT, 80],
+    [ItemTypes.LIVE_PINS_OUTPUT, 80],
+    [ItemTypes.MULTIMETER, 80],
+    [ItemTypes.PILOT_LIGHTS, 80],
+    [ItemTypes.BREAKERS, 60],
+]);
 
 function getBBox(item) {
     let bbox = [parseFloat(item.left.replace('px', '')), parseFloat(item.top.replace('px', '')), 
@@ -125,6 +141,8 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             // (After the first render)
         }, [])
 
+        let dist = Object.fromEntries(distances);
+
         // moving
         if(isDragging && x && y) {
             container.setDragDrop(true);
@@ -145,7 +163,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             // save item
             if(item && (left-offset['left']-w/2) >= 0 && (left-offset['left']-w/2) <= (Constants.drawingScale * 405) // !important
             && (top-offset['top']-h/2) >= 0 && (top-offset['top']-h/2 <= (Constants.drawingScale * (grid_heights[container.state['distributionSize']]-85)))) { // !important
-                if((Math.min(...Object.values(isOnTop)) >= DISTANCE)) {
+                if((Math.min(...Object.values(isOnTop)) >= dist[item.type])) {
                     if(item.type == ItemTypes.LIVE_PINS_INPUT || item.type == ItemTypes.LIVE_PINS_OUTPUT) {
                         item.left = '25px';
                     } else {
@@ -159,7 +177,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
                     //     breaker_item.top = item.top;
                     //     saveItem(breaker_item);
                     // }
-                } else if((Math.min(...Object.values(isOnTop)) < DISTANCE)) {
+                } else if((Math.min(...Object.values(isOnTop)) < dist[item.type])) {
                     item.left = '10px';
                     item.top = '10px'; // allocate some space for it
                     saveItem(item);
@@ -196,7 +214,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
                 break;
             }
         }
-        let dist = container.setTotalDroppedItems(items, distribution, distribution_name);
+        container.setTotalDroppedItems(items, distribution, distribution_name);
     }
 
     return (<div ref={drag} style={{...style, opacity, top, left}} className={className} id={id}>

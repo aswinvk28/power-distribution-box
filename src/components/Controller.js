@@ -188,11 +188,12 @@ export default class Controller extends React.Component {
         $('#boxes_container_draggable').css('width', '100%');       
     }
 
-    alertUserOnUnitSizeChange(index, distributionSize) {
+    alertUserOnUnitSizeChange(index, distributionSize, event) {
         let totalDroppedItems = this.containerRef.getTotalDroppedItems(index);
         for(var i in totalDroppedItems) {
             const item = totalDroppedItems[i];
-            if(parseFloat(item.top.replace('px', '')) > this.scaled_grid_heights[distributionSize]) {
+            if(item && ((parseFloat(item.top.replace('px', '')) + Constants.SIZES[item.type][1]) > this.scaled_grid_heights[distributionSize])) {
+                $(event.target).val(this.containerRef.state['distributionSize']);
                 throw new Error("It is not possible to resize the box. Move the Elements and try again");
             }
         }
@@ -206,9 +207,9 @@ export default class Controller extends React.Component {
         let grid_heights = Object.fromEntries(this.grid_heights);
         try {
             this.current_box = 0;
-            let answer = this.alertUserOnUnitSizeChange(0, distributionSize);
+            let answer = this.alertUserOnUnitSizeChange(0, distributionSize, event);
             this.current_box = 1;
-            answer = this.alertUserOnUnitSizeChange(1, distributionSize);
+            answer = this.alertUserOnUnitSizeChange(1, distributionSize, event);
         } catch(e) {
             this.setState({ alert_text: e.message, alert_title: 'Change Unit Size to ' + distributionSize, alert_box: this.current_box });
             event.preventDefault();
