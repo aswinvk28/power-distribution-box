@@ -152,88 +152,6 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
         totalDroppedItems = [];
     }
 
-    // markers or alerts for placing elements over multiple sizes
-    
-    let $elements = null;
-    switch(distributionSize) {
-        case "24U":
-            $elements = (
-                <div className="sizing-variations">
-                    <div className="size-8U" data-drop-size="8U">
-                        8U
-                    </div>
-                    <div className="size-12U" data-drop-size="12U">
-                        12U
-                    </div>
-                    <div className="size-16U" data-drop-size="16U">
-                        16U
-                    </div>
-                    <div className="size-20U" data-drop-size="20U">
-                        20U
-                    </div>
-                    <div className="size-24U" data-drop-size="24U">
-                        24U
-                    </div>
-                </div>
-            )
-            break;
-
-        case "20U":
-            $elements = (
-                <div className="sizing-variations">
-                    <div className="size-8U" data-drop-size="8U">
-                        8U
-                    </div>
-                    <div className="size-12U" data-drop-size="12U">
-                        12U
-                    </div>
-                    <div className="size-16U" data-drop-size="16U">
-                        16U
-                    </div>
-                    <div className="size-20U" data-drop-size="20U">
-                        20U
-                    </div>
-                </div>
-            )
-            break;
-
-        case "16U":
-            $elements = (
-                <div className="sizing-variations">
-                    <div className="size-8U" data-drop-size="8U">
-                        8U
-                    </div>
-                    <div className="size-12U" data-drop-size="12U">
-                        12U
-                    </div>
-                    <div className="size-16U" data-drop-size="16U">
-                        16U
-                    </div>
-                </div>
-            )
-            break;
-
-        case "12U":
-            $elements = (
-                <div className="sizing-variations">
-                    <div className="size-8U" data-drop-size="8U">
-                        8U
-                    </div>
-                    <div className="size-12U" data-drop-size="12U">
-                        12U
-                    </div>
-                </div>
-            )
-            break;
-
-        case "8U":
-
-            break;
-
-        default:
-            break;
-    }
-
     let distribution_width = (Constants.drawingScale * 681).toString() + 'px';
     let grid_width = (Constants.drawingScale * 500).toString() + 'px';
     let heights = Object.fromEntries(Singleton.__singletonRef.controller.heights);
@@ -248,7 +166,6 @@ export const Distribution = ({ accept, lastDroppedItem, totalDroppedItems, e_nam
 
             <div ref={drop} style={{ width: grid_width, height: grid_height, backgroundColor }} className="distribution_container" id={e_name + "_distribution_container"}>
             {$elem}
-            {drag_drop == true ? $elements : null}
                 {
                     totalDroppedItems.map((item, index) =>  {
                         return (

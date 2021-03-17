@@ -22,48 +22,11 @@ const style = {
     zIndex: 1000,
 };
 
-const distances = new Map([
-    [ItemTypes.PLUGS_1, 45],
-    [ItemTypes.PLUGS_2, 23],
-    [ItemTypes.PLUGS_3, 23],
-    [ItemTypes.PLUGS_4, 23],
-    [ItemTypes.PLUGS_5, 23],
-    [ItemTypes.SOCKETS_1, 60],
-    [ItemTypes.SOCKETS_2, 23],
-    [ItemTypes.SOCKETS_3, 23],
-    [ItemTypes.PINS_INPUT_1, 60],
-    [ItemTypes.PINS_INPUT_2, 50],
-    [ItemTypes.LIVE_PINS_INPUT, 80],
-    [ItemTypes.LIVE_PINS_OUTPUT, 80],
-    [ItemTypes.MULTIMETER, 80],
-    [ItemTypes.PILOT_LIGHTS, 80],
-    [ItemTypes.BREAKERS, 60],
-]);
-
 function getBBox(item) {
     let bbox = [parseFloat(item.left.replace('px', '')), parseFloat(item.top.replace('px', '')), 
                 parseFloat(item.left.replace('px', '')) + parseFloat(item.width.replace('px', '')), 
                 parseFloat(item.top.replace('px', '')) + parseFloat(item.height.replace('px', ''))]
     return bbox;
-}
-
-function elementsOnTop(item, totalDroppedItems) {
-    let least_distance1 = 0, least_distance2 = 0, least_distance3 = 0, least_distance4 = 0, isOnTop = false, distance = null;
-    const [xmin, ymin, xmax, ymax] = item.bbox;
-    let distances = {};
-    for(var i in totalDroppedItems) {
-        const canvasItem = totalDroppedItems[i];
-        if(canvasItem.uniqid == item.uniqid) {
-            continue;
-        }
-        const [x2, y2, x3, y3] = canvasItem.bbox;
-        least_distance1 = Math.sqrt((x2-xmin)**2 + (y2-ymin)**2);
-        least_distance2 = Math.sqrt((x3-xmax)**2 + (y3-ymax)**2);
-        least_distance3 = Math.sqrt((x2-xmax)**2 + (y2-ymax)**2);
-        least_distance4 = Math.sqrt((x3-xmin)**2 + (y3-ymin)**2);
-        distances[canvasItem.uniqid] = Math.min(least_distance1, least_distance2, least_distance3, least_distance4);
-    }
-    return distances;
 }
 
 export const GridBox = ({ name, type, uniqid, distribution, image, top, left, width, 
@@ -148,7 +111,7 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             container.setDragDrop(true);
             let item = getItem(uniqid);
             item.bbox = getBBox(item);
-            let isOnTop = elementsOnTop(item, container.getTotalDroppedItems(item.distribution));
+            // let isOnTop = elementsOnTop(item, container.getTotalDroppedItems(item.distribution));
             let [left, top] = doSnapToGrid(x, y);
             let offset = {left: 0, top: 0};
             if(distribution_name == "cartesian") {
@@ -163,33 +126,19 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             // save item
             if(item && (left-offset['left']-w/2) >= 0 && (left-offset['left']-w/2) <= (Constants.drawingScale * 405) // !important
             && (top-offset['top']-h/2) >= 0 && (top-offset['top']-h/2 <= (Constants.drawingScale * (grid_heights[container.state['distributionSize']]-85)))) { // !important
-                if((Math.min(...Object.values(isOnTop)) >= dist[item.type])) {
-                    if(item.type == ItemTypes.LIVE_PINS_INPUT || item.type == ItemTypes.LIVE_PINS_OUTPUT) {
-                        item.left = '25px';
-                    } else {
-                        item.left = (left-offset['left']-w/2)+'px';
-                    }
-                    item.top = (top-offset['top']-h/2)+'px';
-                    saveItem(item);
-                    // breaker_item attribute is null for others, no need to save the breaker item while moving parent input/output
-                    // if(breaker_item) {
-                    //     breaker_item.left = item.left;
-                    //     breaker_item.top = item.top;
-                    //     saveItem(breaker_item);
-                    // }
-                } else if((Math.min(...Object.values(isOnTop)) < dist[item.type])) {
-                    item.left = '10px';
-                    item.top = '10px'; // allocate some space for it
-                    saveItem(item);
-                    let {_className, _id} = Singleton.getGridBoxId({name, uniqid});
-                    className = _className + " blink";
-                    // breaker_item attribute is null for others
-                    // if(breaker_item) {
-                    //     breaker_item.left = item.left;
-                    //     breaker_item.top = item.top;
-                    //     saveItem(breaker_item);
-                    // }
+                if(item.type == ItemTypes.LIVE_PINS_INPUT || item.type == ItemTypes.LIVE_PINS_OUTPUT) {
+                    item.left = '25px';
+                } else {
+                    item.left = (left-offset['left']-w/2)+'px';
                 }
+                item.top = (top-offset['top']-h/2)+'px';
+                saveItem(item);
+                // breaker_item attribute is null for others, no need to save the breaker item while moving parent input/output
+                // if(breaker_item) {
+                //     breaker_item.left = item.left;
+                //     breaker_item.top = item.top;
+                //     saveItem(breaker_item);
+                // }
             }
         } else {
             container.setDragDrop(false);

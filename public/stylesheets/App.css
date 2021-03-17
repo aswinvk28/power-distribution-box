@@ -247,7 +247,7 @@ body, html {
 }
 
 .grid-box img {
-  padding: 3px 1.5px;
+  /* padding: 3px 1.5px; */
 }
 
 #grid-box-item-RCD-Plugs--1 .distribution-box-menu, #grid-box-item-RCD-Sockets--1 .distribution-box-menu, #grid-box-item-RCD-Sockets--2 .distribution-box-menu {
