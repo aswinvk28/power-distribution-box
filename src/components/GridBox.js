@@ -104,8 +104,6 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             // (After the first render)
         }, [])
 
-        let dist = Object.fromEntries(distances);
-
         // moving
         if(isDragging && x && y) {
             container.setDragDrop(true);
