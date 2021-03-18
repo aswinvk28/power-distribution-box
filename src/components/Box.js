@@ -27,9 +27,7 @@ export const Box = ({ name, type, uniqid, distribution, image, width, height, di
     let className = "box-item box-item-" + name;
     let w = parseFloat(width.replace('px', '')) + 12 + 'px';
     return (<div ref={drag} style={{ ...style, opacity, width: w, border: '2px solid #fe0000',
-    backgroundImage: 'url("../images/power_box/canvas_grid-8u.png")', padding: '4px 1.5px', 
-    borderRadius: '3px', backgroundRepeat: 'no-repeat', backgroundPosition: '-5px -50px', 
-    backgroundSize: '200px', backgroundColor: '#f3f3f3' }} className={className} id={"element-box-item-" + name}>
-            <img src={image} alt={name} title={name} width={width} height="auto" /><br/>
+    position: 'relative' }} className={className} id={"element-box-item-" + name}>
+            <div style={{width: '100%', height: '100%', padding: '2px 0px 0px 0px'}}><img style={{zIndex: 200}} src={image} alt={name} title={name} width={width} height="auto" /></div>
 		</div>);
 };
