@@ -122,8 +122,8 @@ export const GridBox = ({ name, type, uniqid, distribution, image, top, left, wi
             let h = dragElement.height();
             // let breaker_item = item.breaker_item;
             // save item
-            if(item && (left-offset['left']-w/2) >= 0 && (left-offset['left']-w/2) <= (Constants.drawingScale * 405) // !important
-            && (top-offset['top']-h/2) >= 0 && (top-offset['top']-h/2 <= (Constants.drawingScale * (grid_heights[container.state['distributionSize']]-85)))) { // !important
+            if(item && (left-offset['left']-w/2) >= 0 && (left-offset['left']+w/2) <= (Constants.drawingScale * 490) // !important
+            && (top-offset['top']-h/2) >= 0 && ((top-offset['top']+h/2) <= (Constants.drawingScale * (grid_heights[container.state['distributionSize']]-15)))) { // !important
                 if(item.type == ItemTypes.LIVE_PINS_INPUT || item.type == ItemTypes.LIVE_PINS_OUTPUT) {
                     item.left = '25px';
                 } else {
