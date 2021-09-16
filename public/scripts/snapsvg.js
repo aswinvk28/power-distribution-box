@@ -9069,5 +9069,4 @@ return Snap;
 },{"eve":1}],3:[function(require,module,exports){
 const Snap = require('snapsvg')
 
-
 },{"snapsvg":2}]},{},[3]);
